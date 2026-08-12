@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260" width="260" height="260">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4c1d95"/>
+      <stop offset="55%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#0f9b8e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="12%" r="70%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="260" height="260" fill="url(#bg)"/>
+  <rect width="260" height="260" fill="url(#glow)"/>
+
+  <!-- decorative circuit lines -->
+  <g stroke="#ffffff" stroke-opacity="0.15" stroke-width="2" fill="none">
+    <path d="M0 30 H36 L50 44 H100"/>
+    <path d="M260 220 H210 L196 206 H150"/>
+    <circle cx="36" cy="30" r="2.5" fill="#ffffff" fill-opacity="0.3"/>
+    <circle cx="210" cy="220" r="2.5" fill="#ffffff" fill-opacity="0.3"/>
+  </g>
+
+  <!-- CTA ribbon -->
+  <g transform="translate(178,12)">
+    <rect x="0" y="0" width="72" height="22" rx="11" fill="#f97316"/>
+    <text x="36" y="15" font-family="'Segoe UI', Arial, sans-serif" font-weight="700" font-size="10.5" fill="#ffffff" text-anchor="middle">สมัครเลย! →</text>
+  </g>
+
+  <!-- flask icon -->
+  <g transform="translate(18,60)" opacity="0.9">
+    <rect x="6" y="0" width="9" height="14" rx="2" fill="#22d3ee"/>
+    <path d="M4 14 L2 27 Q10.5 34 19 27 L17 14 Z" fill="#22d3ee" fill-opacity="0.85"/>
+    <circle cx="10.5" cy="22" r="1.8" fill="#0f172a"/>
+  </g>
+
+  <!-- atom icon -->
+  <g transform="translate(215,70)" opacity="0.85">
+    <circle cx="8" cy="8" r="2.4" fill="#facc15"/>
+    <ellipse cx="8" cy="8" rx="13" ry="5" fill="none" stroke="#facc15" stroke-width="1.3"/>
+    <ellipse cx="8" cy="8" rx="13" ry="5" fill="none" stroke="#facc15" stroke-width="1.3" transform="rotate(60 8 8)"/>
+    <ellipse cx="8" cy="8" rx="13" ry="5" fill="none" stroke="#facc15" stroke-width="1.3" transform="rotate(120 8 8)"/>
+  </g>
+
+  <!-- title text, centered block -->
+  <text x="130" y="105" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="34" fill="#f9d94a" stroke="#0f172a" stroke-width="1.2" text-anchor="middle">SciGame</text>
+  <text x="88" y="140" font-family="Georgia, serif" font-style="italic" font-weight="700" font-size="30" fill="#f472b6" stroke="#0f172a" stroke-width="1.2" text-anchor="middle">Lab</text>
+  <text x="176" y="140" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="30" fill="#ffffff" stroke="#0f172a" stroke-width="1.2" text-anchor="middle">Camp</text>
+
+  <!-- tagline -->
+  <text x="130" y="163" font-family="'Segoe UI', Arial, sans-serif" font-size="11.5" fill="#e2e8f0" text-anchor="middle">เปลี่ยนวิชาที่เคยยากให้กลายเป็นเกมสุดเจ๋ง</text>
+
+  <!-- hamster mascot -->
+  <g transform="translate(94,168)">
+    <circle cx="36" cy="36" r="30" fill="#e0b48c"/>
+    <circle cx="16" cy="16" r="10" fill="#e0b48c"/>
+    <circle cx="56" cy="16" r="10" fill="#e0b48c"/>
+    <circle cx="16" cy="16" r="4.5" fill="#f3cba3"/>
+    <circle cx="56" cy="16" r="4.5" fill="#f3cba3"/>
+    <ellipse cx="23" cy="41" rx="8" ry="6.2" fill="#fdf3e7"/>
+    <ellipse cx="49" cy="41" rx="8" ry="6.2" fill="#fdf3e7"/>
+    <circle cx="27" cy="32" r="3.5" fill="#1f2937"/>
+    <circle cx="45" cy="32" r="3.5" fill="#1f2937"/>
+    <ellipse cx="36" cy="41" rx="2.6" ry="2.2" fill="#1f2937"/>
+    <g stroke="#22d3ee" stroke-width="2.6" fill="none">
+      <circle cx="27" cy="29" r="8"/>
+      <circle cx="45" cy="29" r="8"/>
+      <line x1="35" y1="29" x2="37" y2="29"/>
+    </g>
+  </g>
+</svg>

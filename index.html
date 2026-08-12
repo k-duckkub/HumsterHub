@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สรุปข้อมูลการสมัคร | HumsterHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="page">
+
+    <header class="page__header">
+      <div>
+        <p class="eyebrow">REGISTRATION SUMMARY</p>
+        <h1 class="title">สรุปข้อมูลการสมัคร</h1>
+      </div>
+      <span class="status-pill" role="status">
+        <svg class="status-pill__icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M10 6v4l2.5 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        รอตรวจสอบการชำระเงิน
+      </span>
+    </header>
+
+    <section class="card course-card">
+      <img class="course-card__banner" src="assets/banner-scigamelab.svg" alt="แบนเนอร์ค่าย SciGameLab Camp">
+      <div class="course-card__info">
+        <h2 class="course-card__name">SciGameLab Camp</h2>
+        <ul class="course-card__meta">
+          <li>
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="4.5" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M3 8h14M7 3v3M13 3v3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            เรียนวันที่ 14–16 ส.ค.
+          </li>
+          <li>
+            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.4"/><path d="M10 6.5v4l2.7 1.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            เวลา 19.00–21.00 น.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="card total-card">
+      <div>
+        <p class="total-card__label">ยอดชำระทั้งหมด</p>
+        <p class="total-card__note">โปรดแจ้งชำระเงินภายใน 24 ชั่วโมง</p>
+      </div>
+      <p class="total-card__amount">฿190</p>
+    </section>
+
+    <section class="card next-step-card">
+      <div class="next-step-card__head">
+        <span class="step-badge">1</span>
+        <div>
+          <p class="eyebrow">NEXT STEP</p>
+          <h3 class="next-step-card__title">แจ้งชำระเงินและเข้าเรียน</h3>
+        </div>
+      </div>
+
+      <div class="next-step-card__body">
+        <div class="next-step-card__instructions">
+          <p>ให้ add Line: <button class="line-id-copy" type="button" data-copy="@smart-school">@smart-school</button></p>
+          <p>พร้อมส่ง <a href="#slip-upload">slip</a> และ <a href="#applicant-name">ชื่อผู้สมัคร</a></p>
+          <p class="dim">ภายใน 24 ชม. จะได้รับการติดต่อจากเจ้าหน้าที่ทางไลน์</p>
+
+          <a class="line-add-btn" href="https://line.me/R/ti/p/@smart-school" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 2C6.48 2 2 5.79 2 10.4c0 4.09 3.55 7.52 8.35 8.24.32.07.77.22.88.5.1.26.07.66.03.92l-.14.87c-.04.26-.2 1.01.88.55 1.08-.46 5.83-3.43 7.95-5.87C21.4 13.9 22 12.24 22 10.4 22 5.79 17.52 2 12 2Z"/></svg>
+            เพิ่มเพื่อน
+          </a>
+        </div>
+
+        <div class="qr-panel">
+          <p class="qr-panel__label">สแกนเพื่อโอนเงิน</p>
+          <div class="qr-panel__frame">
+            <img src="assets/qr-placeholder.svg" alt="QR code สำหรับโอนเงิน">
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
