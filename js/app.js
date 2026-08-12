@@ -8,12 +8,12 @@ function showToast(message) {
   toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 1800);
 }
 
-document.querySelectorAll(".line-id-copy").forEach((btn) => {
-  btn.addEventListener("click", async () => {
-    const value = btn.dataset.copy;
+document.querySelectorAll("[data-copy]").forEach((el) => {
+  el.addEventListener("click", async () => {
+    const value = el.dataset.copy;
     try {
       await navigator.clipboard.writeText(value);
-      showToast(`คัดลอก "${value}" แล้ว`);
+      showToast(`คัดลอก ${value} แล้ว`);
     } catch {
       showToast(value);
     }
