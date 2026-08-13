@@ -1,126 +1,245 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1425 762" width="1425" height="762">
   <defs>
-    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="60%" stop-color="#f7fbfb"/>
-      <stop offset="100%" stop-color="#e8f4f4"/>
+    <linearGradient id="night" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#171b46"/>
+      <stop offset="45%" stop-color="#1e2358"/>
+      <stop offset="100%" stop-color="#121538"/>
     </linearGradient>
-    <linearGradient id="cta" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#ff8a2b"/>
-      <stop offset="100%" stop-color="#ff6b00"/>
+    <radialGradient id="glowc" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3b4bb8" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#3b4bb8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="island" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5fbf3f"/>
+      <stop offset="100%" stop-color="#3d8f28"/>
     </linearGradient>
   </defs>
 
-  <rect width="800" height="450" fill="url(#sky)"/>
+  <rect width="1425" height="762" fill="url(#night)"/>
+  <ellipse cx="1010" cy="330" rx="430" ry="330" fill="url(#glowc)"/>
 
-  <!-- soft blobs -->
-  <circle cx="705" cy="80" r="120" fill="#2c9fa2" opacity="0.07"/>
-  <circle cx="120" cy="400" r="140" fill="#ff6b00" opacity="0.06"/>
+  <!-- brush texture strokes -->
+  <g fill="#2a3070" opacity="0.55">
+    <path d="M60 120 q260 -50 520 10 q-250 40 -520 -10Z"/>
+    <path d="M40 470 q300 -60 600 6 q-300 46 -600 -6Z"/>
+    <path d="M70 610 q220 -40 430 8 q-220 34 -430 -8Z"/>
+  </g>
+
+  <!-- sparkles -->
+  <g fill="#ffd43b">
+    <path d="M70 92 l10 26 26 10 -26 10 -10 26 -10 -26 -26 -10 26 -10Z"/>
+    <path d="M96 560 l8 21 21 8 -21 8 -8 21 -8 -21 -21 -8 21 -8Z"/>
+    <path d="M872 96 l7 18 18 7 -18 7 -7 18 -7 -18 -18 -7 18 -7Z"/>
+  </g>
+  <g fill="#ffffff" opacity="0.9">
+    <path d="M240 60 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6Z"/>
+    <path d="M604 646 l5 14 14 5 -14 5 -5 14 -5 -14 -14 -5 14 -5Z"/>
+  </g>
+  <g stroke="#ffffff" stroke-width="7" stroke-linecap="round" opacity="0.85">
+    <path d="M96 40 L140 74"/><path d="M160 34 L176 62"/>
+    <path d="M840 52 L864 30"/><path d="M886 44 L900 22"/>
+  </g>
+  <path d="M812 34 l30 -2 -16 30 30 -4 -34 44 8 -30 -28 4Z" fill="#b5e848"/>
+
+  <!-- Hamster Hub lockup -->
+  <g transform="translate(1136,14)">
+    <circle cx="30" cy="30" r="26" fill="#e8b98a"/>
+    <circle cx="12" cy="12" r="9" fill="#e8b98a"/>
+    <circle cx="48" cy="12" r="9" fill="#e8b98a"/>
+    <ellipse cx="20" cy="36" rx="7" ry="5" fill="#fdf3e7"/>
+    <ellipse cx="40" cy="36" rx="7" ry="5" fill="#fdf3e7"/>
+    <circle cx="21" cy="26" r="3.4" fill="#171b46"/>
+    <circle cx="39" cy="26" r="3.4" fill="#171b46"/>
+    <ellipse cx="30" cy="35" rx="2.6" ry="2" fill="#171b46"/>
+    <text x="68" y="41" font-family="'Noto Sans Thai', Arial, sans-serif" font-size="27" font-weight="700" fill="#ffffff">Hamster Hub</text>
+  </g>
 
   <!-- subject tags -->
-  <g font-family="'Noto Sans Thai', Arial, sans-serif" font-size="17" font-weight="700" text-anchor="middle">
-    <g transform="translate(452,34)">
-      <rect x="0" y="0" width="112" height="34" rx="10" fill="#2c9fa2"/>
-      <text x="56" y="23" fill="#ffffff">PHYSICS</text>
+  <g font-family="Arial Black, Arial, sans-serif" font-size="30" font-weight="900" text-anchor="middle">
+    <g transform="translate(890,44) rotate(-4)">
+      <rect x="0" y="0" width="192" height="52" rx="14" fill="#3b5bdb"/>
+      <text x="96" y="36" fill="#ffffff">PHYSICS</text>
     </g>
-    <g transform="translate(576,26)">
-      <rect x="0" y="0" width="132" height="34" rx="10" fill="#ff6b00"/>
-      <text x="66" y="23" fill="#ffffff">CHEMISTRY</text>
+    <g transform="translate(1096,58) rotate(3)">
+      <rect x="0" y="0" width="230" height="52" rx="14" fill="#e64980"/>
+      <text x="115" y="36" fill="#ffffff">CHEMISTRY</text>
     </g>
-    <g transform="translate(600,72)">
-      <rect x="0" y="0" width="112" height="34" rx="10" fill="#2c9fa2"/>
-      <text x="56" y="23" fill="#ffffff">BIOLOGY</text>
+    <g transform="translate(1218,110) rotate(-3)">
+      <rect x="0" y="0" width="180" height="52" rx="14" fill="#51cf66"/>
+      <text x="90" y="36" fill="#ffffff">BIOLOGY</text>
     </g>
   </g>
 
   <!-- headline -->
-  <text x="44" y="118" font-family="Arial Black, Arial, sans-serif" font-size="62" font-weight="900" fill="#0a1a2f" letter-spacing="-1">SciGame</text>
-  <text x="44" y="186" font-family="Arial Black, Arial, sans-serif" font-size="62" font-weight="900" fill="#2c9fa2" letter-spacing="-1">Lab</text>
-  <text x="186" y="186" font-family="Arial Black, Arial, sans-serif" font-size="62" font-weight="900" fill="#ff6b00" letter-spacing="-1">Camp</text>
+  <text x="60" y="230" font-family="Arial Black, Arial, sans-serif" font-size="150" font-weight="900" fill="#ffffff" letter-spacing="-4" transform="rotate(-3 60 230)">SciGame</text>
+  <text x="196" y="360" font-family="Georgia, serif" font-style="italic" font-size="118" font-weight="700" fill="#b06cf5" transform="rotate(-3 196 360)">Lab</text>
+  <text x="416" y="352" font-family="Georgia, serif" font-style="italic" font-size="118" font-weight="700" fill="#b5e848" transform="rotate(-3 416 352)">Camp</text>
 
   <!-- thai tagline -->
-  <g font-family="'Noto Sans Thai', Arial, sans-serif" font-size="27" font-weight="700">
-    <text x="46" y="240" fill="#0a1a2f">เปลี่ยน<tspan fill="#2c9fa2">วิทย์</tspan>ที่เคยยาก</text>
-    <text x="46" y="282" fill="#0a1a2f">ให้กลายเป็น<tspan fill="#ff6b00">เกมสุดเจ๋ง</tspan></text>
+  <g font-family="'Noto Sans Thai', Arial, sans-serif" font-size="52" font-weight="700" transform="rotate(-2 230 470)">
+    <text x="230" y="470" fill="#ffffff">เปลี่ยน<tspan fill="#22d3ee">วิทย์</tspan>ที่เคยยาก</text>
+    <text x="196" y="540" fill="#ffffff">ให้กลายเป็น<tspan fill="#f472b6">เกมสุดเจ๋ง</tspan></text>
   </g>
 
-  <!-- portfolio pill -->
-  <g transform="translate(42,304)">
-    <rect x="0" y="0" width="316" height="42" rx="21" fill="#f4e9dd"/>
-    <text x="158" y="28" font-family="'Noto Sans Thai', Arial, sans-serif" font-size="16" fill="#0a1a2f" text-anchor="middle">ผลงาน 0% พัฒนาเป็น Portfolio</text>
+  <!-- portfolio brush band -->
+  <g transform="translate(238,574) rotate(-2)">
+    <path d="M0 12 Q20 0 46 4 L470 0 Q496 6 492 26 L496 50 Q470 62 440 58 L30 62 Q2 56 6 38Z" fill="#f7f3e8"/>
+    <text x="248" y="44" font-family="'Noto Sans Thai', Arial, sans-serif" font-size="32" font-weight="700" fill="#171b46" text-anchor="middle">เริ่มจาก 0 ได้ผลงานใส่ <tspan fill="#7c3aed">Portfolio</tspan></text>
   </g>
 
-  <!-- lab flask centrepiece -->
-  <g transform="translate(430,150)">
-    <rect x="34" y="0" width="26" height="30" rx="5" fill="#cfe3e3"/>
-    <path d="M28 30 L14 92 Q47 116 80 92 L66 30 Z" fill="#ffd8a8" stroke="#e8a13a" stroke-width="3"/>
-    <path d="M22 62 Q47 78 72 62 L80 92 Q47 116 14 92 Z" fill="#ff9e2c"/>
-    <circle cx="38" cy="80" r="5" fill="#ffffff" opacity="0.7"/>
-    <circle cx="56" cy="88" r="3.5" fill="#ffffff" opacity="0.6"/>
+  <!-- feature row -->
+  <g font-family="'Noto Sans Thai', Arial, sans-serif" font-size="26" fill="#ffffff">
+    <path d="M52 690 l9 24 24 9 -24 9 -9 24 -9 -24 -24 -9 24 -9Z" fill="#ffd43b"/>
+    <text x="96" y="722">ไม่ต้องมีพื้นฐาน</text>
+    <text x="286" y="722" fill="#6a72b0">|</text>
+    <g transform="translate(310,700)">
+      <rect x="0" y="4" width="42" height="24" rx="11" fill="#c9cff5"/>
+      <circle cx="11" cy="16" r="3" fill="#171b46"/><circle cx="32" cy="14" r="2.6" fill="#171b46"/>
+    </g>
+    <text x="366" y="722">เรียนรู้ผ่านเกม</text>
+    <text x="552" y="722" fill="#6a72b0">|</text>
+    <g transform="translate(578,696)">
+      <path d="M14 30 Q14 6 26 0 Q38 6 38 30 L30 26 L22 26Z" fill="#e64980"/>
+      <path d="M14 30 l-8 8 12 0Z" fill="#ffd43b"/>
+    </g>
+    <text x="628" y="722">มีระบบและสายอาชีพเข้าร่วมได้</text>
+  </g>
+
+  <!-- ═══ right scene ═══ -->
+
+  <!-- flask -->
+  <g transform="translate(1044,120)">
+    <rect x="26" y="0" width="30" height="34" rx="6" fill="#cfe0ff" opacity="0.9"/>
+    <path d="M18 34 L2 118 Q41 150 80 118 L64 34Z" fill="#2a3070" stroke="#7dd3fc" stroke-width="5"/>
+    <path d="M10 82 Q41 104 72 82 L80 118 Q41 150 2 118Z" fill="#f472b6"/>
+    <circle cx="30" cy="104" r="6" fill="#ffffff" opacity="0.6"/>
+    <circle cx="52" cy="114" r="4" fill="#ffffff" opacity="0.5"/>
   </g>
 
   <!-- atom -->
-  <g transform="translate(392,84)" opacity="0.9">
-    <circle cx="0" cy="0" r="5" fill="#ff6b00"/>
-    <ellipse cx="0" cy="0" rx="27" ry="10" fill="none" stroke="#2c9fa2" stroke-width="3"/>
-    <ellipse cx="0" cy="0" rx="27" ry="10" fill="none" stroke="#2c9fa2" stroke-width="3" transform="rotate(60)"/>
-    <ellipse cx="0" cy="0" rx="27" ry="10" fill="none" stroke="#2c9fa2" stroke-width="3" transform="rotate(120)"/>
+  <g transform="translate(916,150)">
+    <circle cx="0" cy="0" r="14" fill="#f472b6"/>
+    <ellipse cx="0" cy="0" rx="66" ry="24" fill="none" stroke="#7dd3fc" stroke-width="5"/>
+    <ellipse cx="0" cy="0" rx="66" ry="24" fill="none" stroke="#7dd3fc" stroke-width="5" transform="rotate(62)"/>
+    <ellipse cx="0" cy="0" rx="66" ry="24" fill="none" stroke="#7dd3fc" stroke-width="5" transform="rotate(122)"/>
   </g>
 
-  <!-- voxel ground -->
-  <g transform="translate(392,286)">
-    <path d="M0 30 L60 0 L120 30 L60 60 Z" fill="#7ac74f"/>
-    <path d="M0 30 L60 60 L60 92 L0 62 Z" fill="#6b4a2f"/>
-    <path d="M120 30 L60 60 L60 92 L120 62 Z" fill="#8a5f3d"/>
+  <!-- tree -->
+  <g transform="translate(1186,160)">
+    <rect x="34" y="96" width="22" height="58" fill="#6b4a2f"/>
+    <circle cx="45" cy="66" r="52" fill="#3d8f28"/>
+    <circle cx="16" cy="86" r="34" fill="#4aa62f"/>
+    <circle cx="76" cy="86" r="34" fill="#4aa62f"/>
   </g>
 
-  <!-- hamster mascot -->
-  <g transform="translate(430,236)">
-    <circle cx="30" cy="30" r="27" fill="#d9a273"/>
-    <circle cx="11" cy="11" r="9" fill="#d9a273"/>
-    <circle cx="49" cy="11" r="9" fill="#d9a273"/>
-    <circle cx="11" cy="11" r="4" fill="#efc59b"/>
-    <circle cx="49" cy="11" r="4" fill="#efc59b"/>
-    <ellipse cx="19" cy="36" rx="7" ry="5.4" fill="#fdf3e7"/>
-    <ellipse cx="41" cy="36" rx="7" ry="5.4" fill="#fdf3e7"/>
-    <circle cx="21" cy="26" r="3.4" fill="#0a1a2f"/>
-    <circle cx="39" cy="26" r="3.4" fill="#0a1a2f"/>
-    <ellipse cx="30" cy="35" rx="2.6" ry="2" fill="#0a1a2f"/>
+  <!-- voxel island -->
+  <g transform="translate(1000,330)">
+    <path d="M0 44 L128 -22 L256 44 L128 110Z" fill="url(#island)"/>
+    <path d="M0 44 L128 110 L128 178 L0 108Z" fill="#5d4030"/>
+    <path d="M256 44 L128 110 L128 178 L256 108Z" fill="#7a5540"/>
+    <path d="M40 168 L128 214 L128 246 L40 200Z" fill="#4a3226"/>
   </g>
 
-  <!-- monitor with code -->
-  <g transform="translate(300,296)">
-    <rect x="0" y="0" width="104" height="72" rx="7" fill="#0a1a2f"/>
-    <rect x="7" y="8" width="42" height="5" rx="2.5" fill="#7ac74f"/>
-    <rect x="7" y="21" width="66" height="5" rx="2.5" fill="#2c9fa2"/>
-    <rect x="7" y="34" width="52" height="5" rx="2.5" fill="#ff9e2c"/>
-    <rect x="7" y="47" width="72" height="5" rx="2.5" fill="#4b5a6b"/>
-    <rect x="40" y="72" width="24" height="10" fill="#0a1a2f"/>
-    <rect x="26" y="82" width="52" height="6" rx="3" fill="#0a1a2f"/>
+  <!-- blocky characters -->
+  <g transform="translate(1042,318)">
+    <rect x="0" y="0" width="42" height="38" rx="4" fill="#4caf50"/>
+    <rect x="8" y="10" width="10" height="12" fill="#0d1b12"/>
+    <rect x="26" y="10" width="10" height="12" fill="#0d1b12"/>
+    <rect x="16" y="24" width="12" height="12" fill="#0d1b12"/>
+  </g>
+  <g transform="translate(1140,290)">
+    <rect x="4" y="0" width="36" height="34" rx="3" fill="#d9a273"/>
+    <rect x="4" y="0" width="36" height="12" fill="#3d2b1c"/>
+    <rect x="12" y="16" width="7" height="8" fill="#171b46"/>
+    <rect x="26" y="16" width="7" height="8" fill="#171b46"/>
+    <rect x="0" y="36" width="44" height="40" fill="#3b5bdb"/>
+    <rect x="46" y="10" width="7" height="54" fill="#cfd8e3" transform="rotate(14 46 10)"/>
   </g>
 
-  <!-- tablet with chart -->
-  <g transform="translate(596,258)">
-    <rect x="0" y="0" width="86" height="112" rx="9" fill="#0a1a2f"/>
-    <rect x="9" y="12" width="68" height="66" rx="4" fill="#12263f"/>
-    <rect x="17" y="56" width="11" height="16" fill="#2c9fa2"/>
-    <rect x="33" y="44" width="11" height="28" fill="#ff9e2c"/>
-    <rect x="49" y="34" width="11" height="38" fill="#7ac74f"/>
-    <circle cx="43" cy="94" r="6" fill="#31465e"/>
+  <!-- code window -->
+  <g transform="translate(870,368)">
+    <rect x="0" y="0" width="196" height="140" rx="12" fill="#0f1330" stroke="#3b5bdb" stroke-width="3"/>
+    <rect x="14" y="18" width="70" height="9" rx="4.5" fill="#b5e848"/>
+    <rect x="14" y="40" width="122" height="9" rx="4.5" fill="#7dd3fc"/>
+    <rect x="14" y="62" width="92" height="9" rx="4.5" fill="#f472b6"/>
+    <rect x="14" y="84" width="140" height="9" rx="4.5" fill="#5b6496"/>
+    <rect x="14" y="106" width="60" height="9" rx="4.5" fill="#ffd43b"/>
+  </g>
+
+  <!-- code badge -->
+  <g transform="translate(900,436)">
+    <rect x="0" y="0" width="132" height="76" rx="14" fill="#101538" stroke="#7dd3fc" stroke-width="4"/>
+    <text x="66" y="52" font-family="Consolas, monospace" font-size="38" font-weight="700" fill="#7dd3fc" text-anchor="middle">&lt;/&gt;</text>
+  </g>
+
+  <!-- audio / chart panels -->
+  <g transform="translate(1246,388)">
+    <rect x="0" y="0" width="140" height="86" rx="12" fill="#0f1330" stroke="#3b5bdb" stroke-width="3"/>
+    <g stroke="#b5e848" stroke-width="4" stroke-linecap="round">
+      <path d="M16 58 V32"/><path d="M32 64 V26"/><path d="M48 54 V38"/><path d="M64 68 V22"/><path d="M80 58 V32"/><path d="M96 48 V42"/>
+    </g>
+    <circle cx="120" cy="30" r="7" fill="#f472b6"/>
+  </g>
+  <g transform="translate(1252,506)">
+    <rect x="0" y="0" width="140" height="96" rx="12" fill="#0f1330" stroke="#3b5bdb" stroke-width="3"/>
+    <path d="M14 74 L44 44 L70 60 L108 24 L126 40 L126 82 L14 82Z" fill="#3d8f28" opacity="0.75"/>
+    <path d="M14 74 L44 44 L70 60 L108 24 L126 40" fill="none" stroke="#b5e848" stroke-width="4"/>
+  </g>
+
+  <!-- hamster scientist -->
+  <g transform="translate(1086,486)">
+    <path d="M8 150 Q8 76 76 76 Q144 76 144 150Z" fill="#f3f4f8"/>
+    <circle cx="76" cy="56" r="60" fill="#e8b98a"/>
+    <circle cx="30" cy="14" r="20" fill="#e8b98a"/>
+    <circle cx="122" cy="14" r="20" fill="#e8b98a"/>
+    <circle cx="30" cy="14" r="10" fill="#f6d3ac"/>
+    <circle cx="122" cy="14" r="10" fill="#f6d3ac"/>
+    <ellipse cx="52" cy="72" rx="18" ry="13" fill="#fdf3e7"/>
+    <ellipse cx="100" cy="72" rx="18" ry="13" fill="#fdf3e7"/>
+    <ellipse cx="76" cy="72" rx="7" ry="5" fill="#5b3b22"/>
+    <g stroke="#7dd3fc" stroke-width="6" fill="#dff3ff" fill-opacity="0.45">
+      <circle cx="52" cy="48" r="21"/>
+      <circle cx="100" cy="48" r="21"/>
+      <path d="M73 48 H79"/>
+    </g>
+    <circle cx="52" cy="48" r="7" fill="#171b46"/>
+    <circle cx="100" cy="48" r="7" fill="#171b46"/>
+    <rect x="-52" y="34" width="86" height="11" rx="5.5" fill="#cfd8e3" transform="rotate(-22 -52 34)"/>
+  </g>
+
+  <!-- beakers -->
+  <g transform="translate(1236,614)">
+    <path d="M12 0 L4 66 Q34 86 64 66 L56 0Z" fill="#1b2350" stroke="#7dd3fc" stroke-width="4"/>
+    <path d="M7 44 Q34 62 61 44 L64 66 Q34 86 4 66Z" fill="#51cf66"/>
+  </g>
+  <g transform="translate(1330,646)">
+    <path d="M10 0 L4 46 Q28 62 52 46 L46 0Z" fill="#1b2350" stroke="#7dd3fc" stroke-width="4"/>
+    <path d="M6 30 Q28 46 50 30 L52 46 Q28 62 4 46Z" fill="#7dd3fc"/>
   </g>
 
   <!-- gamepad -->
-  <g transform="translate(210,360)">
-    <rect x="0" y="10" width="86" height="44" rx="20" fill="#3d4a5c"/>
-    <circle cx="20" cy="32" r="5" fill="#cbd5e0"/>
-    <circle cx="64" cy="26" r="4" fill="#ff6b00"/>
-    <circle cx="72" cy="36" r="4" fill="#2c9fa2"/>
+  <g transform="translate(806,556)">
+    <rect x="0" y="14" width="130" height="66" rx="30" fill="#2f3555"/>
+    <circle cx="32" cy="46" r="9" fill="#c9cff5"/>
+    <circle cx="96" cy="38" r="7" fill="#f472b6"/>
+    <circle cx="110" cy="52" r="7" fill="#7dd3fc"/>
   </g>
 
-  <!-- CTA -->
-  <g transform="translate(524,384)">
-    <rect x="0" y="0" width="234" height="46" rx="23" fill="url(#cta)"/>
-    <text x="98" y="31" font-family="'Noto Sans Thai', Arial, sans-serif" font-size="23" font-weight="700" fill="#ffffff" text-anchor="middle">สมัครเลย!</text>
-    <path d="M182 23 H206 M198 15 L206 23 L198 31" stroke="#ffffff" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- keyboard -->
+  <g transform="translate(870,640)">
+    <rect x="0" y="0" width="190" height="62" rx="10" fill="#2f3555"/>
+    <g fill="#5b6496">
+      <rect x="12" y="12" width="24" height="14" rx="3"/><rect x="44" y="12" width="24" height="14" rx="3"/>
+      <rect x="76" y="12" width="24" height="14" rx="3"/><rect x="108" y="12" width="24" height="14" rx="3"/>
+      <rect x="140" y="12" width="36" height="14" rx="3"/>
+      <rect x="12" y="34" width="80" height="14" rx="3"/><rect x="100" y="34" width="76" height="14" rx="3"/>
+    </g>
+  </g>
+
+  <!-- CTA brush -->
+  <g transform="translate(1006,656) rotate(-2)">
+    <path d="M8 16 Q30 0 66 4 L376 0 Q404 8 400 30 L404 66 Q374 82 340 78 L40 82 Q6 74 10 50Z" fill="#ffd43b"/>
+    <text x="176" y="58" font-family="'Noto Sans Thai', Arial, sans-serif" font-size="46" font-weight="700" fill="#171b46" text-anchor="middle">สมัครเลย!</text>
+    <path d="M300 44 H358 M342 26 L360 44 L342 62" stroke="#171b46" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
 </svg>
