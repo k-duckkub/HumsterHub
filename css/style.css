@@ -29,7 +29,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-img { display: block; max-width: 100%; }
+/* height:auto keeps the intrinsic ratio when width/height attributes are set. */
+img { display: block; max-width: 100%; height: auto; }
 
 .container {
   max-width: var(--container);
@@ -243,7 +244,9 @@ img { display: block; max-width: 100%; }
   margin-bottom: 16px;
 }
 
-.qr__frame img { width: 240px; height: 240px; }
+/* The supplied QR is 188×170 and carries its own dark frame — keep its
+   aspect ratio rather than forcing a square. */
+.qr__frame img { width: 240px; height: auto; border-radius: 8px; }
 
 .qr__caption { font-size: 17px; color: var(--slate); line-height: 1.55; }
 
