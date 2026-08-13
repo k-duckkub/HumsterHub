@@ -312,6 +312,6 @@ img { display: block; max-width: 100%; height: auto; }
   .next__title { font-size: 27px; }
   .add-line { font-size: 19px; }
   .notice { font-size: 16px; }
-  .btn-line { width: 100%; }
-  .qr__frame img { width: 200px; height: 200px; }
+  .btn-line { width: 240px; }
+  .qr__frame img { width: 200px; }
 }
