@@ -208,7 +208,7 @@ img { display: block; max-width: 100%; height: auto; }
 .btn-line {
   display: block;
   position: relative;
-  width: 340px;
+  width: 288px;
   max-width: 100%;
   aspect-ratio: 1690 / 344;
   overflow: hidden;
