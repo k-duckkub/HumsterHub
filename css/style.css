@@ -201,32 +201,34 @@ img { display: block; max-width: 100%; height: auto; }
 
 .note svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--orange); }
 
-/* ── LINE BUTTON ── */
+/* ── LINE BUTTON ──
+   Official LINE artwork, 2000×667, with the pill inset inside transparent
+   padding at x 155–1844, y 156–499. The box is the pill's own 1690×344
+   ratio and the image is scaled and offset so only the pill shows. */
 .btn-line {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
+  display: block;
+  position: relative;
   width: 340px;
   max-width: 100%;
-  height: 66px;
-  border-radius: var(--btn-radius);
-  background: var(--line-green);
-  color: #ffffff;
-  font-family: inherit;
-  font-size: 25px;
-  font-weight: 700;
-  text-decoration: none;
+  aspect-ratio: 1690 / 344;
+  overflow: hidden;
+  border-radius: 999px;
   box-shadow: 0 8px 20px rgba(6, 199, 85, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-line img {
+  position: absolute;
+  width: 118.343%;  /* 2000/1690 */
+  max-width: none;
+  left: -9.172%;    /* -155/1690 of the box width  */
+  top: -45.349%;    /* -156/344  of the box height */
 }
 
 .btn-line:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 26px rgba(6, 199, 85, 0.28);
 }
-
-.btn-line svg { width: 38px; height: 38px; flex-shrink: 0; }
 
 :where(a, button):focus-visible {
   outline: 3px solid var(--orange);
@@ -310,6 +312,6 @@ img { display: block; max-width: 100%; height: auto; }
   .next__title { font-size: 27px; }
   .add-line { font-size: 19px; }
   .notice { font-size: 16px; }
-  .btn-line { width: 100%; height: 60px; font-size: 22px; }
+  .btn-line { width: 100%; }
   .qr__frame img { width: 200px; height: 200px; }
 }
