@@ -25,9 +25,11 @@
 
 <main class="container section">
 
-  <header class="page-head">
-    <h1>สรุปข้อมูลการสมัคร</h1>
-    <p>เราได้รับใบสมัครของคุณแล้ว เหลืออีกขั้นตอนเดียว</p>
+  <p class="crumb"><a href="#">HamsterHub</a> › <a href="#">ค่ายและหลักสูตร</a> › สรุปการสมัคร</p>
+
+  <header>
+    <h1 class="page-title">สรุปข้อมูลการสมัคร</h1>
+    <p class="page-lede">เราได้รับใบสมัครของคุณแล้ว เหลืออีกขั้นตอนเดียว</p>
     <p class="badge">
       <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.6"/>
@@ -39,78 +41,67 @@
 
   <div class="layout">
 
-    <!-- LEFT: order detail -->
+    <!-- LEFT: the course, as an Apple Store product tile -->
     <div class="col">
-      <p class="group-label">คอร์สที่สมัคร</p>
-      <div class="group">
-        <div class="group__row">
-          <div class="row-inner course">
-            <img class="course__banner" src="assets/banner-scigamelab.svg" alt="แบนเนอร์ค่าย SciGameLab Camp">
-            <div>
-              <p class="course__name">SciGameLab Camp</p>
-              <p class="course__sub">เรียนออนไลน์ผ่าน Discord</p>
-            </div>
-          </div>
+      <article class="tile">
+        <div class="tile__media">
+          <img src="assets/banner-scigamelab.svg" alt="แบนเนอร์ค่าย SciGameLab Camp">
         </div>
-        <div class="group__row">
-          <dl class="row-inner meta-row">
+        <p class="eyebrow">ใหม่</p>
+        <h2 class="tile__name">SciGameLab Camp</h2>
+        <p class="tile__desc">ค่ายวิทยาศาสตร์ + เกมดีเวลอป 3 วัน เรียนออนไลน์ผ่าน Discord</p>
+        <p class="tile__price">฿190</p>
+      </article>
+
+      <section class="panel">
+        <h2 class="panel__title">รายละเอียดคำสั่งซื้อ</h2>
+        <p class="panel__sub">หมายเลขอ้างอิง #SGL-2608</p>
+        <dl class="rows">
+          <div class="rows__item">
             <dt>วันที่เรียน</dt>
             <dd>14–16 สิงหาคม</dd>
-          </dl>
-        </div>
-        <div class="group__row">
-          <dl class="row-inner meta-row">
+          </div>
+          <div class="rows__item">
             <dt>เวลา</dt>
             <dd>19.00–21.00 น.</dd>
-          </dl>
-        </div>
-      </div>
-
-      <p class="group-label">ยอดชำระ</p>
-      <div class="group">
-        <div class="group__row">
-          <dl class="row-inner meta-row">
+          </div>
+          <div class="rows__item">
             <dt>ค่าสมัคร × 1</dt>
             <dd>฿190</dd>
-          </dl>
-        </div>
-        <div class="group__row">
-          <dl class="row-inner meta-row">
+          </div>
+          <div class="rows__item">
             <dt>ส่วนลด</dt>
             <dd>—</dd>
-          </dl>
-        </div>
-        <div class="group__row">
-          <dl class="row-inner total">
+          </div>
+          <div class="rows__item rows__item--total">
             <dt>
               ยอดชำระทั้งหมด
               <span class="deadline">โปรดแจ้งชำระเงินภายใน 24 ชั่วโมง</span>
             </dt>
             <dd>฿190</dd>
-          </dl>
-        </div>
-      </div>
+          </div>
+        </dl>
+      </section>
     </div>
 
-    <!-- RIGHT: next step -->
+    <!-- RIGHT: next steps -->
     <aside class="col" id="next-step">
-      <p class="group-label">ขั้นตอนถัดไป</p>
-      <div class="group">
+      <section class="panel">
+        <h2 class="panel__title">ขั้นตอนถัดไป</h2>
+        <p class="panel__sub">ทำ 3 ขั้นตอนนี้เพื่อยืนยันที่นั่ง</p>
+
         <ol class="steps">
-          <li><span class="row-inner"><span>โอนเงิน ฿190 โดยสแกน QR ด้านล่าง</span></span></li>
-          <li><span class="row-inner"><span>เพิ่มเพื่อนไลน์ <button class="line-id" type="button" data-copy="@smart-school">@smart-school</button></span></span></li>
-          <li><span class="row-inner"><span>ส่ง <strong>สลิปโอนเงิน</strong> และ <strong>ชื่อผู้สมัคร</strong> ในแชทไลน์</span></span></li>
-          <li><span class="row-inner"><span>เจ้าหน้าที่จะติดต่อกลับภายใน 24 ชม. พร้อมส่งลิงก์เข้าเรียน</span></span></li>
+          <li><span>โอนเงิน ฿190 โดยสแกน QR ด้านล่าง</span></li>
+          <li><span>เพิ่มเพื่อนไลน์ <button class="line-id" type="button" data-copy="@smart-school">@smart-school</button></span></li>
+          <li><span>เจ้าหน้าที่จะติดต่อกลับภายใน 24 ชม. พร้อมส่งลิงก์เข้าเรียน</span></li>
         </ol>
 
-        <div class="group__row">
-          <div class="row-inner qr">
-            <img class="qr__img" src="assets/qr-placeholder.svg" alt="QR code สำหรับโอนเงิน">
-            <p class="qr__caption">
-              <strong>สแกนเพื่อโอนเงิน</strong>
-              เปิดแอปธนาคาร แล้วสแกน QR นี้ ยอด ฿190
-            </p>
-          </div>
+        <div class="qr">
+          <img class="qr__img" src="assets/qr-placeholder.svg" alt="QR code สำหรับโอนเงิน">
+          <p class="qr__caption">
+            <strong>สแกนเพื่อโอนเงิน</strong>
+            เปิดแอปธนาคาร แล้วสแกน QR นี้ ยอด ฿190
+          </p>
         </div>
 
         <div class="actions">
@@ -120,7 +111,7 @@
           </a>
           <button class="btn btn--soft" type="button" data-copy="@smart-school">คัดลอกไอดี</button>
         </div>
-      </div>
+      </section>
     </aside>
 
   </div>
