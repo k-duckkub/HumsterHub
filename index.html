@@ -6,115 +6,90 @@
 <title>สรุปข้อมูลการสมัคร | HamsterHub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<nav class="nav">
-  <div class="container nav__inner">
-    <div class="nav__logo">HamsterHub</div>
-    <div class="nav__links">
-      <a href="#">หลักสูตร</a>
-      <a href="#">ผลงานนักเรียน</a>
-      <a href="#">เกี่ยวกับเรา</a>
-    </div>
-    <a class="btn btn--primary btn--sm" href="#next-step">แจ้งชำระเงิน</a>
-  </div>
-</nav>
-
-<main class="container section">
-
-  <p class="crumb"><a href="#">HamsterHub</a> › <a href="#">ค่ายและหลักสูตร</a> › สรุปการสมัคร</p>
+<main class="container">
 
   <header>
+    <p class="eyebrow">Registration Summary</p>
     <h1 class="page-title">สรุปข้อมูลการสมัคร</h1>
-    <p class="page-lede">เราได้รับใบสมัครของคุณแล้ว เหลืออีกขั้นตอนเดียว</p>
-    <p class="badge">
-      <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.6"/>
-        <path d="M10 6v4l2.5 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-      </svg>
-      รอตรวจสอบการชำระเงิน
-    </p>
   </header>
 
-  <div class="layout">
+  <!-- CARD 1 · CAMP -->
+  <section class="card camp">
+    <img class="camp__banner" src="assets/banner-scigamelab.svg" alt="แบนเนอร์ค่าย SciGameLab Camp">
+    <div>
+      <h2 class="camp__name">SciGameLab Camp</h2>
+      <ul class="camp__meta">
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          เรียนวันที่ 14–16 ส.ค.
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5.4l3.4 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          เวลา 19.00 – 21.00 น.
+        </li>
+      </ul>
+    </div>
+  </section>
 
-    <!-- LEFT: the course, as an Apple Store product tile -->
-    <div class="col">
-      <article class="tile">
-        <div class="tile__media">
-          <img src="assets/banner-scigamelab.svg" alt="แบนเนอร์ค่าย SciGameLab Camp">
-        </div>
-        <p class="eyebrow">ใหม่</p>
-        <h2 class="tile__name">SciGameLab Camp</h2>
-        <p class="tile__desc">ค่ายวิทยาศาสตร์ + เกมดีเวลอป 3 วัน เรียนออนไลน์ผ่าน Discord</p>
-        <p class="tile__price">฿190</p>
-      </article>
+  <!-- CARD 2 · TOTAL -->
+  <section class="card total">
+    <div class="icon-box">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M5 3h14v18l-2.3-1.6-2.35 1.6L12 19.4 9.65 21 7.3 19.4 5 21V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M9 8h6M9 12h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="total__text">
+      <p class="total__title">ยอดชำระทั้งหมด</p>
+      <p class="total__note">โปรดแจ้งชำระเงินภายใน 24 ชั่วโมง</p>
+    </div>
+    <p class="total__amount">฿190</p>
+  </section>
 
-      <section class="panel">
-        <h2 class="panel__title">รายละเอียดคำสั่งซื้อ</h2>
-        <p class="panel__sub">หมายเลขอ้างอิง #SGL-2608</p>
-        <dl class="rows">
-          <div class="rows__item">
-            <dt>วันที่เรียน</dt>
-            <dd>14–16 สิงหาคม</dd>
-          </div>
-          <div class="rows__item">
-            <dt>เวลา</dt>
-            <dd>19.00–21.00 น.</dd>
-          </div>
-          <div class="rows__item">
-            <dt>ค่าสมัคร × 1</dt>
-            <dd>฿190</dd>
-          </div>
-          <div class="rows__item">
-            <dt>ส่วนลด</dt>
-            <dd>—</dd>
-          </div>
-          <div class="rows__item rows__item--total">
-            <dt>
-              ยอดชำระทั้งหมด
-              <span class="deadline">โปรดแจ้งชำระเงินภายใน 24 ชั่วโมง</span>
-            </dt>
-            <dd>฿190</dd>
-          </div>
-        </dl>
-      </section>
+  <!-- CARD 3 · NEXT STEP -->
+  <section class="card next">
+    <div>
+      <p class="eyebrow">Next Step</p>
+      <div class="next__head">
+        <span class="step-num">1</span>
+        <h2 class="next__title">แจ้งชำระเงินและเข้าเรียน</h2>
+      </div>
+
+      <p class="add-line">ให้ add Line: <button class="line-id" type="button" data-copy="@smart-school">@smart-school</button></p>
+
+      <p class="notice">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 9a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5h-15S6 13 6 9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 18a2 2 0 0 0 4 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        แจ้งและรับข่าวสารจากที่ LINE
+      </p>
+
+      <p class="note">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5.4l3.4 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        ภายใน 24 ชม. จะได้รับการติดต่อจากเจ้าหน้าที่ทางไลน์
+      </p>
+
+      <a class="btn-line" href="https://line.me/R/ti/p/@smart-school" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#ffffff"/><path fill="#06c755" d="M12 5.2c-3.53 0-6.4 2.35-6.4 5.25 0 2.6 2.27 4.78 5.34 5.19.21.05.49.14.56.32.06.16.04.42.02.58l-.09.55c-.03.17-.13.65.57.35.7-.29 3.73-2.19 5.09-3.76.94-1.03 1.31-2.08 1.31-3.23 0-2.9-2.87-5.25-6.4-5.25Z"/></svg>
+        เพิ่มเพื่อน
+      </a>
     </div>
 
-    <!-- RIGHT: next steps -->
-    <aside class="col" id="next-step">
-      <section class="panel">
-        <h2 class="panel__title">ขั้นตอนถัดไป</h2>
-        <p class="panel__sub">ทำ 3 ขั้นตอนนี้เพื่อยืนยันที่นั่ง</p>
+    <div class="next__qr">
+      <p class="qr__title">ชำระเงินด้วยการสแกน</p>
+      <div class="qr__frame">
+        <img src="assets/qr-placeholder.svg" alt="QR code สำหรับชำระเงิน">
+      </div>
+      <p class="qr__caption">
+        สแกน QR เพื่อชำระเงิน<br>
+        หลังชำระแล้ว กรุณาแจ้งชำระผ่านไลน์
+      </p>
+    </div>
+  </section>
 
-        <ol class="steps">
-          <li><span>โอนเงิน ฿190 โดยสแกน QR ด้านล่าง</span></li>
-          <li><span>เพิ่มเพื่อนไลน์ <button class="line-id" type="button" data-copy="@smart-school">@smart-school</button></span></li>
-          <li><span>เจ้าหน้าที่จะติดต่อกลับภายใน 24 ชม. พร้อมส่งลิงก์เข้าเรียน</span></li>
-        </ol>
-
-        <div class="qr">
-          <img class="qr__img" src="assets/qr-placeholder.svg" alt="QR code สำหรับโอนเงิน">
-          <p class="qr__caption">
-            <strong>สแกนเพื่อโอนเงิน</strong>
-            เปิดแอปธนาคาร แล้วสแกน QR นี้ ยอด ฿190
-          </p>
-        </div>
-
-        <div class="actions">
-          <a class="btn btn--line" href="https://line.me/R/ti/p/@smart-school" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M12 2C6.48 2 2 5.79 2 10.4c0 4.09 3.55 7.52 8.35 8.24.32.07.77.22.88.5.1.26.07.66.03.92l-.14.87c-.04.26-.2 1.01.88.55 1.08-.46 5.83-3.43 7.95-5.87C21.4 13.9 22 12.24 22 10.4 22 5.79 17.52 2 12 2Z"/></svg>
-            เพิ่มเพื่อนในไลน์
-          </a>
-          <button class="btn btn--soft" type="button" data-copy="@smart-school">คัดลอกไอดี</button>
-        </div>
-      </section>
-    </aside>
-
-  </div>
 </main>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
