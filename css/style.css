@@ -284,12 +284,35 @@ img { display: block; max-width: 100%; height: auto; }
 
 .hero__inner { position: relative; }
 
+/* Clips the breathing scale so it never leaves a gap at the edges. */
+.hero__frame { overflow: hidden; }
+
 .hero__art {
   display: block;
   width: 100%;
+  transform: scale(1.01);
   -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent 100%);
   mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent 100%);
 }
+
+/* ── AMBIENT SHAPES ──
+   The art is a single flat bitmap, so these are the only pieces of the scene
+   that can actually move independently. Kept few, slow, and staggered. */
+.orb {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.orb svg { width: 100%; height: 100%; }
+
+.o1 { top: 20%; left: 5%;    width: 26px; height: 26px; color: #3b82f6; }
+.o2 { top: 55%; left: 2.5%;  width: 24px; height: 24px; color: var(--teal); }
+.o3 { top: 78%; left: 11%;   width: 20px; height: 20px; color: #f6c445; }
+.o4 { top: 13%; left: 15%;   width: 18px; height: 18px; color: var(--teal); }
+.o5 { top: 18%; right: 6%;   width: 26px; height: 26px; color: var(--orange); }
+.o6 { top: 50%; right: 2.5%; width: 22px; height: 22px; color: #f6c445; }
+.o7 { top: 74%; right: 9%;   width: 20px; height: 20px; color: #3b82f6; }
 
 /* Everything below the hero was removed — the user is supplying their own
    designs for those sections. Only the scaffolding back-link remains. */
@@ -970,3 +993,61 @@ img { display: block; max-width: 100%; height: auto; }
 .box__chip .chip-ok { display: none; }
 .box.is-open .box__chip .chip-lock { display: none; }
 .box.is-open .box__chip .chip-ok { display: block; }
+
+/* ══════ HERO AMBIENT MOTION ══════
+   Slow, staggered, and never in unison — ambient, not a loading screen. */
+@media (prefers-reduced-motion: no-preference) {
+  /* The whole scene breathes, since the hamster cannot move on its own. */
+  .hero__art { animation: scene-breathe 11s ease-in-out infinite; }
+
+  .o1 { animation: orb-float 6.5s ease-in-out infinite; }
+  .o2 { animation: orb-drift 8s ease-in-out infinite 1.2s; }
+  .o3 { animation: orb-turn 9.5s ease-in-out infinite 0.6s; }
+  .o4 { animation: orb-float 7.5s ease-in-out infinite 2.4s; }
+  .o5 { animation: orb-turn 8.5s ease-in-out infinite 0.3s; }
+  .o6 { animation: orb-float 6s ease-in-out infinite 3.1s; }
+  .o7 { animation: orb-drift 9s ease-in-out infinite 1.8s; }
+
+  /* Barely-there warmth shift on the ground. */
+  .container.page-thanks::before { animation: ground-breathe 14s ease-in-out infinite; }
+}
+
+@keyframes scene-breathe {
+  0%, 100% { transform: scale(1.008); }
+  50%      { transform: scale(1.018); }
+}
+
+@keyframes orb-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-9px) rotate(3deg); }
+}
+
+@keyframes orb-drift {
+  0%, 100% { transform: translateX(0) translateY(0); }
+  50%      { transform: translateX(7px) translateY(-5px); }
+}
+
+@keyframes orb-turn {
+  0%, 100% { transform: rotate(-4deg) translateY(0); }
+  50%      { transform: rotate(4deg) translateY(-6px); }
+}
+
+/* Soft radial warmth over the page ground, pulsing almost imperceptibly. */
+.container.page-thanks { position: relative; }
+
+.container.page-thanks::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(255, 107, 0, 0.05), transparent 60%);
+}
+
+.container.page-thanks > * { position: relative; z-index: 1; }
+
+@keyframes ground-breathe {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 0.8; }
+}
