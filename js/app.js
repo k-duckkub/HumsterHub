@@ -263,62 +263,93 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
   const track = document.getElementById("track");
   if (!stage || !track) return;
 
-  // photo: null renders the placeholder slot. Drop in a path to swap it.
+  // photo: null renders the silhouette. Drop in a path to swap it.
   const TEACHERS = [
     {
       name: "ครูพาย",
       role: "สายเกมดีไซน์",
-      accent: "#2c9fa2",
-      stickers: ["GAME ON", "★ PLAY"],
+      accent: "#2c9fa2", ramp: ["#d8efee", "#7fcfcd", "#2c9fa2"],
+      sticker: "GAME DEV",
+      doodles: ["pad", "heart", "star"],
       photo: null,
     },
     {
       name: "ครูบอส",
       role: "สายโค้ดดิ้งประจำทีม",
-      accent: "#ff6b00",
-      stickers: ["&lt;/&gt; CODE", "LET'S GO"],
+      accent: "#ff6b00", ramp: ["#f6d8c8", "#ffb47a", "#ff6b00"],
+      sticker: "CODE",
+      doodles: ["tag", "brace", "terminal", "bolt"],
       photo: null,
     },
     {
       name: "ครูเกม",
       role: "สายอาร์ตประจำทีม",
-      accent: "#ffc52a",
-      stickers: ["✎ ART", "WOW"],
+      accent: "#ffc52a", ramp: ["#fdeec4", "#ffd873", "#ffc52a"],
+      sticker: "ART",
+      doodles: ["brush", "palette", "sparkle"],
       photo: null,
     },
   ];
 
-  const SLOT = `
-    <div class="photo-slot">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/>
-        <path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-      </svg>
-      <b>ใส่รูปครูตรงนี้</b>
-      <span>PNG พื้นใส ตัดขอบมาแล้ว</span>
-    </div>`;
+  // Every mark means something for its teacher — nothing decorative-at-random.
+  const DOODLE = {
+    tag:      '<svg viewBox="0 0 24 24" fill="none"><path d="M9 7l-5 5 5 5M15 7l5 5-5 5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    brace:    '<svg viewBox="0 0 24 24" fill="none"><path d="M9 4c-2 0-2 6-4 8 2 2 2 8 4 8M15 4c2 0 2 6 4 8-2 2-2 8-4 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
+    terminal: '<svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="4.5" width="19" height="15" rx="3" stroke="currentColor" stroke-width="2.2"/><path d="M7 10l3 2.5L7 15M12.5 15H17" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    bolt:     '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2L5 13h5.5L9.5 22 19 10h-6z"/></svg>',
+    pad:      '<svg viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="11" rx="5" stroke="currentColor" stroke-width="2.2"/><path d="M7 11v3M5.5 12.5h3M16 12h.01M18.5 14h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+    heart:    '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 4H6v3H3v3h3v3h3v3h3v-3h3v-3h3V7h-3V4h-3v3H9z"/></svg>',
+    star:     '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.4 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>',
+    brush:    '<svg viewBox="0 0 24 24" fill="none"><path d="M18 3.5l2.5 2.5-9 9-3.5 1 1-3.5z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M6 16c-1.5 1.5-1 4-3 5 3 .5 5.5 0 6.5-2" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+    palette:  '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 100 18c1.6 0 2-1.2 1.2-2-.8-.9-.3-2 1-2H16a5 5 0 005-5c0-5-4-9-9-9z" stroke="currentColor" stroke-width="2.2"/><circle cx="8" cy="10" r="1.3" fill="currentColor"/><circle cx="12.5" cy="7.5" r="1.3" fill="currentColor"/></svg>',
+    sparkle:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 7.2L21 11l-7.2 1.8L12 20l-1.8-7.2L3 11l7.2-1.8z"/></svg>',
+  };
 
-  const DOODLE_A = `<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v5M12 16v5M3 12h5M16 12h5" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>`;
-  const DOODLE_B = `<svg viewBox="0 0 24 24" fill="none"><path d="M3 15c4-9 14-9 18-2" stroke="currentColor" stroke-width="3.6" stroke-linecap="round"/><path d="M17 10l4 3-4 3" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  // Unrevealed character, not a missing asset: a real figure in the teacher's
+  // accent, wearing the same sticker outline the photo will get.
+  const SILHOUETTE = `
+    <svg class="figure-mock" viewBox="0 0 220 300" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <g fill="currentColor">
+        <circle cx="110" cy="46" r="34"/>
+        <path d="M110 86c-30 0-53 17-59 44l-12 54c-2 10 5 18 14 18 8 0 14-5 16-13l9-38v36c0 11 1 21 3 31l11 66c1 9 8 15 17 15 10 0 17-8 16-17l-5-68 5-32 5 32-5 68c-1 9 6 17 16 17 9 0 16-6 17-15l11-66c2-10 3-20 3-31v-36l9 38c2 8 8 13 16 13 9 0 16-8 14-18l-12-54c-6-27-29-44-59-44z"/>
+      </g>
+    </svg>`;
+
+  const BLOB = `
+    <svg class="blob-art" viewBox="0 0 400 420" aria-hidden="true">
+      <path class="blob-back" d="M214 14c74-6 140 52 156 124 15 72-20 148-78 190-58 42-139 50-192 14C47 306 18 236 24 168 30 100 74 40 140 22c25-7 50-6 74-8z"/>
+      <path class="blob-front" d="M196 30c68-4 128 46 146 112 18 66-8 140-60 182-52 42-128 48-176 12C58 300 30 234 38 170 46 106 90 48 152 34c15-3 29-3 44-4z"/>
+    </svg>`;
+
+  const UNDERLINE = `
+    <svg class="role-underline" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M4 8c34-6 68-7 96-4 26 3 60 2 96-3" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </svg>`;
 
   const figure = (t) => t.photo
-    ? `<img src="${t.photo}" alt="${t.name}">`
-    : SLOT;
+    ? `<img src="${t.photo}" alt="${t.name}" draggable="false">`
+    : SILHOUETTE;
 
   track.innerHTML = TEACHERS.map((t) => `
-    <article class="slide" style="--accent:${t.accent}">
-      <span class="slide__blob" aria-hidden="true"></span>
-      <span class="sticker sticker--a" aria-hidden="true">${t.stickers[0]}</span>
-      <span class="sticker sticker--b" aria-hidden="true">${t.stickers[1]}</span>
-      <span class="doodle doodle--a" aria-hidden="true">${DOODLE_A}</span>
-      <span class="doodle doodle--b" aria-hidden="true">${DOODLE_B}</span>
+    <article class="slide" style="--accent:${t.accent};--ramp0:${t.ramp[0]};--ramp1:${t.ramp[1]};--ramp2:${t.ramp[2]}">
+      <span class="slide__blob" aria-hidden="true">${BLOB}</span>
+
+      <span class="deco deco--back deco--plus" aria-hidden="true">${DOODLE.sparkle}</span>
+      ${t.doodles.slice(0, 2).map((d, i) => `<span class="doodle doodle--b${i}" aria-hidden="true">${DOODLE[d]}</span>`).join("")}
+
       <div class="slide__figure">
         <div class="fig-layer fig-layer--top" aria-hidden="true">${figure(t)}</div>
         <div class="fig-layer fig-layer--bot">${figure(t)}</div>
       </div>
+
+      ${t.doodles.slice(2).map((d, i) => `<span class="doodle doodle--f${i}" aria-hidden="true">${DOODLE[d]}</span>`).join("")}
+      <span class="sticker sticker--a" aria-hidden="true">${t.sticker}</span>
+      <span class="deco deco--front deco--ring" aria-hidden="true"></span>
+      <span class="deco deco--front deco--square" aria-hidden="true"></span>
+
       <div class="slide__text">
         <h2 class="slide__name">${t.name}</h2>
-        <p class="slide__role">${t.role}</p>
+        <p class="slide__role">${t.role}${UNDERLINE}</p>
       </div>
     </article>`).join("");
 
@@ -434,6 +465,32 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     track.style.willChange = "transform";
   });
 
+  // Parallax and tilt are pure decoration written from the drag offset the
+  // handler already has — they never feed back into the pointer maths.
+  function paint(x) {
+    track.style.transform = `translate3d(${x}px, 0, 0)`;
+
+    const slide = slides[index];
+    if (!slide) return;
+    const dx = x - restingX(index);
+    const fig = slide.querySelector(".slide__figure");
+    const blob = slide.querySelector(".slide__blob");
+    // Capped at 1.5° — past that the character reads as falling over.
+    const tilt = Math.max(-1.5, Math.min(1.5, dx / 90));
+    if (fig) fig.style.transform = `rotate(${tilt}deg)`;
+    // Counter-translated so the blob travels at ~70% of the character.
+    if (blob) blob.style.transform = `translate(-50%, -50%) translateX(${-dx * 0.3}px)`;
+  }
+
+  function clearDragPaint() {
+    slides.forEach((s) => {
+      const fig = s.querySelector(".slide__figure");
+      const blob = s.querySelector(".slide__blob");
+      if (fig) fig.style.transform = "";
+      if (blob) blob.style.transform = "";
+    });
+  }
+
   // 1:1 with the pointer — drag 200px, the track moves 200px. Coalesced into
   // one write per frame; pointermove can fire well above refresh rate.
   stage.addEventListener("pointermove", (e) => {
@@ -442,7 +499,7 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     if (rafId) return;
     rafId = requestAnimationFrame(() => {
       rafId = 0;
-      if (pendingX !== null) track.style.transform = `translate3d(${pendingX}px, 0, 0)`;
+      if (pendingX !== null) paint(pendingX);
     });
   });
 
@@ -453,6 +510,9 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
     stage.classList.remove("is-dragging");
     track.style.willChange = "auto";
+    // Inline transforms outrank the squash/slice CSS, so they must go before
+    // show() runs — otherwise the figure never takes the hit.
+    clearDragPaint();
     const dx = e.clientX - startX;
     const threshold = Math.min(140, window.innerWidth * 0.12);
     if (dx <= -threshold) show(index + 1);

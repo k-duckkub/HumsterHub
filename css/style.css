@@ -1067,14 +1067,31 @@ img { display: block; max-width: 100%; height: auto; }
 
 /* Continuous section, so it sizes to its content rather than the viewport. */
 .gallery {
-  background: var(--warm-ivory);
+  position: relative;
+  background: radial-gradient(circle at 50% 45%, #fff8f1 0%, var(--warm-ivory) 72%);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   padding-bottom: 12px;
 }
 
-.gallery__head { text-align: center; padding: 44px 24px 8px; }
+/* 3% film grain so the flat gradient reads as paper, not as a CSS fill.
+   Inline feTurbulence — no asset, and light enough to leave art clean. */
+.gallery::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.03;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.gallery > * { position: relative; z-index: 2; }
+
+/* Tight, so the character arrives sooner in the scroll. */
+.gallery__head { text-align: center; padding: 34px 24px 0; }
 
 .gallery__kicker {
   font-size: 15px;
@@ -1093,8 +1110,11 @@ img { display: block; max-width: 100%; height: auto; }
   text-wrap: balance;
 }
 
+/* Poster scale: the character should own the screen, so the stage takes
+   most of the viewport height while still flowing in the page. */
 .stage {
-  min-height: 620px;
+  position: relative;
+  min-height: min(86vh, 880px);
   display: flex;
   align-items: center;
   cursor: grab;
@@ -1112,115 +1132,186 @@ img { display: block; max-width: 100%; height: auto; }
   will-change: transform;
 }
 
-/* Slides sit at 82vw so ~9vw of each neighbour stays in frame. */
+/* Slides sit at 82vw so ~9vw of each neighbour stays in frame.
+   Depth comes from strict layering, so every child declares its plane:
+   blob (0) → back doodles (1) → CHARACTER (2) → front shapes (3) → text (4) */
 .slide {
   position: relative;
   flex: 0 0 82vw;
-  min-height: 580px;
+  min-height: min(84vh, 860px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 0 2vw;
-  transform: scale(0.86);
-  opacity: 0.5;
-  transition: transform 0.42s ease-out, opacity 0.42s ease-out;
+  transform: scale(0.88);
+  opacity: 0.38;
+  filter: saturate(0.75);
+  transition: transform 0.42s ease-out, opacity 0.42s ease-out, filter 0.42s ease-out;
 }
 
-.slide.is-active { transform: scale(1); opacity: 1; }
+.slide.is-active { transform: scale(1); opacity: 1; filter: none; }
 
-/* Organic accent blob behind the figure, per teacher. */
+/* Organic hand-drawn blob, two offset layers — an ellipse read as a shape
+   the browser made, which is exactly what a poster must not look like. */
 .slide__blob {
   position: absolute;
-  top: 46%;
+  top: 47%;
   left: 50%;
-  width: min(52vw, 430px);
-  aspect-ratio: 1 / 1.06;
+  width: min(56vw, 620px);
   transform: translate(-50%, -50%);
-  background: var(--accent);
-  opacity: 0.14;
-  border-radius: 58% 42% 46% 54% / 48% 52% 48% 52%;
+  z-index: 0;
   pointer-events: none;
+  line-height: 0;
 }
 
+.blob-art {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  /* drop-shadow, not box-shadow: it has to follow the blob path. */
+  filter: drop-shadow(0 24px 60px rgba(255, 107, 0, 0.08));
+}
+
+/* The back layer is nudged and rotated off the front one — that offset is
+   the whole reason there are two, and without it this reads as a circle. */
+.blob-back {
+  fill: var(--ramp0);
+  opacity: 0.85;
+  transform: translate(-3%, 3%) rotate(-9deg);
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.blob-front { fill: var(--ramp1); opacity: 0.34; }
+
+/* 55–70vh of character: the figure is the subject, not an inset image. */
 .slide__figure {
   position: relative;
-  width: min(40vw, 320px);
-  aspect-ratio: 3 / 4;
+  z-index: 2;
+  height: min(62vh, 600px);
+  width: auto;
+  aspect-ratio: 22 / 30;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.slide__figure img {
+.slide__figure img,
+.figure-mock {
   width: 100%; height: 100%;
   object-fit: contain;
   object-position: bottom center;
-  filter: drop-shadow(0 18px 30px rgba(10, 26, 47, 0.14));
+  filter: drop-shadow(0 18px 28px rgba(10, 26, 47, 0.12));
 }
 
-/* Slot for the cut-out photo, until the real artwork arrives. */
-.photo-slot {
-  width: 100%; height: 100%;
-  border: 2.5px dashed color-mix(in srgb, var(--accent) 55%, #ffffff);
-  border-radius: 999px 999px 34px 34px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: var(--slate);
-  text-align: center;
-  padding: 18px;
+/* Not a placeholder — the character unrevealed. Accent fill at 22% under
+   the same white sticker outline the cut-out photos will carry. */
+.figure-mock { color: var(--accent); }
+
+.figure-mock g {
+  fill-opacity: 0.22;
+  stroke: #ffffff;
+  stroke-width: 7;
+  paint-order: stroke;
 }
 
-.photo-slot svg { width: 46px; height: 46px; color: var(--accent); opacity: 0.6; }
-.photo-slot b { font-size: 15px; font-weight: 700; color: var(--ink); }
-.photo-slot span { font-size: 13px; }
+.slide__text { z-index: 4; }
 
+/* The name is the second-loudest thing on the slide, and it overlaps the
+   character — the white outline is what keeps it readable when it does. */
 .slide__name {
-  margin-top: 26px;
-  font-size: 46px;
+  margin-top: -18px;
+  font-size: clamp(40px, 4.4vw, 64px);
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--ink);
   line-height: 1.1;
+  -webkit-text-stroke: 6px #ffffff;
+  paint-order: stroke fill;
 }
 
-.slide__role { font-size: 20px; color: var(--slate); margin-top: 4px; }
+.slide__role {
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+}
 
-.slide__quote {
-  margin-top: 14px;
-  padding: 9px 18px;
-  border-radius: 999px 999px 999px 6px;
-  background: #ffffff;
-  box-shadow: var(--shadow-sm);
-  font-size: 16px;
-  color: var(--ink);
+/* Hand-drawn squiggle, not a border-bottom. */
+.role-underline {
+  position: absolute;
+  left: 50%;
+  bottom: -11px;
+  transform: translateX(-50%);
+  width: 104%;
+  height: 11px;
+  color: var(--accent);
+  opacity: 0.8;
 }
 
 /* Stickers — tilted, on white, like something stuck to a poster. */
 .sticker {
   position: absolute;
-  padding: 7px 14px;
-  border-radius: 12px;
+  z-index: 3;
+  padding: 8px 15px;
+  border-radius: 14px;
   background: #ffffff;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 6px 14px rgba(10, 26, 47, 0.08);
   font-size: 13px;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   color: var(--accent);
   white-space: nowrap;
 }
 
-.sticker--a { top: 8%;  left: 2%;  transform: rotate(-8deg); }
-.sticker--b { top: 26%; right: 1%; transform: rotate(7deg); }
+/* Offsets are measured from the slide's centre, not its edges: the slide is
+   82vw wide, so edge percentages scatter the marks metres from the figure. */
+.sticker--a { top: 19%; left: calc(50% + 185px); transform: rotate(6deg); }
 
-/* Hand-drawn doodles: round caps, deliberately imperfect. */
+/* Doodles: each one means something for its teacher — code braces for the
+   coder, a gamepad for the game designer. Nothing decorative-at-random. */
 .doodle { position: absolute; color: var(--accent); pointer-events: none; }
 .doodle svg { width: 100%; height: 100%; }
-.doodle--a { top: 12%; right: 8%;  width: 46px; height: 46px; }
-.doodle--b { bottom: 22%; left: 5%; width: 54px; height: 54px; color: var(--teal); }
+
+.doodle--b0 { top: 14%;    left: calc(50% - 330px); width: 56px; height: 56px; z-index: 1; opacity: 0.55; }
+.doodle--b1 { bottom: 24%; left: calc(50% + 265px); width: 50px; height: 50px; z-index: 1; opacity: 0.5; }
+.doodle--f0 { top: 33%;    left: calc(50% + 200px); width: 44px; height: 44px; z-index: 3; }
+.doodle--f1 { bottom: 26%; left: calc(50% - 265px); width: 40px; height: 40px; z-index: 3; }
+
+/* Two global marks per slide, one behind the character and one in front —
+   the pair is what makes the character sit inside the composition. */
+.deco { position: absolute; pointer-events: none; }
+.deco svg { width: 100%; height: 100%; }
+
+.deco--back  { z-index: 1; }
+.deco--front { z-index: 3; }
+
+.deco--plus {
+  top: 11%; left: calc(50% + 250px);
+  width: 32px; height: 32px;
+  color: var(--teal);
+  opacity: 0.55;
+}
+
+.deco--ring {
+  bottom: 15%; left: calc(50% + 320px);
+  width: 62px; height: 62px;
+  border: 5px solid var(--orange);
+  border-radius: 50%;
+  opacity: 0.45;
+}
+
+.deco--square {
+  top: 30%; left: calc(50% - 285px);
+  width: 26px; height: 26px;
+  border-radius: 7px;
+  background: #ffc52a;
+  transform: rotate(18deg);
+  opacity: 0.7;
+}
 
 .gallery__hint {
   text-align: center;
@@ -1235,14 +1326,23 @@ img { display: block; max-width: 100%; height: auto; }
   .gallery__kicker { font-size: 13px; }
   /* The peek is the only affordance, so it has to survive on a phone:
      narrower slides and a gentler side-scale keep the neighbour in frame. */
-  .stage { min-height: 520px; }
-  .slide { flex-basis: 78vw; min-height: 490px; transform: scale(0.9); }
+  .stage { min-height: min(78vh, 640px); }
+  .slide { flex-basis: 78vw; min-height: min(76vh, 620px); transform: scale(0.9); }
   .slide.is-active { transform: scale(1); }
-  .slide__figure { width: 58vw; }
-  .slide__name { font-size: 32px; margin-top: 18px; }
-  .slide__role { font-size: 16px; }
-  .slide__quote { font-size: 14px; }
-  .sticker { font-size: 11px; padding: 6px 11px; }
+  /* Narrower crop so 56vh of character still fits inside a 78vw slide. */
+  .slide__figure { height: 56vh; aspect-ratio: 3 / 5; }
+  .slide__blob { width: 84vw; }
+  .slide__name { font-size: 32px; margin-top: -10px; -webkit-text-stroke-width: 4px; }
+  .slide__role { font-size: 15px; }
+  .sticker { font-size: 11px; padding: 6px 11px; border-radius: 12px; }
+  .sticker--a { left: calc(50% + 70px); top: 14%; }
+  .doodle--b0 { width: 40px; height: 40px; left: calc(50% - 132px); }
+  .doodle--b1 { width: 36px; height: 36px; left: calc(50% + 104px); }
+  .doodle--f0 { width: 34px; height: 34px; left: calc(50% + 100px); }
+  .doodle--f1 { width: 32px; height: 32px; left: calc(50% - 128px); }
+  .deco--ring { width: 42px; height: 42px; border-width: 4px; left: calc(50% + 106px); }
+  .deco--plus { width: 26px; height: 26px; left: calc(50% + 96px); }
+  .deco--square { left: calc(50% - 122px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1313,11 +1413,13 @@ img { display: block; max-width: 100%; height: auto; }
 
 .slide.is-active .slide__text { opacity: 1; transform: translateY(0); }
 
-/* Idle: the settled teacher breathes, nothing else. */
+/* Idle: the settled teacher breathes and two doodles drift. Restraint is
+   the point — everything moving at once reads as a toy, not a poster. */
 @media (prefers-reduced-motion: no-preference) {
-  .slide.is-active .slide__figure { animation: teacher-idle 5.5s ease-in-out infinite; }
-  .slide.is-active .doodle--a { animation: orb-float 6s ease-in-out infinite; }
-  .slide.is-active .doodle--b { animation: orb-turn 7.5s ease-in-out infinite 1.1s; }
+  .slide.is-active .slide__figure { animation: teacher-idle 4.5s ease-in-out infinite; }
+  .slide.is-active .blob-art { animation: blob-breathe 7s ease-in-out infinite; }
+  .slide.is-active .doodle--b0 { animation: orb-float 6s ease-in-out infinite; }
+  .slide.is-active .doodle--f0 { animation: orb-turn 7.5s ease-in-out infinite 1.1s; }
   /* The idle loop must not fight the slash. */
   .slide.is-squash .slide__figure,
   .slide.is-sliced .slide__figure { animation: none; }
@@ -1325,7 +1427,12 @@ img { display: block; max-width: 100%; height: auto; }
 
 @keyframes teacher-idle {
   0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-5px) rotate(0.7deg); }
+  50%      { transform: translateY(-5px) rotate(0.4deg); }
+}
+
+@keyframes blob-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.015); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1346,6 +1453,7 @@ img { display: block; max-width: 100%; height: auto; }
 /* Idle loops animate the same elements the drag moves — pausing them while
    the finger is down keeps the frame budget for the drag itself. */
 .stage.is-dragging .slide__figure,
+.stage.is-dragging .blob-art,
 .stage.is-dragging .doodle { animation: none !important; }
 
 /* Slides are only eased when snapping, never mid-drag. */
