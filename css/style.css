@@ -264,37 +264,36 @@ img { display: block; max-width: 100%; height: auto; }
 
 .qr__caption { font-size: 17px; color: var(--slate); line-height: 1.55; }
 
-/* Bank details under the QR — some people transfer by account number
-   rather than scanning, so both routes sit in the same panel. */
+/* Bank details as a full-width strip under both columns — some people
+   transfer by account number rather than scanning. It sat inside the QR
+   column first, which made that side 218px taller than the left and left a
+   hole under the LINE button; spanning the grid balances the two instead. */
 .bank {
-  width: 100%;
-  max-width: 300px;
-  margin-top: 20px;
-  padding-top: 18px;
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 48px;
+  margin-top: 4px;
+  padding-top: 26px;
   border-top: 1px solid var(--border);
   text-align: left;
 }
 
-.bank__row {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  padding: 7px 0;
-}
+/* Label above value: stacked reads better than side-by-side once the rows
+   sit next to each other as columns. */
+.bank__row { display: flex; flex-direction: column; gap: 6px; }
 
 .bank__label {
-  flex: 0 0 74px;
-  font-size: 15px;
+  font-size: 14px;
   color: var(--slate);
 }
 
 .bank__value {
-  flex: 1;
   margin: 0;
   font-size: 17px;
   font-weight: 700;
   color: var(--ink);
-  word-break: break-word;
+  white-space: nowrap;
 }
 
 /* Reuses the [data-copy] handler and toast that the LINE ID already uses. */
@@ -311,25 +310,12 @@ img { display: block; max-width: 100%; height: auto; }
   text-align: left;
 }
 
-/* An image has no text baseline to share, so this row aligns from the top
-   and the label is nudged to sit optically centred against the logo. */
-.bank__row--logo { align-items: flex-start; }
-.bank__row--logo .bank__label { padding-top: 7px; }
-
 /* Trademark, so it keeps its own blue rather than a palette colour. */
 .bank__logo {
   display: block;
-  width: 170px;
+  width: 158px;
   max-width: 100%;
   height: auto;
-}
-
-.bank__sub {
-  display: block;
-  margin-top: 2px;
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--slate);
 }
 
 .bank__acct svg { width: 17px; height: 17px; color: var(--orange); flex: 0 0 auto; }
@@ -463,9 +449,9 @@ img { display: block; max-width: 100%; height: auto; }
   .notice { font-size: 16px; }
   .btn-line { width: 240px; }
   .qr__frame img { width: 200px; }
-  .bank { max-width: 100%; }
-  .bank__label { flex-basis: 68px; font-size: 14px; }
-  .bank__value { font-size: 16px; }
+  /* The card is already one column here, so the strip stacks again. */
+  .bank { flex-direction: column; gap: 16px; padding-top: 22px; }
+  .bank__value { font-size: 16px; white-space: normal; }
 }
 
 /* ══════════ ACTIVITY PICKER ══════════ */

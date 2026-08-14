@@ -86,37 +86,38 @@
       <p class="qr__caption">
         สแกน QR เพื่อชำระเงิน
       </p>
-
-      <!-- ═══════ ข้อมูลบัญชีธนาคาร ═══════ -->
-      <dl class="bank">
-        <div class="bank__row bank__row--logo">
-          <dt class="bank__label">ธนาคาร</dt>
-          <dd class="bank__value">
-            <!-- The lockup already reads "ธนาคารกรุงไทย", so the name is not
-                 repeated as text — it lives in the alt for screen readers. -->
-            <img class="bank__logo" src="assets/krungthai-logo.webp" width="638" height="140"
-                 alt="ธนาคารกรุงไทย จำกัด (มหาชน)">
-            <span class="bank__sub">สาขาอโศก</span>
-          </dd>
-        </div>
-        <div class="bank__row">
-          <dt class="bank__label">เลขบัญชี</dt>
-          <dd class="bank__value">
-            <!-- data-copy is the digits only: banking apps reject the dashes,
-                 so copying the pretty form would just make people retype it. -->
-            <button class="bank__acct" type="button" data-copy="0151565031">
-              015-1-56503-1
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M15 5.5A1.5 1.5 0 0 0 13.5 4h-8A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            </button>
-          </dd>
-        </div>
-        <div class="bank__row">
-          <dt class="bank__label">ชื่อบัญชี</dt>
-          <dd class="bank__value">บริษัท เอ็กซ์บิส (ประเทศไทย) จำกัด</dd>
-        </div>
-      </dl>
-      <!-- ═══════ จบข้อมูลบัญชีธนาคาร ═══════ -->
     </div>
+
+    <!-- ═══════ ข้อมูลบัญชีธนาคาร ═══════
+         Spans both columns: kept inside the QR column it made the right side
+         218px taller than the left, leaving a hole under the LINE button. -->
+    <dl class="bank">
+      <div class="bank__row">
+        <dt class="bank__label">ธนาคาร</dt>
+        <dd class="bank__value">
+          <!-- The lockup already reads "ธนาคารกรุงไทย", so the name is not
+               repeated as text — it lives in the alt for screen readers. -->
+          <img class="bank__logo" src="assets/krungthai-logo.webp" width="638" height="140"
+               alt="ธนาคารกรุงไทย จำกัด (มหาชน)">
+        </dd>
+      </div>
+      <div class="bank__row">
+        <dt class="bank__label">เลขบัญชี</dt>
+        <dd class="bank__value">
+          <!-- data-copy is the digits only: banking apps reject the dashes,
+               so copying the pretty form would just make people retype it. -->
+          <button class="bank__acct" type="button" data-copy="0151565031">
+            015-1-56503-1
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M15 5.5A1.5 1.5 0 0 0 13.5 4h-8A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+        </dd>
+      </div>
+      <div class="bank__row">
+        <dt class="bank__label">ชื่อบัญชี</dt>
+        <dd class="bank__value">บริษัท เอ็กซ์บิส (ประเทศไทย) จำกัด</dd>
+      </div>
+    </dl>
+    <!-- ═══════ จบข้อมูลบัญชีธนาคาร ═══════ -->
   </section>
 
   <!-- ═══════ TEMPORARY TEST BUTTON — DELETE BEFORE LAUNCH ═══════
