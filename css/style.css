@@ -286,181 +286,11 @@ img { display: block; max-width: 100%; height: auto; }
   mask-image: linear-gradient(to bottom, #000 calc(100% - 40px), transparent 100%);
 }
 
-/* ── HERO COPY ── */
-.thanks-copy {
-  max-width: 660px;
-  margin: 0 auto;
-  padding: 6px 24px 0;
-  text-align: center;
-  position: relative;
-  z-index: 3;
-}
-
-.thanks-copy h1 {
-  font-size: 44px;
-  font-weight: 800;
-  line-height: 1.14;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-  text-wrap: balance;
-  margin-bottom: 14px;
-}
-
-.thanks-copy p {
-  font-size: 19px;
-  line-height: 1.6;
-  color: var(--slate);
-}
-
-.pill-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  margin-bottom: 20px;
-  padding: 9px 20px;
-  border-radius: 999px;
-  background: var(--surface-white, #ffffff);
-  box-shadow: var(--shadow-float);
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--orange);
-}
-
-.pill-status svg { width: 19px; height: 19px; }
-
-/* ── BODY ── */
-.thanks-body {
-  max-width: 780px;
-  margin: 0 auto;
-  padding: 44px 24px 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.soft-card {
-  background: #ffffff;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: 32px 36px;
-}
-
-.soft-card__title {
-  font-size: 23px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  margin-bottom: 22px;
-}
-
-/* Order recap */
-.recap { display: flex; flex-direction: column; gap: 0; }
-
-.recap__row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 18px;
-  padding: 13px 0;
-  font-size: 17px;
-}
-
-.recap__row + .recap__row { border-top: 1px solid var(--border); }
-
-.recap__row dt { color: var(--slate); }
-.recap__row dd { font-weight: 700; font-variant-numeric: tabular-nums; }
-.recap__row--total dd { color: var(--orange); font-size: 25px; }
-
-/* Next steps */
-.flow { list-style: none; display: flex; flex-direction: column; gap: 20px; }
-
-.flow li {
-  display: grid;
-  grid-template-columns: 46px minmax(0, 1fr);
-  gap: 16px;
-  align-items: start;
-}
-
-.flow__icon {
-  width: 46px;
-  height: 46px;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--soft-orange);
-  color: var(--orange);
-}
-
-.flow li:nth-child(2) .flow__icon { background: rgba(44, 159, 162, 0.16); color: var(--teal); }
-.flow li:nth-child(3) .flow__icon { background: rgba(10, 26, 47, 0.07); color: var(--ink); }
-
-.flow__icon svg { width: 24px; height: 24px; }
-
-.flow__text strong {
-  display: block;
-  font-size: 18px;
-  font-weight: 700;
-  margin-bottom: 2px;
-}
-
-.flow__text span { font-size: 16px; color: var(--slate); line-height: 1.55; }
-
-/* CTA block */
-.cta-card {
-  background: var(--soft-orange);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  padding: 30px 36px;
-  text-align: center;
-}
-
-.cta-card p {
-  font-size: 17px;
-  color: var(--ink);
-  margin-bottom: 18px;
-}
-
-.cta-card .btn-line { margin-inline: auto; }
-
-.thanks-back {
-  align-self: center;
-  font-size: 16px;
-  color: var(--slate);
-  text-decoration: none;
-}
-
-.thanks-back:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-
-/* ── CLOSING BAND ──
-   Full-bleed; the art's own cream waves melt into the warm ground. */
-.scene-band { width: 100%; }
-
-/* The art's cream is a shade lighter than the page ground, which leaves a
-   hairline seam — fade the top edge out so the two meet invisibly. */
-.scene-band img {
-  width: 100%;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 34px);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 34px);
-}
+/* Everything below the hero was removed — the user is supplying their own
+   designs for those sections. Only the scaffolding back-link remains. */
 
 @media (max-width: 768px) {
-  /* The phone crop carries the same cloud-waves, so it stays full-bleed too. */
-  .thanks-copy { padding-top: 2px; }
-  .thanks-copy h1 { font-size: 30px; }
-  .thanks-copy p { font-size: 17px; }
-  .pill-status { font-size: 14px; padding: 8px 16px; margin-bottom: 16px; }
-  .thanks-body { padding: 30px 16px 28px; gap: 16px; }
-  /* The band is 3.4:1, so at phone widths it collapses to a sliver and the
-     mascot disappears — crop instead of letting it shrink. */
-  .scene-band img { height: 210px; object-fit: cover; object-position: center; }
-  .soft-card, .cta-card { padding: 24px 20px; border-radius: var(--radius-md); }
-  .soft-card__title { font-size: 20px; margin-bottom: 18px; }
-  .flow li { grid-template-columns: 40px minmax(0, 1fr); gap: 13px; }
-  .flow__icon { width: 40px; height: 40px; }
-  .flow__icon svg { width: 21px; height: 21px; }
-  .flow__text strong { font-size: 17px; }
-  .recap__row { font-size: 16px; }
-  .recap__row--total dd { font-size: 22px; }
+  .hero { padding: 0; }
 }
 
 /* ── TOAST ── */
@@ -552,3 +382,22 @@ img { display: block; max-width: 100%; height: auto; }
   .test-jump { font-size: 13px; padding: 10px 14px; }
 }
 /* ═══════ END TEMPORARY TEST BUTTON ═══════ */
+
+/* ═══════ TEMPORARY BACK LINK — DELETE BEFORE LAUNCH ═══════
+   Pairs with the TEST button so the preview can round-trip. */
+.test-back {
+  display: block;
+  width: fit-content;
+  margin: 28px auto 60px;
+  padding: 10px 20px;
+  border: 2px dashed #b9b9c2;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.6);
+  color: #6e6e73;
+  font-family: inherit;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.test-back:hover { border-color: #8d8d96; color: #3c3c42; }
+/* ═══════ END TEMPORARY BACK LINK ═══════ */
