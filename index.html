@@ -89,10 +89,13 @@
 
       <!-- ═══════ ข้อมูลบัญชีธนาคาร ═══════ -->
       <dl class="bank">
-        <div class="bank__row">
+        <div class="bank__row bank__row--logo">
           <dt class="bank__label">ธนาคาร</dt>
           <dd class="bank__value">
-            กรุงไทย จำกัด (มหาชน)
+            <!-- The lockup already reads "ธนาคารกรุงไทย", so the name is not
+                 repeated as text — it lives in the alt for screen readers. -->
+            <img class="bank__logo" src="assets/krungthai-logo.webp" width="638" height="140"
+                 alt="ธนาคารกรุงไทย จำกัด (มหาชน)">
             <span class="bank__sub">สาขาอโศก</span>
           </dd>
         </div>

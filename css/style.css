@@ -311,6 +311,19 @@ img { display: block; max-width: 100%; height: auto; }
   text-align: left;
 }
 
+/* An image has no text baseline to share, so this row aligns from the top
+   and the label is nudged to sit optically centred against the logo. */
+.bank__row--logo { align-items: flex-start; }
+.bank__row--logo .bank__label { padding-top: 7px; }
+
+/* Trademark, so it keeps its own blue rather than a palette colour. */
+.bank__logo {
+  display: block;
+  width: 170px;
+  max-width: 100%;
+  height: auto;
+}
+
 .bank__sub {
   display: block;
   margin-top: 2px;
