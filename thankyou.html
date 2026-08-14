@@ -26,7 +26,139 @@
    </div>
   </section>
 
-  <!-- ส่วนที่เหลือของหน้ารอดีไซน์จากผู้ใช้ -->
+  <!-- ══════════ ACTIVITY PICKER ══════════ -->
+  <section class="picker">
+
+    <span class="picker__deco d1" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.4 6.1 20.5l1.2-6.7-4.8-4.7 6.6-.9z"/></svg></span>
+    <span class="picker__deco d2" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="4.6" stroke-linecap="round"/></svg></span>
+    <span class="picker__deco d3" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="5"/></svg></span>
+    <span class="picker__deco d4" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="3" transform="rotate(45 12 12)"/></svg></span>
+    <span class="picker__deco d5" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="4.6" stroke-linecap="round"/></svg></span>
+    <span class="picker__deco d6" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="5"/></svg></span>
+
+    <div class="picker__head">
+      <h2 class="picker__title">เลือกกิจกรรมที่ใช่สำหรับคุณ</h2>
+      <p class="picker__sub"><b>คลิกกล่องปริศนา</b> เพื่อเปิดกิจกรรมสุดพิเศษที่รอคุณอยู่!</p>
+    </div>
+
+    <div class="boxes" id="boxes">
+      <button class="box" type="button" data-index="0" aria-expanded="false" aria-controls="reveal">
+        <span class="box__ghosts" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 18l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.8" transform="rotate(60 12 12)"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="11" rx="5" stroke="currentColor" stroke-width="1.8"/><path d="M7 11v3M5.5 12.5h3M16 11.5h.01M18 14h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <span class="box__lid" aria-hidden="true"></span>
+        <span class="box__mark" aria-hidden="true">?</span>
+        <span class="box__chip">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.9"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.9"/></svg>
+          คลิกเพื่อเปิด
+        </span>
+      </button>
+
+      <button class="box" type="button" data-index="1" aria-expanded="false" aria-controls="reveal">
+        <span class="box__ghosts" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 18l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="11" rx="5" stroke="currentColor" stroke-width="1.8"/><path d="M7 11v3M5.5 12.5h3M16 11.5h.01M18 14h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 20V9M12 20V4M19 20v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <span class="box__lid" aria-hidden="true"></span>
+        <span class="box__mark" aria-hidden="true">?</span>
+        <span class="box__chip">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.9"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.9"/></svg>
+          คลิกเพื่อเปิด
+        </span>
+      </button>
+
+      <button class="box" type="button" data-index="2" aria-expanded="false" aria-controls="reveal">
+        <span class="box__ghosts" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.8" transform="rotate(60 12 12)"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 18l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="box__lid" aria-hidden="true"></span>
+        <span class="box__mark" aria-hidden="true">?</span>
+        <span class="box__chip">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.9"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.9"/></svg>
+          คลิกเพื่อเปิด
+        </span>
+      </button>
+    </div>
+
+    <!-- Reveal zone sits on the soft-orange band, waves top and bottom -->
+    <div class="reveal" id="reveal" hidden>
+      <svg class="reveal__wave reveal__wave--top" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+        <path fill="currentColor" d="M0 0H1440V22C1180 48 940 4 700 24 460 44 220 12 0 34Z"/>
+      </svg>
+
+      <div class="reveal__inner">
+        <div class="carousel">
+          <button class="carousel__arrow" type="button" id="prev" aria-label="กิจกรรมก่อนหน้า">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <div class="carousel__view">
+            <article class="act" id="act" aria-live="polite">
+              <div class="act__media">
+                <img id="act-img" src="assets/banner-scigamelab.webp" width="1425" height="762" alt="">
+              </div>
+              <div class="act__info">
+                <span class="act__badge" id="act-badge">แนะนำ</span>
+                <h3 class="act__title" id="act-title">SciGame Lab Camp</h3>
+                <p class="act__hook" id="act-hook">ค่ายวิทย์ + โค้ดดิ้ง + เกม</p>
+                <p class="act__desc" id="act-desc">เปิดโลกวิทยาศาสตร์และเทคโนโลยีผ่านการลงมือทำจริง สร้างเกม ทดลองวิทย์ และพัฒนาไอเดียสุดล้ำไปกับเพื่อนๆ</p>
+
+                <ul class="act__facts">
+                  <li><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 18l-5-9V3" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>วิทย์สนุก<br>ทดลองจริง</li>
+                  <li><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>โค้ดดิ้งง่ายๆ<br>สร้างสรรค์เกม</li>
+                  <li><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="7" width="20" height="11" rx="5" stroke="currentColor" stroke-width="1.9"/><path d="M7 11v3M5.5 12.5h3M16.5 12h.01M18.5 14h.01" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>เกม &amp; STEM<br>บูรณาการความรู้</li>
+                  <li><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="3.2" stroke="currentColor" stroke-width="1.9"/><path d="M3 19c0-3 2.7-4.6 6-4.6s6 1.6 6 4.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M16 6.5a3.2 3.2 0 0 1 0 6M18 14.6c2 .7 3 2.2 3 4.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>ทีมเวิร์ค<br>เพื่อนใหม่เพียบ</li>
+                </ul>
+
+                <p class="act__meta">
+                  <span>
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="1.9"/><path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+                    <b id="act-date">14 – 16 ส.ค.</b>
+                  </span>
+                  <i>|</i>
+                  <span>
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z" stroke="currentColor" stroke-width="1.9"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.9"/></svg>
+                    <b id="act-place">เรียนออนไลน์ผ่าน Discord</b>
+                  </span>
+                </p>
+
+                <div class="act__cta">
+                  <a class="btn-solid" id="act-link" href="index.html">
+                    ดูรายละเอียดกิจกรรม
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </a>
+                  <button class="btn-ghost" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 20s-7.5-4.7-7.5-9.4A4.1 4.1 0 0 1 12 8a4.1 4.1 0 0 1 7.5 2.6C19.5 15.3 12 20 12 20Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg>
+                    บันทึกไว้
+                  </button>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <button class="carousel__arrow" type="button" id="next" aria-label="กิจกรรมถัดไป">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+        <div class="dots" id="dots" role="tablist" aria-label="เลือกกิจกรรม"></div>
+        <p class="reveal__hint">คลิกกล่องปริศนาอื่น เพื่อดูอีกกิจกรรม!</p>
+      </div>
+
+      <svg class="reveal__wave reveal__wave--bottom" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+        <path fill="currentColor" d="M0 60H1440V38C1180 12 940 56 700 36 460 16 220 48 0 26Z"/>
+      </svg>
+    </div>
+  </section>
+
 
   <!-- ═══════ TEMPORARY BACK LINK — DELETE BEFORE LAUNCH ═══════ -->
   <a class="test-back" href="index.html">← กลับไปหน้าสรุปการสมัคร (ชั่วคราว)</a>
