@@ -205,17 +205,6 @@ img { display: block; max-width: 100%; height: auto; }
 
 .notice svg { width: 24px; height: 24px; flex-shrink: 0; color: var(--orange); }
 
-.note {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 17px;
-  color: var(--slate);
-  margin-bottom: 26px;
-}
-
-.note svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--orange); }
-
 /* ── LINE BUTTON ──
    Official LINE artwork, 2000×667, with the pill inset inside transparent
    padding at x 155–1844, y 156–499. The box is the pill's own 1690×344
@@ -454,8 +443,7 @@ img { display: block; max-width: 100%; height: auto; }
   .total__amount { font-size: 42px; }
 
   /* Divider is vertical only on desktop. */
-  .next { grid-template-columns: 1fr; padding: 22px; gap: 30px; }
-  .next__qr { border-left: none; padding-left: 0; }
+  .next { padding: 22px; gap: 30px; }
   .next__head { gap: 16px; margin-bottom: 18px; }
   .step-num { width: 50px; height: 50px; font-size: 27px; border-radius: 12px; }
   .next__title { font-size: 27px; }
@@ -471,6 +459,18 @@ img { display: block; max-width: 100%; height: auto; }
     padding-top: 22px;
     border-top: 1px solid var(--border);
   }
+}
+
+/* Below this the card cannot hold "steps | QR + account" side by side: the
+   pay group starts wrapping, the payment column grows tall again, and the
+   steps column leaves the same hole under the LINE button this layout was
+   built to close. One column is the honest answer at these widths. */
+@media (max-width: 1180px) {
+  .next { grid-template-columns: 1fr; }
+  .next__qr { border-left: none; padding-left: 0; }
+  /* Capped, or the account column stretches across the whole card and the
+     pair drifts left of its own centred heading. */
+  .pay { justify-content: center; max-width: 540px; margin-inline: auto; }
 }
 
 /* ══════════ ACTIVITY PICKER ══════════ */
