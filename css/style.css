@@ -758,8 +758,10 @@ img { display: block; max-width: 100%; height: auto; }
 /* ── MOTION ── */
 @media (prefers-reduced-motion: no-preference) {
   .box__mark { animation: wobble 2.1s ease-in-out infinite; }
-  .box:nth-child(2) .box__mark { animation-delay: 0.5s; }
-  .box:nth-child(3) .box__mark { animation-delay: 1s; }
+  /* Counted on .box-slot, not .box: the slot wrapper made every .box an
+     only-child, so nth-child on .box itself matches nothing. */
+  .box-slot:nth-child(2) .box__mark { animation-delay: 0.5s; }
+  .box-slot:nth-child(3) .box__mark { animation-delay: 1s; }
 
   /* "notice me" — staggered so the three never pulse in unison */
   .box { animation: nudge 5.5s ease-in-out infinite; }
@@ -932,8 +934,10 @@ img { display: block; max-width: 100%; height: auto; }
     scrollbar-width: none;
   }
   .boxes::-webkit-scrollbar { display: none; }
+  /* All three the same width on a phone. The desktop hero-box rule
+     (.box-slot:nth-child(2) .box) still wins on width — max-width is what
+     actually flattens it to 280, which is why there is no override here. */
   .box { width: 74vw; max-width: 280px; scroll-snap-align: center; }
-  .box:nth-child(2) { width: 74vw; max-width: 280px; }
 
   .reveal__inner { padding: 0 12px; }
   .carousel { gap: 8px; }

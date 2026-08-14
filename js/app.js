@@ -32,10 +32,10 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
   const ACTIVITIES = [
     {
       badge: "แนะนำ",
-      title: "SciGame Lab Camp",
+      title: "SciGameLab Camp",
       hook: "ค่ายวิทย์ + โค้ดดิ้ง + เกม",
       desc: "เปิดโลกวิทยาศาสตร์และเทคโนโลยีผ่านการลงมือทำจริง สร้างเกม ทดลองวิทย์ และพัฒนาไอเดียสุดล้ำไปกับเพื่อนๆ",
-      date: "14 – 16 ส.ค.",
+      date: "14–16 ส.ค.",
       place: "เรียนออนไลน์ผ่าน Discord",
       link: "index.html",
     },
@@ -348,7 +348,7 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
       <span class="deco deco--front deco--square" aria-hidden="true"></span>
 
       <div class="slide__text">
-        <h2 class="slide__name">${t.name}</h2>
+        <h3 class="slide__name">${t.name}</h3>
         <p class="slide__role">${t.role}${UNDERLINE}</p>
       </div>
     </article>`).join("");
