@@ -311,6 +311,14 @@ img { display: block; max-width: 100%; height: auto; }
   text-align: left;
 }
 
+.bank__sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--slate);
+}
+
 .bank__acct svg { width: 17px; height: 17px; color: var(--orange); flex: 0 0 auto; }
 
 .bank__acct:hover { color: var(--orange); }
