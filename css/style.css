@@ -251,6 +251,51 @@ img { display: block; max-width: 100%; height: auto; }
 
 .qr__caption { font-size: 17px; color: var(--slate); line-height: 1.55; }
 
+/* ── THANK YOU ── */
+.thanks {
+  max-width: 620px;
+  margin: 40px auto 0;
+  padding: 48px 40px;
+  text-align: center;
+}
+
+.thanks__check {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 26px;
+  border-radius: 50%;
+  background: rgba(6, 199, 85, 0.12);
+  color: var(--line-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thanks__check svg { width: 44px; height: 44px; }
+
+.thanks__title {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin-bottom: 14px;
+  text-wrap: balance;
+}
+
+.thanks__lede {
+  font-size: 18px;
+  color: var(--slate);
+  margin-bottom: 30px;
+}
+
+.thanks__back {
+  font-size: 17px;
+  color: var(--orange);
+  text-decoration: none;
+}
+
+.thanks__back:hover { text-decoration: underline; text-underline-offset: 3px; }
+
 /* ── TOAST ── */
 .toast {
   position: fixed;
@@ -315,3 +360,28 @@ img { display: block; max-width: 100%; height: auto; }
   .btn-line { width: 240px; }
   .qr__frame img { width: 200px; }
 }
+
+/* ═══════ TEMPORARY TEST BUTTON — DELETE BEFORE LAUNCH ═══════
+   Deliberately off-brand so it never reads as production UI. */
+.test-jump {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin: 32px auto 0;
+  padding: 12px 22px;
+  border: 2px dashed #b9b9c2;
+  border-radius: 10px;
+  background: #fafafa;
+  color: #6e6e73;
+  font-family: inherit;
+  font-size: 15px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.test-jump:hover { border-color: #8d8d96; color: #3c3c42; }
+
+@media (max-width: 560px) {
+  .test-jump { font-size: 13px; padding: 10px 14px; }
+}
+/* ═══════ END TEMPORARY TEST BUTTON ═══════ */
