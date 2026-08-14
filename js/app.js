@@ -382,6 +382,15 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     slashTimers.length = 0;
     const at = (ms, fn) => slashTimers.push(setTimeout(fn, ms));
 
+    // Clearing the timers above also kills the previous slash's cleanup, so
+    // reset every slide here — otherwise a fast second swipe strands the
+    // earlier slide at opacity 0 with its halves flung apart, permanently.
+    slides.forEach((s) => {
+      s.classList.remove("is-squash", "is-sliced");
+      s.querySelectorAll(".particle").forEach((p) => p.remove());
+    });
+    stage.querySelectorAll(".slash-line").forEach((l) => l.remove());
+
     slide.style.setProperty("--dir", dir > 0 ? "1" : "-1");
     slide.classList.add("is-squash");
 
@@ -409,25 +418,41 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     live.textContent = `${TEACHERS[index].name} — ${TEACHERS[index].role} (${index + 1}/${TEACHERS.length})`;
   }
 
+  let pendingX = null;
+  let rafId = 0;
+
   stage.addEventListener("pointerdown", (e) => {
+    // Stops the browser starting a native image-drag or text selection,
+    // which otherwise swallows the gesture halfway through.
+    e.preventDefault();
     dragging = true;
     startX = e.clientX;
     baseX = restingX(index);
     stage.setPointerCapture(e.pointerId);
     stage.classList.add("is-dragging");
     track.style.transition = "none";
+    track.style.willChange = "transform";
   });
 
-  // 1:1 with the pointer — drag 200px, the track moves 200px.
+  // 1:1 with the pointer — drag 200px, the track moves 200px. Coalesced into
+  // one write per frame; pointermove can fire well above refresh rate.
   stage.addEventListener("pointermove", (e) => {
     if (!dragging) return;
-    place(baseX + (e.clientX - startX), false);
+    pendingX = baseX + (e.clientX - startX);
+    if (rafId) return;
+    rafId = requestAnimationFrame(() => {
+      rafId = 0;
+      if (pendingX !== null) track.style.transform = `translate3d(${pendingX}px, 0, 0)`;
+    });
   });
 
   function release(e) {
     if (!dragging) return;
     dragging = false;
+    pendingX = null;
+    if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
     stage.classList.remove("is-dragging");
+    track.style.willChange = "auto";
     const dx = e.clientX - startX;
     const threshold = Math.min(140, window.innerWidth * 0.12);
     if (dx <= -threshold) show(index + 1);

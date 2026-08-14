@@ -1331,3 +1331,22 @@ img { display: block; max-width: 100%; height: auto; }
 @media (prefers-reduced-motion: reduce) {
   .fig-layer, .slide__text { transition: none; }
 }
+
+/* ══════ GALLERY DRAG POLISH ══════
+   Text selection and native image-drag both hijack the gesture, which is
+   what made the swipe feel like it kept losing the pointer. */
+.stage, .stage * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.stage img { pointer-events: none; }
+
+/* Idle loops animate the same elements the drag moves — pausing them while
+   the finger is down keeps the frame budget for the drag itself. */
+.stage.is-dragging .slide__figure,
+.stage.is-dragging .doodle { animation: none !important; }
+
+/* Slides are only eased when snapping, never mid-drag. */
+.stage.is-dragging .slide { transition: none; }
