@@ -395,36 +395,38 @@ img { display: block; max-width: 100%; height: auto; }
   padding: 40px 24px 48px;
 }
 
+/* Unclipped layer around each box — the shockwave and particles travel far
+   outside the button, which clips its own contents. */
+.box-slot { position: relative; flex: 0 0 auto; display: block; }
+
 .box {
   position: relative;
-  flex: 0 0 auto;
+  display: block;
   width: 260px;
   aspect-ratio: 5 / 4;
   padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 24px;
-  background: linear-gradient(145deg, #1d2330, #11151d);
-  box-shadow: 0 18px 40px rgba(10, 26, 47, 0.16),
-              inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: linear-gradient(145deg, #202631, #11151c);
+  box-shadow: 0 16px 32px rgba(10, 26, 47, 0.16),
+              inset 0 2px 2px rgba(255, 255, 255, 0.08),
+              inset 0 -5px 8px rgba(0, 0, 0, 0.22);
   cursor: pointer;
   overflow: hidden;
-  transform: scale(0.94);
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+              background 0.4s ease,
+              box-shadow 0.4s ease;
 }
 
-/* Centre box leads, per the spec's 1 / 0.94 pairing. */
-.box:nth-child(2) { transform: scale(1); width: 290px; }
+/* Size hierarchy comes from width alone — every box rests at scale(1) so the
+   keyframes below apply identically to all three. */
+.box-slot:nth-child(2) .box { width: 290px; }
 
 .box:hover, .box:focus-visible {
   transform: translateY(-8px) scale(1.03);
   box-shadow: 0 22px 50px rgba(10, 26, 47, 0.18),
               0 0 0 3px rgba(255, 107, 0, 0.15),
               0 0 28px rgba(255, 107, 0, 0.22);
-}
-
-.box:nth-child(2):hover, .box:nth-child(2):focus-visible {
-  transform: translateY(-8px) scale(1.06);
 }
 
 /* Faint subject glyphs behind the mark. */
@@ -456,6 +458,20 @@ img { display: block; max-width: 100%; height: auto; }
   text-shadow: 0 0 18px rgba(255, 107, 0, 0.45);
 }
 
+/* ? and ✓ stack so they can cross-fade at the colour change. */
+.box__mark i { grid-area: 1 / 1; font-style: normal; transition: opacity 0.18s ease; }
+.box__mark { display: grid; place-items: center; }
+.box__mark .v { opacity: 0; }
+
+.box.is-open .box__mark {
+  color: #ffffff;
+  text-shadow: none;
+  filter: drop-shadow(0 3px 6px rgba(120, 40, 0, 0.18));
+}
+
+.box.is-open .box__mark .q { opacity: 0; }
+.box.is-open .box__mark .v { opacity: 1; }
+
 .box__chip {
   position: absolute;
   left: 50%;
@@ -480,7 +496,18 @@ img { display: block; max-width: 100%; height: auto; }
   color: #ffffff;
 }
 
-.box.is-open { border-color: rgba(255, 107, 0, 0.5); }
+/* Beat 4 — the payoff. Never flat orange: light top, mid, deep bottom, so it
+   keeps reading as soft plastic rather than a filled rectangle. */
+.box.is-open {
+  background: linear-gradient(145deg, #ff8a24 0%, #ff6b00 60%, #e95400 100%);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 18px 42px rgba(255, 107, 0, 0.24),
+              0 0 28px rgba(255, 107, 0, 0.18),
+              inset 0 2px 3px rgba(255, 255, 255, 0.30),
+              inset 0 -5px 10px rgba(185, 65, 0, 0.18);
+}
+
+.box.is-open .box__ghosts { opacity: 0.16; }
 
 /* Lid: a panel that lifts off the top edge when the box opens. */
 .box__lid {
@@ -713,9 +740,14 @@ img { display: block; max-width: 100%; height: auto; }
 
   /* "notice me" — staggered so the three never pulse in unison */
   .box { animation: nudge 5.5s ease-in-out infinite; }
-  .box:nth-child(2) { animation: nudge-lead 5.5s ease-in-out infinite 1.6s; }
-  .box:nth-child(3) { animation-delay: 3.2s; }
-  .box:hover, .box:focus-visible, .box.is-open { animation: none; }
+  .box-slot:nth-child(2) .box { animation-delay: 1.6s; }
+  .box-slot:nth-child(3) .box { animation-delay: 3.2s; }
+  /* Must be off for every beat, not just the end state — it drives transform
+     on the same element and would fight the whole sequence. */
+  .box:hover, .box:focus-visible,
+  .box.is-pressing, .box.is-charging, .box.is-boom, .box.is-open { animation: none; }
+  .box.is-charging { animation: charge 0.21s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .box.is-boom { animation: boxBoom 0.32s cubic-bezier(0.22, 1, 0.36, 1); }
 
   .d1, .d4 { animation: drift 5s ease-in-out infinite; }
   .d3, .d6 { animation: drift 6s ease-in-out infinite 1.2s; }
@@ -729,12 +761,10 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 @keyframes nudge {
-  0%, 84%, 100% { transform: scale(0.94) translateY(0); }
-  90% { transform: scale(0.94) translateY(-3px); }
+  0%, 84%, 100% { transform: translateY(0); }
+  90% { transform: translateY(-3px); }
 }
 
-@keyframes nudge-lead {
-  0%, 84%, 100% { transform: scale(1) translateY(0); }
   90% { transform: scale(1) translateY(-3px); }
 }
 
@@ -743,23 +773,100 @@ img { display: block; max-width: 100%; height: auto; }
   50% { transform: translateY(-6px); }
 }
 
-/* Reveal sequence, driven by a class the script toggles. */
-.box.is-popping { animation: pop 0.42s cubic-bezier(0.22, 1, 0.36, 1); }
+/* ══════ OPEN SEQUENCE — 4 beats over 800ms ══════
+   Black is held all the way through the charge; the colour only lands after
+   the boom, so the reveal reads as a reward rather than a state toggle. */
 
-@keyframes pop {
-  0% { transform: scale(0.94); }
-  24% { transform: scale(0.88); }
-  60% { transform: scale(1.05); }
-  100% { transform: scale(0.94); }
+/* Beat 1 · ยุบ (0–140ms) — Y compresses while X widens. That asymmetry is
+   what sells "soft rubber" instead of "button pressed". */
+.box.is-pressing {
+  transform: translateY(5px) scaleX(1.035) scaleY(0.91);
+  box-shadow: 0 5px 12px rgba(10, 26, 47, 0.12),
+              inset 0 5px 12px rgba(0, 0, 0, 0.25);
+  transition: transform 0.14s ease-out, box-shadow 0.14s ease-out;
 }
 
-.box:nth-child(2).is-popping { animation-name: pop-lead; }
+/* Beat 2 · อัดพลัง (140–350ms) — winds up, glow builds from inside. */
+.box.is-charging {
+  animation: charge 0.21s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  box-shadow: 0 0 0 5px rgba(255, 107, 0, 0.10),
+              0 0 30px rgba(255, 107, 0, 0.30),
+              inset 0 0 28px rgba(255, 107, 0, 0.25);
+}
 
-@keyframes pop-lead {
-  0% { transform: scale(1); }
-  24% { transform: scale(0.94); }
-  60% { transform: scale(1.11); }
+.box.is-charging .box__mark { animation: questionCharge 0.22s ease-out forwards; }
+
+@keyframes charge {
+  0%   { transform: scale(0.97); }
+  35%  { transform: scale(1.045) rotate(-1deg); }
+  55%  { transform: scale(1.03) rotate(1deg); }
+  72%  { transform: scale(1.055) rotate(-0.5deg); }
+  100% { transform: scale(1.06) rotate(0); }
+}
+
+@keyframes questionCharge {
+  0%   { transform: scale(1); }
+  60%  { transform: scale(1.25); }
+  100% { transform: scale(1.1); }
+}
+
+/* Beat 3 · BOOM (350–500ms) — squash then overshoot past 1. */
+.box.is-boom { animation: boxBoom 0.32s cubic-bezier(0.22, 1, 0.36, 1); }
+
+@keyframes boxBoom {
+  0%   { transform: scale(1.06); }
+  30%  { transform: scale(0.93); }
+  58%  { transform: scale(1.13); }
+  78%  { transform: scale(0.98); }
   100% { transform: scale(1); }
+}
+
+/* ── BURST LAYER ── */
+.box__burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.box__burst::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border-radius: 999px;
+  border: 3px solid var(--orange);
+  opacity: 0;
+}
+
+.box__burst.is-boom::after { animation: shockwave 0.38s ease-out; }
+
+@keyframes shockwave {
+  0%   { transform: scale(0.2); opacity: 0.9; }
+  100% { transform: scale(9); opacity: 0; }
+}
+
+/* Particles fly from the centre along a per-particle angle and distance. */
+.particle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--size, 9px);
+  height: var(--size, 9px);
+  margin: calc(var(--size, 9px) / -2) 0 0 calc(var(--size, 9px) / -2);
+  color: var(--tint, #ff6b00);
+  animation: particle-fly 0.62s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.particle svg { width: 100%; height: 100%; }
+
+@keyframes particle-fly {
+  0%   { transform: translate(0, 0) scale(0.4) rotate(0deg); opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(1) rotate(var(--spin)); opacity: 0; }
 }
 
 .act.is-entering { animation: card-in 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
@@ -858,3 +965,8 @@ img { display: block; max-width: 100%; height: auto; }
 
 .test-back:hover { border-color: #8d8d96; color: #3c3c42; }
 /* ═══════ END TEMPORARY BACK LINK ═══════ */
+
+/* Chip icon follows the state: padlock while closed, check once opened. */
+.box__chip .chip-ok { display: none; }
+.box.is-open .box__chip .chip-lock { display: none; }
+.box.is-open .box__chip .chip-ok { display: block; }

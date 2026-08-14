@@ -42,50 +42,59 @@
     </div>
 
     <div class="boxes" id="boxes">
-      <button class="box" type="button" data-index="0" aria-expanded="false" aria-controls="reveal">
-        <span class="box__ghosts" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 18l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-          <svg viewBox="0 0 24 24" fill="none"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.8" transform="rotate(60 12 12)"/></svg>
-          <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="11" rx="5" stroke="currentColor" stroke-width="1.8"/><path d="M7 11v3M5.5 12.5h3M16 11.5h.01M18 14h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </span>
-        <span class="box__lid" aria-hidden="true"></span>
-        <span class="box__mark" aria-hidden="true">?</span>
-        <span class="box__chip">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.9"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.9"/></svg>
-          คลิกเพื่อเปิด
-        </span>
-      </button>
+      <span class="box-slot">
+        <button class="box" type="button" data-index="0" aria-expanded="false" aria-controls="reveal">
+          <span class="box__ghosts" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 18l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.8" transform="rotate(60 12 12)"/></svg>
+            <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="11" rx="5" stroke="currentColor" stroke-width="1.8"/><path d="M7 11v3M5.5 12.5h3M16 11.5h.01M18 14h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+          <span class="box__lid" aria-hidden="true"></span>
+          <span class="box__mark" aria-hidden="true"><i class="q">?</i><i class="v">✓</i></span>
+          <span class="box__chip">
+            <svg class="chip-lock" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.9"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.9"/></svg><svg class="chip-ok" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M8.4 12.3l2.5 2.5 4.7-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            คลิกเพื่อเปิด
+          </span>
+        </button>
+        <span class="box__burst" aria-hidden="true"></span>
+      </span>
 
-      <button class="box" type="button" data-index="1" aria-expanded="false" aria-controls="reveal">
-        <span class="box__ghosts" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 18l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-          <svg viewBox="0 0 24 24" fill="none"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="11" rx="5" stroke="currentColor" stroke-width="1.8"/><path d="M7 11v3M5.5 12.5h3M16 11.5h.01M18 14h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <svg viewBox="0 0 24 24" fill="none"><path d="M5 20V9M12 20V4M19 20v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        </span>
-        <span class="box__lid" aria-hidden="true"></span>
-        <span class="box__mark" aria-hidden="true">?</span>
-        <span class="box__chip">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.9"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.9"/></svg>
-          คลิกเพื่อเปิด
-        </span>
-      </button>
+      <span class="box-slot">
+        <button class="box" type="button" data-index="1" aria-expanded="false" aria-controls="reveal">
+          <span class="box__ghosts" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 18l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="11" rx="5" stroke="currentColor" stroke-width="1.8"/><path d="M7 11v3M5.5 12.5h3M16 11.5h.01M18 14h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 20V9M12 20V4M19 20v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+          <span class="box__lid" aria-hidden="true"></span>
+          <span class="box__mark" aria-hidden="true"><i class="q">?</i><i class="v">✓</i></span>
+          <span class="box__chip">
+            <svg class="chip-lock" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.9"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.9"/></svg><svg class="chip-ok" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M8.4 12.3l2.5 2.5 4.7-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            คลิกเพื่อเปิด
+          </span>
+        </button>
+        <span class="box__burst" aria-hidden="true"></span>
+      </span>
 
-      <button class="box" type="button" data-index="2" aria-expanded="false" aria-controls="reveal">
-        <span class="box__ghosts" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.8" transform="rotate(60 12 12)"/></svg>
-          <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 18l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-        </span>
-        <span class="box__lid" aria-hidden="true"></span>
-        <span class="box__mark" aria-hidden="true">?</span>
-        <span class="box__chip">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.9"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.9"/></svg>
-          คลิกเพื่อเปิด
-        </span>
-      </button>
+      <span class="box-slot">
+        <button class="box" type="button" data-index="2" aria-expanded="false" aria-controls="reveal">
+          <span class="box__ghosts" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 8l-4 4 4 4M15 8l4 4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.8"/><ellipse cx="12" cy="12" rx="10" ry="4" stroke="currentColor" stroke-width="1.8" transform="rotate(60 12 12)"/></svg>
+            <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 18l-5-9V3" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="box__lid" aria-hidden="true"></span>
+          <span class="box__mark" aria-hidden="true"><i class="q">?</i><i class="v">✓</i></span>
+          <span class="box__chip">
+            <svg class="chip-lock" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.9"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.9"/></svg><svg class="chip-ok" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M8.4 12.3l2.5 2.5 4.7-5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            คลิกเพื่อเปิด
+          </span>
+        </button>
+        <span class="box__burst" aria-hidden="true"></span>
+      </span>
     </div>
 
     <!-- Reveal zone sits on the soft-orange band, waves top and bottom -->

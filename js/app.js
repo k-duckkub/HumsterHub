@@ -136,20 +136,79 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     });
   }
 
-  // First open: press → overshoot → lid lifts → card rises from the box.
+  // Brand shapes for the burst — plus, ring, diamond, dot.
+  const SHAPES = [
+    '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>',
+    '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="6"/></svg>',
+    '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2" transform="rotate(45 12 12)"/></svg>',
+    '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9"/></svg>',
+  ];
+  const TINTS = ["#ff6b00", "#2c9fa2", "#ffc52a", "#ffffff"];
+
+  // Ten, not fifty — more than this and it reads as a gacha pull.
+  function burst(slot) {
+    const layer = slot.querySelector(".box__burst");
+    if (!layer) return;
+    layer.classList.add("is-boom");
+    layer.addEventListener(
+      "animationend",
+      () => layer.classList.remove("is-boom"),
+      { once: true }
+    );
+
+    for (let n = 0; n < 10; n++) {
+      const p = document.createElement("span");
+      p.className = "particle";
+      p.innerHTML = SHAPES[n % SHAPES.length];
+      const angle = (n / 10) * Math.PI * 2 + Math.random() * 0.5;
+      const dist = 30 + Math.random() * 40;
+      p.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
+      p.style.setProperty("--dy", `${Math.sin(angle) * dist}px`);
+      p.style.setProperty("--size", `${7 + Math.random() * 6}px`);
+      p.style.setProperty("--spin", `${Math.random() * 360 - 180}deg`);
+      p.style.setProperty("--tint", TINTS[n % TINTS.length]);
+      layer.append(p);
+      p.addEventListener("animationend", () => p.remove(), { once: true });
+    }
+  }
+
+  // First open: ยุบ → อัดพลัง → BOOM → ดำเปลี่ยนเป็นส้ม, then the card.
+  // Beats run on timers rather than chained animationend so a dropped event
+  // cannot strand the box mid-sequence.
+  const timers = [];
   function open(i) {
     if (busy) return;
     busy = true;
     const box = boxEls[i];
-    const first = reveal.hidden;
+    const slot = box.closest(".box-slot");
 
-    if (!first) return finishOpen(i, box);
+    if (reduced.matches) return finishOpen(i, box);
 
-    animate(box, "is-popping", () => {});
-    setTimeout(
-      () => finishOpen(i, box),
-      reduced.matches ? 0 : 260
-    );
+    timers.forEach(clearTimeout);
+    timers.length = 0;
+    const at = (ms, fn) => timers.push(setTimeout(fn, ms));
+
+    box.classList.add("is-pressing");
+
+    at(140, () => {
+      box.classList.remove("is-pressing");
+      box.classList.add("is-charging");
+    });
+
+    at(350, () => {
+      box.classList.remove("is-charging");
+      box.classList.add("is-boom");
+      burst(slot);
+    });
+
+    // Colour lands only after the boom — holding black until here is the
+    // whole point of the sequence.
+    at(500, () => {
+      box.classList.remove("is-boom");
+      paint(i);
+    });
+
+    at(650, () => finishOpen(i, box));
   }
 
   function finishOpen(i, box) {
