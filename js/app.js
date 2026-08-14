@@ -255,7 +255,7 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
 })();
 
 /* ── TEACHER GALLERY ──────────────────────────────────────────
-   Only runs on teachers.html; the other pages have no #track.
+   Only runs where the gallery exists; other pages have no #track.
    Invisible UI by design: drag is the interaction, the peeking
    neighbour is the affordance. Keyboard + SR access is .sr-only. */
 (function () {
