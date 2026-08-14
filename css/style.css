@@ -264,6 +264,64 @@ img { display: block; max-width: 100%; height: auto; }
 
 .qr__caption { font-size: 17px; color: var(--slate); line-height: 1.55; }
 
+/* Bank details under the QR — some people transfer by account number
+   rather than scanning, so both routes sit in the same panel. */
+.bank {
+  width: 100%;
+  max-width: 300px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  text-align: left;
+}
+
+.bank__row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 7px 0;
+}
+
+.bank__label {
+  flex: 0 0 74px;
+  font-size: 15px;
+  color: var(--slate);
+}
+
+.bank__value {
+  flex: 1;
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  word-break: break-word;
+}
+
+/* Reuses the [data-copy] handler and toast that the LINE ID already uses. */
+.bank__acct {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: inherit;
+  color: var(--ink);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.bank__acct svg { width: 17px; height: 17px; color: var(--orange); flex: 0 0 auto; }
+
+.bank__acct:hover { color: var(--orange); }
+.bank__acct:hover svg { color: var(--orange); }
+
+.bank__acct:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 /* ══════════ THANK YOU PAGE ══════════
    Warm + playful + tech. Weighting is roughly
    60% warm ground / 20% navy / 10% orange / 5% teal / 5% other. */
@@ -384,6 +442,9 @@ img { display: block; max-width: 100%; height: auto; }
   .notice { font-size: 16px; }
   .btn-line { width: 240px; }
   .qr__frame img { width: 200px; }
+  .bank { max-width: 100%; }
+  .bank__label { flex-basis: 68px; font-size: 14px; }
+  .bank__value { font-size: 16px; }
 }
 
 /* ══════════ ACTIVITY PICKER ══════════ */
