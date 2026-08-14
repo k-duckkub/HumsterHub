@@ -362,7 +362,7 @@ img { display: block; max-width: 100%; height: auto; }
 .thanks-body {
   max-width: 780px;
   margin: 0 auto;
-  padding: 44px 24px 90px;
+  padding: 44px 24px 40px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -461,13 +461,28 @@ img { display: block; max-width: 100%; height: auto; }
 
 .thanks-back:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
+/* ── CLOSING BAND ──
+   Full-bleed; the art's own cream waves melt into the warm ground. */
+.scene-band { width: 100%; }
+
+/* The art's cream is a shade lighter than the page ground, which leaves a
+   hairline seam — fade the top edge out so the two meet invisibly. */
+.scene-band img {
+  width: 100%;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 34px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 34px);
+}
+
 @media (max-width: 768px) {
   .hero { padding: 8px 12px 0; }
   .thanks-copy { padding-top: 2px; }
   .thanks-copy h1 { font-size: 30px; }
   .thanks-copy p { font-size: 17px; }
   .pill-status { font-size: 14px; padding: 8px 16px; margin-bottom: 16px; }
-  .thanks-body { padding: 30px 16px 64px; gap: 16px; }
+  .thanks-body { padding: 30px 16px 28px; gap: 16px; }
+  /* The band is 3.4:1, so at phone widths it collapses to a sliver and the
+     mascot disappears — crop instead of letting it shrink. */
+  .scene-band img { height: 210px; object-fit: cover; object-position: center; }
   .soft-card, .cta-card { padding: 24px 20px; border-radius: var(--radius-md); }
   .soft-card__title { font-size: 20px; margin-bottom: 18px; }
   .flow li { grid-template-columns: 40px minmax(0, 1fr); gap: 13px; }
