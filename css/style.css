@@ -240,8 +240,6 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 /* ── QR ── */
-.qr__title { font-size: 20px; font-weight: 600; margin-bottom: 18px; }
-
 .qr__frame {
   border: 6px solid var(--orange);
   border-radius: 20px;
@@ -252,7 +250,7 @@ img { display: block; max-width: 100%; height: auto; }
 
 /* Square QR on plain white, so the spec's orange frame is the only frame.
    Sized so the account details beside it still get a readable column. */
-.qr__frame img { width: 210px; height: auto; }
+.qr__frame img { width: 224px; height: auto; }
 
 .qr__caption { font-size: 17px; color: var(--slate); line-height: 1.55; }
 
@@ -262,8 +260,9 @@ img { display: block; max-width: 100%; height: auto; }
 .pay {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 26px;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
   width: 100%;
 }
 
@@ -297,6 +296,9 @@ img { display: block; max-width: 100%; height: auto; }
   font-weight: 700;
   color: var(--ink);
   line-height: 1.45;
+  /* The company name is too long for this column at any sane QR size, so
+     let it break into two even lines rather than orphaning "จำกัด". */
+  text-wrap: balance;
 }
 
 /* Reuses the [data-copy] handler and toast that the LINE ID already uses. */
@@ -465,7 +467,7 @@ img { display: block; max-width: 100%; height: auto; }
    pay group starts wrapping, the payment column grows tall again, and the
    steps column leaves the same hole under the LINE button this layout was
    built to close. One column is the honest answer at these widths. */
-@media (max-width: 1180px) {
+@media (max-width: 1190px) {
   .next { grid-template-columns: 1fr; }
   .next__qr { border-left: none; padding-left: 0; }
   /* Capped, or the account column stretches across the whole card and the
