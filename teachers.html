@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ครูผู้สอน | HamsterHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<main class="gallery">
+
+  <header class="gallery__head">
+    <p class="gallery__kicker">Meet the crew</p>
+    <h1 class="gallery__title">คนที่พร้อมลุยไปกับคุณ</h1>
+  </header>
+
+  <!-- No arrows, no dots, no counter — the peeking neighbour is the
+       affordance. Keyboard and screen-reader access live in .sr-only. -->
+  <div class="stage" id="stage" tabindex="0" role="group"
+       aria-roledescription="แกลเลอรีครูผู้สอน" aria-label="ครูผู้สอน">
+    <div class="track" id="track"></div>
+  </div>
+
+  <button class="sr-only" type="button" id="gPrev">ครูคนก่อนหน้า</button>
+  <button class="sr-only" type="button" id="gNext">ครูคนถัดไป</button>
+  <p class="sr-only" id="gLive" aria-live="polite"></p>
+
+  <p class="gallery__hint" aria-hidden="true">ลากเพื่อดูครูคนอื่น</p>
+
+  <!-- ═══════ TEMPORARY BACK LINK — DELETE BEFORE LAUNCH ═══════ -->
+  <a class="test-back" href="thankyou.html">← กลับไปหน้า Thank You (ชั่วคราว)</a>
+  <!-- ═══════ END TEMPORARY BACK LINK ═══════ -->
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

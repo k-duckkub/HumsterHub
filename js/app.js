@@ -253,3 +253,210 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     );
   });
 })();
+
+/* ── TEACHER GALLERY ──────────────────────────────────────────
+   Only runs on teachers.html; the other pages have no #track.
+   Invisible UI by design: drag is the interaction, the peeking
+   neighbour is the affordance. Keyboard + SR access is .sr-only. */
+(function () {
+  const stage = document.getElementById("stage");
+  const track = document.getElementById("track");
+  if (!stage || !track) return;
+
+  // photo: null renders the placeholder slot. Drop in a path to swap it.
+  const TEACHERS = [
+    {
+      name: "ครูพาย",
+      role: "สายเกมดีไซน์",
+      accent: "#2c9fa2",
+      stickers: ["GAME ON", "★ PLAY"],
+      photo: null,
+    },
+    {
+      name: "ครูบอส",
+      role: "สายโค้ดดิ้งประจำทีม",
+      accent: "#ff6b00",
+      stickers: ["&lt;/&gt; CODE", "LET'S GO"],
+      photo: null,
+    },
+    {
+      name: "ครูเกม",
+      role: "สายอาร์ตประจำทีม",
+      accent: "#ffc52a",
+      stickers: ["✎ ART", "WOW"],
+      photo: null,
+    },
+  ];
+
+  const SLOT = `
+    <div class="photo-slot">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <b>ใส่รูปครูตรงนี้</b>
+      <span>PNG พื้นใส ตัดขอบมาแล้ว</span>
+    </div>`;
+
+  const DOODLE_A = `<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v5M12 16v5M3 12h5M16 12h5" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>`;
+  const DOODLE_B = `<svg viewBox="0 0 24 24" fill="none"><path d="M3 15c4-9 14-9 18-2" stroke="currentColor" stroke-width="3.6" stroke-linecap="round"/><path d="M17 10l4 3-4 3" stroke="currentColor" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  const figure = (t) => t.photo
+    ? `<img src="${t.photo}" alt="${t.name}">`
+    : SLOT;
+
+  track.innerHTML = TEACHERS.map((t) => `
+    <article class="slide" style="--accent:${t.accent}">
+      <span class="slide__blob" aria-hidden="true"></span>
+      <span class="sticker sticker--a" aria-hidden="true">${t.stickers[0]}</span>
+      <span class="sticker sticker--b" aria-hidden="true">${t.stickers[1]}</span>
+      <span class="doodle doodle--a" aria-hidden="true">${DOODLE_A}</span>
+      <span class="doodle doodle--b" aria-hidden="true">${DOODLE_B}</span>
+      <div class="slide__figure">
+        <div class="fig-layer fig-layer--top" aria-hidden="true">${figure(t)}</div>
+        <div class="fig-layer fig-layer--bot">${figure(t)}</div>
+      </div>
+      <div class="slide__text">
+        <h2 class="slide__name">${t.name}</h2>
+        <p class="slide__role">${t.role}</p>
+      </div>
+    </article>`).join("");
+
+  const slides = [...track.children];
+  const live = document.getElementById("gLive");
+  const reducedG = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  let index = 0;
+  let dragging = false;
+  let startX = 0;
+  let baseX = 0;
+
+  // offsetWidth, not getBoundingClientRect: slides scale between .86 and 1,
+  // and the visual rect would make the resting position shift with the
+  // active slide — which breaks the 1:1 feel of the drag.
+  const slideWidth = () => slides[0].offsetWidth;
+  const restingX = (i) => stage.clientWidth / 2 - slideWidth() * (i + 0.5);
+
+  function place(x, animate) {
+    track.style.transition = animate && !reducedG.matches
+      ? "transform 0.52s cubic-bezier(.22,1,.36,1)"
+      : "none";
+    track.style.transform = `translate3d(${x}px, 0, 0)`;
+  }
+
+  const SLASH_SHAPES = [
+    '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>',
+    '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="6"/></svg>',
+    '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2" transform="rotate(45 12 12)"/></svg>',
+    '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9"/></svg>',
+  ];
+  const SLASH_TINTS = ["#ff6b00", "#2c9fa2", "#ffc52a", "#ffffff"];
+
+  // Six, not a confetti cannon — the spec is explicit about restraint.
+  function sparks(slide, dir) {
+    for (let n = 0; n < 6; n++) {
+      const s = document.createElement("span");
+      s.className = "particle";
+      s.innerHTML = SLASH_SHAPES[n % SLASH_SHAPES.length];
+      const angle = Math.PI * (0.15 + Math.random() * 0.7) + (dir > 0 ? Math.PI : 0);
+      const dist = 30 + Math.random() * 30;
+      s.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
+      s.style.setProperty("--dy", `${(Math.random() - 0.5) * dist}px`);
+      s.style.setProperty("--size", `${8 + Math.random() * 5}px`);
+      s.style.setProperty("--spin", `${Math.random() * 300 - 150}deg`);
+      s.style.setProperty("--tint", SLASH_TINTS[n % SLASH_TINTS.length]);
+      slide.append(s);
+      s.addEventListener("animationend", () => s.remove(), { once: true });
+    }
+  }
+
+  const slashTimers = [];
+
+  // Fruit-Ninja beat: squash → slash → the outgoing figure splits along a
+  // diagonal and flies apart while the next teacher slides in underneath.
+  function slash(fromIndex, dir) {
+    const slide = slides[fromIndex];
+    if (!slide || reducedG.matches) return;
+
+    slashTimers.forEach(clearTimeout);
+    slashTimers.length = 0;
+    const at = (ms, fn) => slashTimers.push(setTimeout(fn, ms));
+
+    slide.style.setProperty("--dir", dir > 0 ? "1" : "-1");
+    slide.classList.add("is-squash");
+
+    at(80, () => {
+      slide.classList.remove("is-squash");
+      slide.classList.add("is-sliced");
+      sparks(slide, dir);
+
+      const line = document.createElement("span");
+      line.className = "slash-line";
+      line.style.setProperty("--dir", dir > 0 ? "1" : "-1");
+      stage.append(line);
+      at(220, () => line.remove());
+    });
+
+    at(700, () => slide.classList.remove("is-sliced"));
+  }
+
+  function show(i, animate = true) {
+    const next = Math.max(0, Math.min(TEACHERS.length - 1, i));
+    if (animate && next !== index) slash(index, next > index ? -1 : 1);
+    index = next;
+    place(restingX(index), animate);
+    slides.forEach((s, n) => s.classList.toggle("is-active", n === index));
+    live.textContent = `${TEACHERS[index].name} — ${TEACHERS[index].role} (${index + 1}/${TEACHERS.length})`;
+  }
+
+  stage.addEventListener("pointerdown", (e) => {
+    dragging = true;
+    startX = e.clientX;
+    baseX = restingX(index);
+    stage.setPointerCapture(e.pointerId);
+    stage.classList.add("is-dragging");
+    track.style.transition = "none";
+  });
+
+  // 1:1 with the pointer — drag 200px, the track moves 200px.
+  stage.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    place(baseX + (e.clientX - startX), false);
+  });
+
+  function release(e) {
+    if (!dragging) return;
+    dragging = false;
+    stage.classList.remove("is-dragging");
+    const dx = e.clientX - startX;
+    const threshold = Math.min(140, window.innerWidth * 0.12);
+    if (dx <= -threshold) show(index + 1);
+    else if (dx >= threshold) show(index - 1);
+    else show(index);
+  }
+
+  stage.addEventListener("pointerup", release);
+  stage.addEventListener("pointercancel", release);
+
+  stage.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") { e.preventDefault(); show(index + 1); }
+    if (e.key === "ArrowLeft")  { e.preventDefault(); show(index - 1); }
+  });
+
+  // Trackpad horizontal swipe. Vertical wheel is left to the browser.
+  let wheelLock = false;
+  stage.addEventListener("wheel", (e) => {
+    if (Math.abs(e.deltaX) < Math.abs(e.deltaY) || Math.abs(e.deltaX) < 12) return;
+    e.preventDefault();
+    if (wheelLock) return;
+    wheelLock = true;
+    show(index + (e.deltaX > 0 ? 1 : -1));
+    setTimeout(() => (wheelLock = false), 420);
+  }, { passive: false });
+
+  document.getElementById("gPrev").addEventListener("click", () => show(index - 1));
+  document.getElementById("gNext").addEventListener("click", () => show(index + 1));
+
+  window.addEventListener("resize", () => show(index, false));
+  show(0, false);
+})();

@@ -1051,3 +1051,281 @@ img { display: block; max-width: 100%; height: auto; }
   0%, 100% { opacity: 0.25; }
   50%      { opacity: 0.8; }
 }
+
+/* ══════════ TEACHER GALLERY (teachers.html) ══════════
+   Invisible UI: no arrows, no dots, no counter. The neighbouring slide
+   peeking in at the edge is the only navigation affordance. */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.gallery {
+  min-height: 100vh;
+  background: var(--warm-ivory);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.gallery__head { text-align: center; padding: 44px 24px 8px; }
+
+.gallery__kicker {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+
+.gallery__title {
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  cursor: grab;
+  touch-action: pan-y;
+  outline: none;
+}
+
+.stage.is-dragging { cursor: grabbing; }
+
+.stage:focus-visible { outline: 3px solid var(--orange); outline-offset: -6px; }
+
+.track {
+  display: flex;
+  align-items: center;
+  will-change: transform;
+}
+
+/* Slides sit at 82vw so ~9vw of each neighbour stays in frame. */
+.slide {
+  position: relative;
+  flex: 0 0 82vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2vw;
+  transform: scale(0.86);
+  opacity: 0.5;
+  transition: transform 0.42s ease-out, opacity 0.42s ease-out;
+}
+
+.slide.is-active { transform: scale(1); opacity: 1; }
+
+/* Organic accent blob behind the figure, per teacher. */
+.slide__blob {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  width: min(52vw, 430px);
+  aspect-ratio: 1 / 1.06;
+  transform: translate(-50%, -50%);
+  background: var(--accent);
+  opacity: 0.14;
+  border-radius: 58% 42% 46% 54% / 48% 52% 48% 52%;
+  pointer-events: none;
+}
+
+.slide__figure {
+  position: relative;
+  width: min(40vw, 320px);
+  aspect-ratio: 3 / 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide__figure img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 18px 30px rgba(10, 26, 47, 0.14));
+}
+
+/* Slot for the cut-out photo, until the real artwork arrives. */
+.photo-slot {
+  width: 100%; height: 100%;
+  border: 2.5px dashed color-mix(in srgb, var(--accent) 55%, #ffffff);
+  border-radius: 999px 999px 34px 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--slate);
+  text-align: center;
+  padding: 18px;
+}
+
+.photo-slot svg { width: 46px; height: 46px; color: var(--accent); opacity: 0.6; }
+.photo-slot b { font-size: 15px; font-weight: 700; color: var(--ink); }
+.photo-slot span { font-size: 13px; }
+
+.slide__name {
+  margin-top: 26px;
+  font-size: 46px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.slide__role { font-size: 20px; color: var(--slate); margin-top: 4px; }
+
+.slide__quote {
+  margin-top: 14px;
+  padding: 9px 18px;
+  border-radius: 999px 999px 999px 6px;
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+  font-size: 16px;
+  color: var(--ink);
+}
+
+/* Stickers — tilted, on white, like something stuck to a poster. */
+.sticker {
+  position: absolute;
+  padding: 7px 14px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: var(--shadow-sm);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.sticker--a { top: 8%;  left: 2%;  transform: rotate(-8deg); }
+.sticker--b { top: 26%; right: 1%; transform: rotate(7deg); }
+
+/* Hand-drawn doodles: round caps, deliberately imperfect. */
+.doodle { position: absolute; color: var(--accent); pointer-events: none; }
+.doodle svg { width: 100%; height: 100%; }
+.doodle--a { top: 12%; right: 8%;  width: 46px; height: 46px; }
+.doodle--b { bottom: 22%; left: 5%; width: 54px; height: 54px; color: var(--teal); }
+
+.gallery__hint {
+  text-align: center;
+  font-size: 14px;
+  color: var(--slate);
+  padding-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+  .gallery__head { padding: 26px 16px 4px; }
+  .gallery__title { font-size: 28px; }
+  .gallery__kicker { font-size: 13px; }
+  /* The peek is the only affordance, so it has to survive on a phone:
+     narrower slides and a gentler side-scale keep the neighbour in frame. */
+  .slide { flex-basis: 78vw; transform: scale(0.9); }
+  .slide.is-active { transform: scale(1); }
+  .slide__figure { width: 58vw; }
+  .slide__name { font-size: 32px; margin-top: 18px; }
+  .slide__role { font-size: 16px; }
+  .slide__quote { font-size: 14px; }
+  .sticker { font-size: 11px; padding: 6px 11px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide { transition: none; }
+}
+
+/* ══════ FRUIT-NINJA SLASH TRANSITION ══════
+   The figure renders twice, clipped along opposing halves of a diagonal,
+   so the outgoing teacher can be cut apart rather than merely slid away. */
+.slide__figure { position: relative; }
+
+.fig-layer {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.5s cubic-bezier(.22, 1, .36, 1), opacity 0.5s ease-out;
+}
+
+.fig-layer--top { clip-path: polygon(0 0, 100% 0, 100% 34%, 0 64%); }
+.fig-layer--bot { clip-path: polygon(0 64%, 100% 34%, 100% 100%, 0 100%); }
+
+.fig-layer > * { width: 100%; height: 100%; }
+
+/* Beat 1 — takes the hit before it is cut. */
+.slide.is-squash .slide__figure {
+  transform: scaleX(1.03) scaleY(0.96);
+  transition: transform 0.08s ease-out;
+}
+
+/* Beat 2 — the two halves part along the cut. */
+.slide.is-sliced .fig-layer--top {
+  transform: translate(calc(var(--dir) * 80px), -30px) rotate(calc(var(--dir) * -2deg));
+  opacity: 0;
+}
+
+.slide.is-sliced .fig-layer--bot {
+  transform: translate(calc(var(--dir) * 100px), 35px) rotate(calc(var(--dir) * 2deg));
+  opacity: 0;
+}
+
+/* The blade: a thin streak that crosses the stage in ~150ms. */
+.slash-line {
+  position: absolute;
+  top: 50%;
+  left: -20%;
+  width: 140%;
+  height: 5px;
+  pointer-events: none;
+  z-index: 6;
+  background: linear-gradient(90deg, transparent, #ffffff, #ffb067, #ff6b00, transparent);
+  filter: blur(1px);
+  transform-origin: center;
+  animation: slash-sweep 0.16s ease-out forwards;
+}
+
+@keyframes slash-sweep {
+  0%   { opacity: 0; transform: rotate(calc(var(--dir) * -13deg)) scaleX(0.2); }
+  35%  { opacity: 1; }
+  100% { opacity: 0; transform: rotate(calc(var(--dir) * -13deg)) scaleX(1.1); }
+}
+
+/* Name and role fade through rather than sliding as a block. */
+.slide__text {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.34s ease-out 0.16s, transform 0.34s ease-out 0.16s;
+}
+
+.slide.is-active .slide__text { opacity: 1; transform: translateY(0); }
+
+/* Idle: the settled teacher breathes, nothing else. */
+@media (prefers-reduced-motion: no-preference) {
+  .slide.is-active .slide__figure { animation: teacher-idle 5.5s ease-in-out infinite; }
+  .slide.is-active .doodle--a { animation: orb-float 6s ease-in-out infinite; }
+  .slide.is-active .doodle--b { animation: orb-turn 7.5s ease-in-out infinite 1.1s; }
+  /* The idle loop must not fight the slash. */
+  .slide.is-squash .slide__figure,
+  .slide.is-sliced .slide__figure { animation: none; }
+}
+
+@keyframes teacher-idle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-5px) rotate(0.7deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fig-layer, .slide__text { transition: none; }
+}
