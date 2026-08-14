@@ -16,19 +16,13 @@
   <!-- HERO — 3D art carries the 2026 / thank you / mascot layering -->
   <section class="hero">
    <div class="hero__inner">
-    <span class="hero__shape hero__shape--ring s1" aria-hidden="true"></span>
-    <span class="hero__shape s2" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="4.6" stroke-linecap="round"/></svg>
-    </span>
-    <span class="hero__shape hero__shape--diamond s3" aria-hidden="true"></span>
-    <span class="hero__shape s4" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="4.6" stroke-linecap="round"/></svg>
-    </span>
-    <span class="hero__shape hero__shape--ring s5" aria-hidden="true"></span>
-    <span class="hero__shape hero__shape--diamond s6" aria-hidden="true"></span>
-
-    <img class="hero__art" src="assets/thankyou-hero.webp" width="1448" height="1086"
-         alt="2026 thank you — มาสคอตแฮมสเตอร์ของ HamsterHub ยืนอยู่กลางโต๊ะทำงาน">
+    <picture>
+      <!-- Wide art is built to run full-bleed; phones keep the 4:3 crop
+           so the wordmark and mascot stay readable. -->
+      <source media="(min-width: 769px)" srcset="assets/thankyou-hero-wide.webp" width="1640" height="560">
+      <img class="hero__art" src="assets/thankyou-hero.webp" width="1448" height="1086"
+           alt="2026 thank you — มาสคอตแฮมสเตอร์ของ HamsterHub ยืนอยู่กลางโต๊ะทำงาน">
+    </picture>
    </div>
   </section>
 
