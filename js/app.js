@@ -164,17 +164,17 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     quiz.scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth", block: "center" });
   }
 
-  // Six sparks, same restraint as the gallery slash — a loot box, not a
-  // confetti cannon.
+  // Eight shards, thrown 30–90px. Deliberately not confetti: the brief asks
+  // for a few crystal chips, and more than this reads as a slot machine.
   function sparks(win) {
     const burst = lootBox.querySelector(".lootbox__burst");
-    const tints = win ? ["#ffffff", "#7fd6ff", "#ffc52a", "#ff6b00"]
-                      : ["#ffffff", "#c9d1d9", "#ff6b00", "#8d949c"];
+    const tints = win ? ["#ffffff", "#7fd6ff", "#bde9ff", "#ffc52a"]
+                      : ["#ffffff", "#ffd98a", "#ffc52a", "#c9d1d9"];
     for (let n = 0; n < 8; n++) {
       const s = document.createElement("i");
       s.className = "spark";
       const a = Math.PI * (0.15 + Math.random() * 0.7);
-      const d = 60 + Math.random() * 60;
+      const d = 30 + Math.random() * 60;
       s.style.setProperty("--dx", `${Math.cos(a) * d * (n % 2 ? 1 : -1)}px`);
       s.style.setProperty("--dy", `${-Math.sin(a) * d}px`);
       s.style.setProperty("--sz", `${6 + Math.random() * 7}px`);
@@ -184,20 +184,52 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     }
   }
 
+  // Android Chrome honours this; iOS Safari has no vibration API and simply
+  // does not expose it, so the guard is the whole story.
+  const buzz = (ms) => { if (navigator.vibrate) navigator.vibrate(ms); };
+
+  // Opening runs to a fixed timeline rather than chained transitionend events,
+  // so a dropped frame cannot strand the sequence half-finished.
   let opened = false;
   lootBox.addEventListener("click", () => {
     if (opened) return;
     opened = true;
     const win = passed();
+    const squish = document.getElementById("lootSquish");
+    const flash = lootBox.querySelector(".lootbox__flash");
 
-    if (reduced.matches) { swap(pResult, pPrize); return; }
-
-    lootBox.classList.add(win ? "is-opening" : "is-opening-hard");
-    setTimeout(() => sparks(win), win ? 260 : 340);
-    setTimeout(() => {
+    if (reduced.matches) {
+      lootBox.classList.add("is-open");
       swap(pResult, pPrize);
       live.textContent = "ได้รับกิจกรรม SciGameLab Camp — เช็คอินเลยไหม?";
-    }, 900);
+      return;
+    }
+
+    buzz(12);
+    squish.classList.add("is-pressing");                       // 0–130   ยุบ
+
+    setTimeout(() => {                                         // 130–390 อัดพลัง
+      squish.classList.remove("is-pressing");
+      squish.classList.add("is-charging");
+    }, 130);
+
+    setTimeout(() => {                                         // 390     ฝาเปิด
+      squish.classList.remove("is-charging");
+      lootBox.classList.add("is-open");
+    }, 390);
+
+    setTimeout(() => {                                         // 440     แสง + ประกาย
+      flash.classList.add("is-firing");
+      sparks(win);
+      buzz(25);
+    }, 440);
+
+    setTimeout(() => squish.classList.add("is-settling"), 700); // 700     คืนตัว
+
+    setTimeout(() => {                                         // 860     reward pop
+      swap(pResult, pPrize);
+      live.textContent = "ได้รับกิจกรรม SciGameLab Camp — เช็คอินเลยไหม?";
+    }, 860);
   });
 
   document.getElementById("laterBtn").addEventListener("click", () => {

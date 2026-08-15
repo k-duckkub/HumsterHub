@@ -80,10 +80,30 @@
         <h3 class="result__title" id="resultTitle"></h3>
         <p class="result__sub" id="resultSub"></p>
 
+        <!-- Layered on purpose: idle float, press squash and charge all drive
+             transform, so they each get their own element instead of fighting
+             over one. All four chests ship in the markup so the closed→open
+             crossfade has nothing left to load at click time. -->
         <button class="lootbox" id="lootBox" type="button" aria-describedby="boxHint">
-          <span class="lootbox__glow" aria-hidden="true"></span>
-          <span class="lootbox__lid" aria-hidden="true"></span>
-          <span class="lootbox__base" aria-hidden="true"><i class="lootbox__gem"></i></span>
+          <span class="lootbox__float" aria-hidden="true">
+            <span class="lootbox__squish" id="lootSquish">
+              <img class="lootbox__art" data-art="diamond-closed" src="assets/box-diamond-closed.webp" width="480" height="452" alt="">
+              <img class="lootbox__art" data-art="diamond-open"   src="assets/box-diamond-open.webp"   width="480" height="452" alt="">
+              <img class="lootbox__art" data-art="iron-closed"    src="assets/box-iron-closed.webp"    width="480" height="452" alt="">
+              <img class="lootbox__art" data-art="iron-open"      src="assets/box-iron-open.webp"      width="480" height="452" alt="">
+
+              <!-- The sweep is masked to the chest silhouette so it never reads
+                   as a rectangle sliding past. The mask URL sits inline because
+                   the single-file build rewrites asset paths in the markup only,
+                   not inside style.css. -->
+              <span class="lootbox__shine" data-shine="diamond" style="-webkit-mask-image:url(assets/box-diamond-closed.webp);mask-image:url(assets/box-diamond-closed.webp)"></span>
+              <span class="lootbox__shine" data-shine="iron"    style="-webkit-mask-image:url(assets/box-iron-closed.webp);mask-image:url(assets/box-iron-closed.webp)"></span>
+
+              <span class="lootbox__flash"></span>
+            </span>
+          </span>
+
+          <span class="lootbox__sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           <span class="lootbox__burst" aria-hidden="true"></span>
           <span class="sr-only" id="lootLabel"></span>
         </button>

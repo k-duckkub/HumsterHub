@@ -663,122 +663,172 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 /* ── LOOT BOX ──
-   Built from gradients and clip-paths, not a render: a faceted lid over a
-   body with a banded seam, tinted by modifier. */
+   Rendered chest art on four layers, each owning exactly one transform so
+   they never overwrite one another:
+     .lootbox          hover lift
+     .lootbox__float   idle float (transform) + breathe (scale property)
+     .lootbox__squish  press / charge / settle
+   The art itself carries the drop shadow, because the baked-in ground shadow
+   was keyed out of the source — a painted shadow cannot lift with the box. */
 .lootbox {
   position: relative;
   display: block;
-  width: 210px;
-  height: 190px;
-  margin: 22px auto 8px;
+  width: 218px;
+  height: 205px;
+  margin: 18px auto 4px;
   padding: 0;
   background: none;
   border: 0;
   cursor: pointer;
+  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.lootbox__glow {
+.lootbox__float,
+.lootbox__squish { position: absolute; inset: 0; display: block; }
+
+.lootbox__art {
   position: absolute;
-  left: 50%; top: 58%;
-  width: 240px; height: 150px;
-  margin: -75px 0 0 -120px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  filter: drop-shadow(0 14px 18px rgba(10, 26, 47, 0.16));
+  transition: opacity 0.28s ease, filter 0.26s ease;
+}
+
+/* Which chest is on screen: variant picks the pair, .is-open picks the frame.
+   Both frames share one body anchor, so only the lid appears to move. */
+.lootbox--diamond .lootbox__art[data-art="diamond-closed"],
+.lootbox--iron    .lootbox__art[data-art="iron-closed"]    { opacity: 1; }
+
+.lootbox--diamond.is-open .lootbox__art[data-art="diamond-closed"],
+.lootbox--iron.is-open    .lootbox__art[data-art="iron-closed"]    { opacity: 0; }
+
+.lootbox--diamond.is-open .lootbox__art[data-art="diamond-open"],
+.lootbox--iron.is-open    .lootbox__art[data-art="iron-open"]      { opacity: 1; }
+
+/* ── shine sweep ── */
+/* The element stays put and the gradient slides through it via
+   background-position. Translating the element instead would drag its mask
+   along, which just parks a chest-shaped ghost off to one side. */
+.lootbox__shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(110deg,
+    transparent 35%, rgba(255, 255, 255, 0.55) 48%, transparent 61%);
+  background-size: 260% 100%;
+  background-repeat: no-repeat;
+  background-position: -130% 0;
+  -webkit-mask-size: contain; mask-size: contain;
+  -webkit-mask-position: center; mask-position: center;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+}
+
+.lootbox--diamond .lootbox__shine[data-shine="diamond"],
+.lootbox--iron    .lootbox__shine[data-shine="iron"]    { opacity: 1; }
+.lootbox.is-open .lootbox__shine { opacity: 0; }
+
+/* ── idle sparkles ── */
+.lootbox__sparkles { position: absolute; inset: -14px; pointer-events: none; }
+
+.lootbox__sparkles i {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  opacity: 0;
+  background:
+    linear-gradient(to bottom, transparent 46%, #fff 46% 54%, transparent 54%),
+    linear-gradient(to right,  transparent 46%, #fff 46% 54%, transparent 54%);
+  filter: drop-shadow(0 0 4px rgba(140, 220, 255, 0.9));
+}
+
+.lootbox__sparkles i:nth-child(1) { top: 12%; left: 6%; }
+.lootbox__sparkles i:nth-child(2) { top: 30%; right: 4%; width: 13px; height: 13px; }
+.lootbox__sparkles i:nth-child(3) { bottom: 22%; left: 2%; width: 8px; height: 8px; }
+.lootbox__sparkles i:nth-child(4) { top: 4%; right: 26%; width: 9px; height: 9px; }
+
+/* ── light burst from inside ── */
+.lootbox__flash {
+  position: absolute;
+  left: 50%; top: 46%;
+  width: 230px; height: 230px;
+  margin: -115px 0 0 -115px;
   border-radius: 50%;
-  filter: blur(26px);
-  opacity: 0.75;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(86, 203, 255, 0.5) 30%,
+    rgba(255, 191, 64, 0.16) 55%,
+    transparent 75%);
 }
 
-/* The lid is a trapezoid so the box reads as a solid seen slightly from
-   above, which a plain rectangle never does. */
-.lootbox__lid {
-  position: absolute;
-  left: 50%;
-  top: 26px;
-  width: 186px;
-  height: 74px;
-  margin-left: -93px;
-  border-radius: 14px 14px 6px 6px;
-  clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%);
-  transform-origin: 50% 100%;
-  transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+.lootbox--iron .lootbox__flash {
+  background: radial-gradient(circle,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 201, 92, 0.55) 30%,
+    rgba(255, 150, 40, 0.18) 55%,
+    transparent 75%);
 }
 
-.lootbox__base {
-  position: absolute;
-  left: 50%;
-  bottom: 8px;
-  width: 172px;
-  height: 92px;
-  margin-left: -86px;
-  border-radius: 8px 8px 16px 16px;
-  display: grid;
-  place-items: center;
-}
+.lootbox__flash.is-firing { animation: loot-flash 0.42s ease-out; }
 
-/* The clasp — a rotated square reads as a gem without needing artwork. */
-.lootbox__gem {
-  width: 30px;
-  height: 30px;
-  border-radius: 7px;
-  transform: rotate(45deg);
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.55);
+@keyframes loot-flash {
+  0%   { opacity: 0; transform: scale(0.3); }
+  40%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.4); }
 }
 
 .lootbox__burst { position: absolute; inset: 0; pointer-events: none; }
 
-.lootbox:hover .lootbox__lid { transform: translateY(-5px); }
-.lootbox:hover .lootbox__base { transform: translateY(-2px); }
+/* ── hover: "กดฉันสิ" ── */
+.lootbox:hover,
+.lootbox:focus-visible { transform: translateY(-10px) scale(1.035); }
 
-/* Diamond — crystalline, cool, gold band. */
-.lootbox--diamond .lootbox__glow { background: radial-gradient(circle, rgba(125, 214, 255, 0.85), transparent 70%); }
-.lootbox--diamond .lootbox__lid {
-  background: linear-gradient(150deg, #eaf9ff 0%, #a9e2fb 38%, #5fbfe8 70%, #2f92c4 100%);
-  box-shadow: 0 6px 14px rgba(10, 26, 47, 0.16), inset 0 2px 3px rgba(255, 255, 255, 0.9);
-}
-.lootbox--diamond .lootbox__base {
-  background: linear-gradient(165deg, #cdeeff 0%, #86cdee 45%, #3d9dcb 100%);
-  box-shadow: 0 12px 24px rgba(10, 26, 47, 0.18), inset 0 2px 3px rgba(255, 255, 255, 0.7);
-  border-top: 7px solid #f2c14e;
-}
-.lootbox--diamond .lootbox__gem { background: linear-gradient(150deg, #fff6d8, #f2c14e); }
-
-/* Iron — steel, heavier, still worth pressing. */
-.lootbox--iron .lootbox__glow { background: radial-gradient(circle, rgba(120, 130, 142, 0.55), transparent 70%); }
-.lootbox--iron .lootbox__lid {
-  background: linear-gradient(150deg, #d3d9df 0%, #98a1aa 40%, #656d76 100%);
-  box-shadow: 0 6px 14px rgba(10, 26, 47, 0.22), inset 0 2px 3px rgba(255, 255, 255, 0.55);
-}
-.lootbox--iron .lootbox__base {
-  background: linear-gradient(165deg, #aeb6be 0%, #79828b 45%, #4a5158 100%);
-  box-shadow: 0 12px 24px rgba(10, 26, 47, 0.24), inset 0 2px 3px rgba(255, 255, 255, 0.4);
-  border-top: 7px solid #3a4046;
-}
-.lootbox--iron .lootbox__gem { background: linear-gradient(150deg, #dfe4e8, #8a939c); }
-
-/* Opening — diamond floats its lid off, iron shoves it. */
-.lootbox.is-opening .lootbox__lid {
-  transform: translateY(-78px) rotate(-11deg) scale(1.04);
-}
-.lootbox.is-opening .lootbox__base { animation: loot-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
-.lootbox.is-opening-hard .lootbox__lid {
-  transform: translateY(-58px) rotate(9deg);
-  transition-timing-function: cubic-bezier(0.36, 0, 0.66, -0.56);
-}
-.lootbox.is-opening-hard .lootbox__base { animation: loot-shake 0.34s ease-in-out; }
-
-@keyframes loot-pop {
-  0%   { transform: scaleY(0.9) scaleX(1.05); }
-  60%  { transform: scaleY(1.05) scaleX(0.97); }
-  100% { transform: none; }
+.lootbox:hover .lootbox__art,
+.lootbox:focus-visible .lootbox__art {
+  filter: drop-shadow(0 22px 28px rgba(10, 26, 47, 0.18))
+          drop-shadow(0 0 24px rgba(60, 190, 255, 0.22));
 }
 
-@keyframes loot-shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-5px); }
-  45% { transform: translateX(5px); }
-  70% { transform: translateX(-3px); }
+.lootbox--iron:hover .lootbox__art,
+.lootbox--iron:focus-visible .lootbox__art {
+  filter: drop-shadow(0 22px 28px rgba(10, 26, 47, 0.2))
+          drop-shadow(0 0 24px rgba(255, 190, 90, 0.2));
 }
 
+.lootbox.is-open { transform: none; cursor: default; }
+
+/* ── press · charge · settle ──
+   Charge and shake are one keyframe set rather than two animations: the spec
+   runs them over the same window, and two animations on one element would be
+   competing for transform. */
+.lootbox__squish.is-pressing {
+  transform: translateY(5px) scaleX(1.045) scaleY(0.91);
+  transition: transform 0.12s ease-out;
+}
+
+.lootbox__squish.is-charging { animation: loot-charge 0.26s cubic-bezier(0.34, 1.4, 0.64, 1); }
+.lootbox__squish.is-settling { animation: loot-settle 0.5s ease-out; }
+
+@keyframes loot-charge {
+  0%   { transform: scale(0.95) rotate(-0.8deg) translateX(0); }
+  25%  { transform: scale(1.05) rotate(0.8deg) translateX(-3px); }
+  50%  { transform: scale(0.99) rotate(-0.5deg) translateX(3px); }
+  75%  { transform: scale(1.04) rotate(0.3deg) translateX(-2px); }
+  100% { transform: scale(1.07) rotate(0deg) translateX(0); }
+}
+
+@keyframes loot-settle {
+  0%   { transform: rotate(0.6deg); }
+  45%  { transform: rotate(-0.3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* ── burst shards ── */
 .spark {
   position: absolute;
   left: 50%; top: 44%;
@@ -824,11 +874,14 @@ img { display: block; max-width: 100%; height: auto; }
 .checkin__cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
 /* ── PANEL TRANSITIONS ── */
-.panel.is-pop { animation: panel-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+/* The reward rising out of the chest — overshoots past its resting place,
+   then settles. The easing y-value above 1 is what produces the overshoot. */
+.panel.is-pop { animation: panel-pop 0.56s cubic-bezier(0.22, 1.4, 0.36, 1); }
 
 @keyframes panel-pop {
-  0%   { opacity: 0; transform: translateY(26px) scale(0.95); }
-  100% { opacity: 1; transform: none; }
+  0%   { opacity: 0; transform: translateY(40px) scale(0.7); }
+  55%  { opacity: 1; transform: translateY(-12px) scale(1.06); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .qcard.is-out { animation: q-out 0.26s ease-in forwards; }
@@ -840,17 +893,57 @@ img { display: block; max-width: 100%; height: auto; }
 @keyframes q-in-left  { from { opacity: 0; transform: translateX(-56px) scale(0.97); } }
 
 @media (prefers-reduced-motion: no-preference) {
-  .lootbox { animation: loot-breathe 3.6s ease-in-out infinite; }
-  .lootbox.is-opening, .lootbox.is-opening-hard { animation: none; }
+  /* Float writes transform, breathe writes the separate scale property, so
+     both can sit on one element without either clobbering the other. */
+  .lootbox__float {
+    animation: box-float 4s ease-in-out infinite,
+               box-breath 4.5s ease-in-out infinite;
+  }
+  .lootbox.is-open .lootbox__float { animation-play-state: paused; }
+
+  /* One pass every 5s. The sweep occupies the last 18% of the cycle and the
+     rest is spent parked off-frame — a highlight running continuously is the
+     thing that makes this read as cheap. */
+  .lootbox__shine { animation: box-shine 5s ease-in-out 1.2s infinite; }
+
+  .lootbox__sparkles i { animation: box-sparkle 2.8s ease-in-out infinite; }
+  .lootbox__sparkles i:nth-child(2) { animation-delay: 1.3s; }
+  .lootbox__sparkles i:nth-child(3) { animation-delay: 2.1s; }
+  .lootbox__sparkles i:nth-child(4) { animation-delay: 3.4s; }
+
+  .result__hint { animation: hint-pulse 2.5s ease-in-out infinite; }
 }
 
-@keyframes loot-breathe {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-6px); }
+@keyframes box-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-7px) rotate(0.4deg); }
+}
+
+@keyframes box-breath {
+  0%, 100% { scale: 1; }
+  50%      { scale: 1.015; }
+}
+
+@keyframes box-shine {
+  0%, 82% { background-position: -130% 0; }
+  100%    { background-position: 230% 0; }
+}
+
+@keyframes box-sparkle {
+  0%, 70%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  82%           { opacity: 1; transform: scale(1) rotate(45deg); }
+}
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .qbar__fill, .opt, .quiz__head, .page-thanks .hero { transition: none; }
+  .qbar__fill, .opt, .quiz__head, .page-thanks .hero,
+  .lootbox, .lootbox__art { transition: none; }
+  .lootbox:hover, .lootbox:focus-visible { transform: none; }
+  .lootbox__shine { display: none; }
 }
 
 @media (max-width: 768px) {
@@ -865,9 +958,8 @@ img { display: block; max-width: 100%; height: auto; }
   .result__title { font-size: 30px; }
   .result__sub { font-size: 17px; }
   .result__hint { font-size: 18px; }
-  .lootbox { width: 176px; height: 162px; }
-  .lootbox__lid { width: 158px; height: 62px; margin-left: -79px; top: 22px; }
-  .lootbox__base { width: 146px; height: 78px; margin-left: -73px; }
+  .lootbox { width: 178px; height: 168px; }
+  .lootbox__flash { width: 190px; height: 190px; margin: -95px 0 0 -95px; }
   .checkin__title { font-size: 23px; }
 }
 
