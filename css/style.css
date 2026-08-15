@@ -873,17 +873,6 @@ img { display: block; max-width: 100%; height: auto; }
 
 .checkin__cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
-/* Deferred: the check-in link stays available but stops shouting, since the
-   user has said "not now" and there is nothing else below to move on to. */
-.checkin.is-deferred .btn-solid {
-  background: none;
-  color: var(--teal);
-  border: 2px solid var(--teal);
-  box-shadow: none;
-}
-
-.checkin.is-deferred .btn-solid:hover { background: rgba(44, 159, 162, 0.07); }
-.checkin.is-deferred .btn-ghost { opacity: 0.55; }
 
 /* ── PANEL TRANSITIONS ── */
 /* The reward rising out of the chest — overshoots past its resting place,

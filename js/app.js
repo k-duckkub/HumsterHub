@@ -232,13 +232,5 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     }, 860);
   });
 
-  // "ไว้ทีหลัง" used to scroll down to the teacher gallery. With that section
-  // gone there is nothing below the prize, so it just steps the primary CTA
-  // back down and returns to the top of the page.
-  document.getElementById("laterBtn").addEventListener("click", (e) => {
-    e.currentTarget.closest(".checkin").classList.add("is-deferred");
-    window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" });
-  });
-
   paintQuestion(0);
 })();
