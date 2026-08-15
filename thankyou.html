@@ -159,8 +159,10 @@
               ไปเช็คอินเลย
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
-            <!-- ═══════ ใส่ URL ปลายทาง "เล่นเกมต่อ" ตรงนี้ ═══════ -->
-            <a class="btn-ghost" id="playLink" href="#">เล่นเกมต่อ</a>
+            <!-- "ไว้ก่อน" dismisses rather than navigating, so it is a button
+                 again — a link needs somewhere to go, and href="#" would put a
+                 stray hash in the URL on every click. -->
+            <button class="btn-ghost" type="button" id="laterBtn">ไว้ก่อน</button>
           </div>
         </div>
       </div>

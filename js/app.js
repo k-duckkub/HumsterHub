@@ -291,5 +291,12 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     }, 1250);
   });
 
+  // "ไว้ก่อน" is a dismissal with nowhere to go — the reward and the check-in
+  // link both stay put, the page just returns to the top so the chest and the
+  // card are back in view together.
+  document.getElementById("laterBtn").addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" });
+  });
+
   paintQuestion(0);
 })();
