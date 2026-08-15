@@ -1067,8 +1067,8 @@ img { display: block; max-width: 100%; height: auto; }
    Inline, the emphasis straddled the wrap and read as one long sentence;
    separated, it reads as the note it is. Not a warning banner though — the
    ink-on-cream keeps it informative rather than alarming. */
-/* One unbroken line. The text runs 427px at 15.5px while a 390px phone only
-   offers 338px inside the page and pill padding, so the size scales with the
+/* One unbroken line. The text runs 400px at 15.5px while a 360px phone only
+   offers 300px inside the page and pill padding, so the size scales with the
    viewport to keep it on one line instead of wrapping. 3.1vw is the slope
    that lands just inside that budget. */
 .checkin__note {
@@ -1180,11 +1180,13 @@ img { display: block; max-width: 100%; height: auto; }
   .checkin__title { font-size: 23px; }
 }
 
-/* At 375px and below, one line would need to drop under ~11.5px to fit, and
-   at that point it stops being readable — and it still overflowed by 2px at
-   360. Wrapping is the better failure here, so the single line is a promise
-   kept from 376px up, which covers every current phone but the smallest. */
-@media (max-width: 375px) {
+/* Below 360px, one line would need to drop under ~10px to fit, and at that
+   point it stops being readable. Wrapping is the better failure, so the single
+   line is a promise kept from 360px up — which covers every current phone
+   (360 / 375 / 390 / 393 / 412 / 430) and gives up only on the pre-2017 small
+   screens. This threshold moved down from 375px when "อาจ" came out of the
+   copy and the line got 27px shorter. */
+@media (max-width: 359px) {
   .checkin__note { white-space: normal; font-size: 13px; max-width: 40ch; }
 }
 
