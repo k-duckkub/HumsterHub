@@ -24,11 +24,6 @@
   --shadow-sm: 0 6px 18px rgba(10, 26, 47, 0.06);
   --shadow-float: 0 8px 20px rgba(10, 26, 47, 0.08);
   --shadow-md: 0 12px 30px rgba(10, 26, 47, 0.10);
-
-  /* Mystery boxes only — they need hard contrast against the cream. */
-  --mystery-surface: #141820;
-  --mystery-border: #252b36;
-  --glow-orange: rgba(255, 107, 0, 0.35);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -475,224 +470,406 @@ img { display: block; max-width: 100%; height: auto; }
   .pay { justify-content: center; max-width: 540px; margin-inline: auto; }
 }
 
-/* ══════════ ACTIVITY PICKER ══════════ */
-.picker { position: relative; }
+/* ══════════ QUIZ → REWARD FLOW ══════════
+   One section, six states, one centred composition throughout. Panels swap
+   in place so the page never feels like it navigated somewhere. */
+.quiz { position: relative; padding-bottom: 20px; }
 
-.picker__head {
+.quiz__head {
   text-align: center;
   max-width: 760px;
   margin-inline: auto;
   padding: 8px 24px 0;
+  transition: opacity 0.45s ease, transform 0.45s ease;
 }
 
-.picker__title {
-  font-size: 48px;
+.quiz__kicker {
+  font-size: 15px;
   font-weight: 800;
-  line-height: 1.14;
-  letter-spacing: -0.015em;
-  color: var(--ink);
-  text-wrap: balance;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--orange);
   margin-bottom: 10px;
 }
 
-.picker__sub { font-size: 19px; color: var(--slate); }
-.picker__sub b { color: var(--orange); font-weight: 700; }
-
-/* ── BOXES ── */
-.boxes {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-  padding: 40px 24px 48px;
+.quiz__title {
+  font-size: 44px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 10px;
+  text-wrap: balance;
 }
 
-/* Unclipped layer around each box — the shockwave and particles travel far
-   outside the button, which clips its own contents. */
-.box-slot { position: relative; flex: 0 0 auto; display: block; }
+.quiz__sub { font-size: 19px; color: var(--slate); }
+.quiz__sub b { color: var(--orange); font-weight: 700; }
 
-.box {
+/* The hero and the heading both step aside once the quiz is answered, so
+   the result has the screen to itself. */
+.page-thanks .hero,
+.quiz__head { transform-origin: center top; }
+
+.page-thanks .hero.is-gone,
+.quiz__head.is-gone {
+  opacity: 0;
+  transform: scale(0.96) translateY(-14px);
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 0.45s ease, transform 0.45s ease, height 0.5s ease 0.15s;
+}
+
+/* One stage, one thing at a time. min-height stops the page jumping as the
+   panels swap heights. */
+.stagebox {
+  position: relative;
+  z-index: 1;
+  min-height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 34px 24px 44px;
+}
+
+.panel { width: 100%; max-width: 620px; text-align: center; }
+.panel[hidden] { display: none; }
+
+/* ── STATE 1 · QUESTION CARD ── */
+.qcard {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 18px 44px rgba(10, 26, 47, 0.10);
+  padding: 30px 30px 26px;
+  text-align: left;
+}
+
+.qcard__head { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+
+.qcard__count {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ink);
+  flex: 0 0 auto;
+}
+
+.qbar {
+  flex: 1;
+  height: 10px;
+  border-radius: 999px;
+  background: #eeeeee;
+  overflow: hidden;
+}
+
+.qbar__fill {
+  display: block;
+  height: 100%;
+  width: 33.333%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #ffa04d, var(--orange));
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.qcard__ask {
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  margin-bottom: 22px;
+  text-wrap: balance;
+}
+
+.qcard__opts { display: flex; flex-direction: column; gap: 12px; }
+
+/* Game choice buttons, not radios: full-width, rounded, with a soft press. */
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 15px 18px;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  text-align: left;
+  background: #fdf8f3;
+  border: 2px solid #f0e4d8;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.opt__icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  border-radius: 12px;
+  background: var(--soft-orange);
+  color: var(--orange);
+  display: grid;
+  place-items: center;
+}
+
+.opt__icon svg { width: 23px; height: 23px; }
+.opt__text { flex: 1; min-width: 0; }
+
+.opt__go {
+  width: 20px; height: 20px;
+  flex: 0 0 auto;
+  color: #c9b6a6;
+  transition: transform 0.18s ease, color 0.18s ease;
+}
+
+.opt:hover {
+  transform: translateY(-2px);
+  border-color: var(--orange);
+  background: #ffffff;
+  box-shadow: 0 10px 22px rgba(255, 107, 0, 0.14);
+}
+
+.opt:hover .opt__go { transform: translateX(3px); color: var(--orange); }
+
+.opt:active { transform: translateY(0) scale(0.985); }
+
+/* Picked: squash, then hold a warm glow while the next question slides in. */
+.opt.is-picked {
+  border-color: var(--orange);
+  background: #fff3e8;
+  box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.16);
+  transform: scale(0.975);
+}
+
+.opt.is-picked .opt__icon { background: var(--orange); color: #ffffff; }
+
+/* ── STATE 2+3 · RESULT AND BOX ── */
+.result__title {
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.result__sub { font-size: 19px; color: var(--slate); margin-bottom: 6px; }
+
+.result__got { font-size: 18px; color: var(--ink); font-weight: 600; margin-top: 4px; }
+
+.result__hint {
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--orange);
+  letter-spacing: 0.01em;
+}
+
+/* ── LOOT BOX ──
+   Built from gradients and clip-paths, not a render: a faceted lid over a
+   body with a banded seam, tinted by modifier. */
+.lootbox {
   position: relative;
   display: block;
-  width: 260px;
-  aspect-ratio: 5 / 4;
+  width: 210px;
+  height: 190px;
+  margin: 22px auto 8px;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  background: linear-gradient(145deg, #202631, #11151c);
-  box-shadow: 0 16px 32px rgba(10, 26, 47, 0.16),
-              inset 0 2px 2px rgba(255, 255, 255, 0.08),
-              inset 0 -5px 8px rgba(0, 0, 0, 0.22);
+  background: none;
+  border: 0;
   cursor: pointer;
-  overflow: hidden;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-              background 0.4s ease,
-              box-shadow 0.4s ease;
 }
 
-/* Size hierarchy comes from width alone — every box rests at scale(1) so the
-   keyframes below apply identically to all three. */
-.box-slot:nth-child(2) .box { width: 290px; }
-
-.box:hover, .box:focus-visible {
-  transform: translateY(-8px) scale(1.03);
-  box-shadow: 0 22px 50px rgba(10, 26, 47, 0.18),
-              0 0 0 3px rgba(255, 107, 0, 0.15),
-              0 0 28px rgba(255, 107, 0, 0.22);
-}
-
-/* Faint subject glyphs behind the mark. */
-.box__ghosts {
+.lootbox__glow {
   position: absolute;
-  inset: 0;
-  color: #ffffff;
-  opacity: 0.07;
-  pointer-events: none;
+  left: 50%; top: 58%;
+  width: 240px; height: 150px;
+  margin: -75px 0 0 -120px;
+  border-radius: 50%;
+  filter: blur(26px);
+  opacity: 0.75;
 }
 
-.box__ghosts svg { position: absolute; width: 34px; height: 34px; }
-.box__ghosts svg:nth-child(1) { top: 16%; left: 12%; }
-.box__ghosts svg:nth-child(2) { top: 22%; right: 13%; transform: rotate(12deg); }
-.box__ghosts svg:nth-child(3) { bottom: 30%; left: 18%; transform: rotate(-10deg); }
-.box__ghosts svg:nth-child(4) { bottom: 26%; right: 15%; }
-
-.box__mark {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 22px;
-  font-size: 76px;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--orange);
-  text-shadow: 0 0 18px rgba(255, 107, 0, 0.45);
-}
-
-/* ? and ✓ stack so they can cross-fade at the colour change. */
-.box__mark i { grid-area: 1 / 1; font-style: normal; transition: opacity 0.18s ease; }
-.box__mark { display: grid; place-items: center; }
-.box__mark .v { opacity: 0; }
-
-.box.is-open .box__mark {
-  color: #ffffff;
-  text-shadow: none;
-  filter: drop-shadow(0 3px 6px rgba(120, 40, 0, 0.18));
-}
-
-.box.is-open .box__mark .q { opacity: 0; }
-.box.is-open .box__mark .v { opacity: 1; }
-
-.box__chip {
+/* The lid is a trapezoid so the box reads as a solid seen slightly from
+   above, which a plain rectangle never does. */
+.lootbox__lid {
   position: absolute;
   left: 50%;
-  bottom: 16px;
-  transform: translateX(-50%);
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 15px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #cfd4dd;
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
+  top: 26px;
+  width: 186px;
+  height: 74px;
+  margin-left: -93px;
+  border-radius: 14px 14px 6px 6px;
+  clip-path: polygon(8% 0, 92% 0, 100% 100%, 0 100%);
+  transform-origin: 50% 100%;
+  transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.box__chip svg { width: 15px; height: 15px; }
-
-.box.is-open .box__chip {
-  background: var(--orange);
-  color: #ffffff;
-}
-
-/* Beat 4 — the payoff. Never flat orange: light top, mid, deep bottom, so it
-   keeps reading as soft plastic rather than a filled rectangle. */
-.box.is-open {
-  background: linear-gradient(145deg, #ff8a24 0%, #ff6b00 60%, #e95400 100%);
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 18px 42px rgba(255, 107, 0, 0.24),
-              0 0 28px rgba(255, 107, 0, 0.18),
-              inset 0 2px 3px rgba(255, 255, 255, 0.30),
-              inset 0 -5px 10px rgba(185, 65, 0, 0.18);
-}
-
-.box.is-open .box__ghosts { opacity: 0.16; }
-
-/* Lid: a panel that lifts off the top edge when the box opens. */
-.box__lid {
+.lootbox__base {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 26%;
-  border-radius: 24px 24px 8px 8px;
-  background: linear-gradient(180deg, #232a39, #171d28);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  transform-origin: top center;
-  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  left: 50%;
+  bottom: 8px;
+  width: 172px;
+  height: 92px;
+  margin-left: -86px;
+  border-radius: 8px 8px 16px 16px;
+  display: grid;
+  place-items: center;
 }
 
-.box.is-open .box__lid { transform: translateY(-64%) scaleY(0.55); }
-
-/* ── REVEAL ZONE ── */
-.reveal {
-  position: relative;
-  background: var(--soft-orange);
-  padding: 8px 0 20px;
+/* The clasp — a rotated square reads as a gem without needing artwork. */
+.lootbox__gem {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  transform: rotate(45deg);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.55);
 }
 
-/* The waves are cream shapes carved OUT of the orange band — filling them
-   with the band colour would make them invisible against it. */
-.reveal__wave { display: block; width: 100%; height: auto; color: var(--warm-ivory); }
-.reveal__wave--top { margin-bottom: -1px; }
-.reveal__wave--bottom { margin-top: -1px; }
+.lootbox__burst { position: absolute; inset: 0; pointer-events: none; }
 
-.reveal__inner {
-  max-width: 1180px;
-  margin-inline: auto;
-  padding: 0 24px;
+.lootbox:hover .lootbox__lid { transform: translateY(-5px); }
+.lootbox:hover .lootbox__base { transform: translateY(-2px); }
+
+/* Diamond — crystalline, cool, gold band. */
+.lootbox--diamond .lootbox__glow { background: radial-gradient(circle, rgba(125, 214, 255, 0.85), transparent 70%); }
+.lootbox--diamond .lootbox__lid {
+  background: linear-gradient(150deg, #eaf9ff 0%, #a9e2fb 38%, #5fbfe8 70%, #2f92c4 100%);
+  box-shadow: 0 6px 14px rgba(10, 26, 47, 0.16), inset 0 2px 3px rgba(255, 255, 255, 0.9);
+}
+.lootbox--diamond .lootbox__base {
+  background: linear-gradient(165deg, #cdeeff 0%, #86cdee 45%, #3d9dcb 100%);
+  box-shadow: 0 12px 24px rgba(10, 26, 47, 0.18), inset 0 2px 3px rgba(255, 255, 255, 0.7);
+  border-top: 7px solid #f2c14e;
+}
+.lootbox--diamond .lootbox__gem { background: linear-gradient(150deg, #fff6d8, #f2c14e); }
+
+/* Iron — steel, heavier, still worth pressing. */
+.lootbox--iron .lootbox__glow { background: radial-gradient(circle, rgba(120, 130, 142, 0.55), transparent 70%); }
+.lootbox--iron .lootbox__lid {
+  background: linear-gradient(150deg, #d3d9df 0%, #98a1aa 40%, #656d76 100%);
+  box-shadow: 0 6px 14px rgba(10, 26, 47, 0.22), inset 0 2px 3px rgba(255, 255, 255, 0.55);
+}
+.lootbox--iron .lootbox__base {
+  background: linear-gradient(165deg, #aeb6be 0%, #79828b 45%, #4a5158 100%);
+  box-shadow: 0 12px 24px rgba(10, 26, 47, 0.24), inset 0 2px 3px rgba(255, 255, 255, 0.4);
+  border-top: 7px solid #3a4046;
+}
+.lootbox--iron .lootbox__gem { background: linear-gradient(150deg, #dfe4e8, #8a939c); }
+
+/* Opening — diamond floats its lid off, iron shoves it. */
+.lootbox.is-opening .lootbox__lid {
+  transform: translateY(-78px) rotate(-11deg) scale(1.04);
+}
+.lootbox.is-opening .lootbox__base { animation: loot-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+.lootbox.is-opening-hard .lootbox__lid {
+  transform: translateY(-58px) rotate(9deg);
+  transition-timing-function: cubic-bezier(0.36, 0, 0.66, -0.56);
+}
+.lootbox.is-opening-hard .lootbox__base { animation: loot-shake 0.34s ease-in-out; }
+
+@keyframes loot-pop {
+  0%   { transform: scaleY(0.9) scaleX(1.05); }
+  60%  { transform: scaleY(1.05) scaleX(0.97); }
+  100% { transform: none; }
 }
 
-.reveal__empty {
-  text-align: center;
-  font-size: 17px;
-  color: var(--slate);
-  padding: 30px 0 34px;
+@keyframes loot-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  45% { transform: translateX(5px); }
+  70% { transform: translateX(-3px); }
 }
 
-.reveal[hidden] { display: none; }
-
-/* ── CAROUSEL ── */
-.carousel {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.spark {
+  position: absolute;
+  left: 50%; top: 44%;
+  width: var(--sz, 8px);
+  height: var(--sz, 8px);
+  margin: calc(var(--sz, 8px) / -2) 0 0 calc(var(--sz, 8px) / -2);
+  border-radius: 2px;
+  background: var(--tint, #ffffff);
+  animation: spark-fly 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.carousel__arrow {
-  flex: 0 0 auto;
-  width: 56px;
-  height: 56px;
-  border: none;
-  border-radius: 50%;
-  background: #ffffff;
+@keyframes spark-fly {
+  0%   { transform: translate(0, 0) scale(0.3) rotate(0deg); opacity: 1; }
+  70%  { opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(1) rotate(200deg); opacity: 0; }
+}
+
+/* ── STATE 5+6 · PRIZE AND CHECK-IN ── */
+.prize__eyebrow {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--orange);
-  box-shadow: var(--shadow-float);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 14px;
 }
 
-.carousel__arrow svg { width: 24px; height: 24px; }
-.carousel__arrow:hover { transform: scale(1.08); box-shadow: var(--shadow-md); }
+/* The prize panel is wider than the quiz card — the activity card carries
+   an image and needs the room. */
+.panel--prize { max-width: 760px; }
 
-.carousel__view { flex: 1; min-width: 0; overflow: hidden; }
+.act--prize { text-align: left; }
+
+.checkin {
+  margin-top: 26px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.checkin__title { font-size: 28px; font-weight: 800; letter-spacing: -0.01em; }
+.checkin__sub { font-size: 17px; color: var(--slate); margin: 6px 0 18px; }
+
+.checkin__cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ── PANEL TRANSITIONS ── */
+.panel.is-pop { animation: panel-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+
+@keyframes panel-pop {
+  0%   { opacity: 0; transform: translateY(26px) scale(0.95); }
+  100% { opacity: 1; transform: none; }
+}
+
+.qcard.is-out { animation: q-out 0.26s ease-in forwards; }
+.qcard.is-in-right { animation: q-in-right 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.qcard.is-in-left  { animation: q-in-left 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+
+@keyframes q-out      { to   { opacity: 0; transform: translateX(-56px) scale(0.97); } }
+@keyframes q-in-right { from { opacity: 0; transform: translateX(56px) scale(0.97); } }
+@keyframes q-in-left  { from { opacity: 0; transform: translateX(-56px) scale(0.97); } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .lootbox { animation: loot-breathe 3.6s ease-in-out infinite; }
+  .lootbox.is-opening, .lootbox.is-opening-hard { animation: none; }
+}
+
+@keyframes loot-breathe {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qbar__fill, .opt, .quiz__head, .page-thanks .hero { transition: none; }
+}
+
+@media (max-width: 768px) {
+  .quiz__title { font-size: 30px; }
+  .quiz__sub { font-size: 16px; }
+  .picker__deco { display: none; }
+  .stagebox { min-height: 400px; padding: 22px 16px 32px; }
+  .qcard { padding: 22px 18px 20px; border-radius: var(--radius-md); }
+  .qcard__ask { font-size: 22px; }
+  .opt { font-size: 16px; padding: 13px 14px; gap: 12px; }
+  .opt__icon { width: 38px; height: 38px; }
+  .result__title { font-size: 30px; }
+  .result__sub { font-size: 17px; }
+  .result__hint { font-size: 18px; }
+  .lootbox { width: 176px; height: 162px; }
+  .lootbox__lid { width: 158px; height: 62px; margin-left: -79px; top: 22px; }
+  .lootbox__base { width: 146px; height: 78px; margin-left: -73px; }
+  .checkin__title { font-size: 23px; }
+}
 
 /* ── ACTIVITY CARD ── */
 .act {
@@ -759,7 +936,6 @@ img { display: block; max-width: 100%; height: auto; }
 
 .act__meta span { display: inline-flex; align-items: center; gap: 8px; }
 .act__meta svg { width: 18px; height: 18px; color: var(--orange); }
-.act__meta i { color: var(--border); font-style: normal; }
 
 .act__cta { display: flex; gap: 12px; flex-wrap: wrap; }
 
@@ -803,29 +979,6 @@ img { display: block; max-width: 100%; height: auto; }
 .btn-ghost:hover { background: rgba(44, 159, 162, 0.07); transform: translateY(-2px); }
 .btn-ghost svg { width: 19px; height: 19px; }
 
-/* ── DOTS ── */
-.dots {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  padding: 22px 0 4px;
-}
-
-.dots button {
-  width: 10px;
-  height: 10px;
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  background: var(--border);
-  cursor: pointer;
-  transition: background 0.25s ease, width 0.25s ease;
-}
-
-.dots button[aria-current="true"] { background: var(--orange); width: 26px; border-radius: 999px; }
-
-.reveal__hint { text-align: center; font-size: 15px; color: var(--slate); padding-bottom: 6px; }
-
 /* ── DECORATIONS ── */
 .picker__deco { position: absolute; z-index: 0; pointer-events: none; }
 
@@ -846,121 +999,13 @@ img { display: block; max-width: 100%; height: auto; }
 
 /* ── MOTION ── */
 @media (prefers-reduced-motion: no-preference) {
-  .box__mark { animation: wobble 2.1s ease-in-out infinite; }
-  /* Counted on .box-slot, not .box: the slot wrapper made every .box an
-     only-child, so nth-child on .box itself matches nothing. */
-  .box-slot:nth-child(2) .box__mark { animation-delay: 0.5s; }
-  .box-slot:nth-child(3) .box__mark { animation-delay: 1s; }
-
-  /* "notice me" — staggered so the three never pulse in unison */
-  .box { animation: nudge 5.5s ease-in-out infinite; }
-  .box-slot:nth-child(2) .box { animation-delay: 1.6s; }
-  .box-slot:nth-child(3) .box { animation-delay: 3.2s; }
-  /* Must be off for every beat, not just the end state — it drives transform
-     on the same element and would fight the whole sequence. */
-  .box:hover, .box:focus-visible,
-  .box.is-pressing, .box.is-charging, .box.is-boom, .box.is-open { animation: none; }
-  .box.is-charging { animation: charge 0.21s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-  .box.is-boom { animation: boxBoom 0.32s cubic-bezier(0.22, 1, 0.36, 1); }
-
   .d1, .d4 { animation: drift 5s ease-in-out infinite; }
   .d3, .d6 { animation: drift 6s ease-in-out infinite 1.2s; }
-}
-
-@keyframes wobble {
-  0%, 62%, 100% { transform: rotate(0deg); }
-  68% { transform: rotate(-3deg); }
-  78% { transform: rotate(3deg); }
-  88% { transform: rotate(-2deg); }
-}
-
-@keyframes nudge {
-  0%, 84%, 100% { transform: translateY(0); }
-  90% { transform: translateY(-3px); }
-}
-
-  90% { transform: scale(1) translateY(-3px); }
 }
 
 @keyframes drift {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
-}
-
-/* ══════ OPEN SEQUENCE — 4 beats over 800ms ══════
-   Black is held all the way through the charge; the colour only lands after
-   the boom, so the reveal reads as a reward rather than a state toggle. */
-
-/* Beat 1 · ยุบ (0–140ms) — Y compresses while X widens. That asymmetry is
-   what sells "soft rubber" instead of "button pressed". */
-.box.is-pressing {
-  transform: translateY(5px) scaleX(1.035) scaleY(0.91);
-  box-shadow: 0 5px 12px rgba(10, 26, 47, 0.12),
-              inset 0 5px 12px rgba(0, 0, 0, 0.25);
-  transition: transform 0.14s ease-out, box-shadow 0.14s ease-out;
-}
-
-/* Beat 2 · อัดพลัง (140–350ms) — winds up, glow builds from inside. */
-.box.is-charging {
-  animation: charge 0.21s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  box-shadow: 0 0 0 5px rgba(255, 107, 0, 0.10),
-              0 0 30px rgba(255, 107, 0, 0.30),
-              inset 0 0 28px rgba(255, 107, 0, 0.25);
-}
-
-.box.is-charging .box__mark { animation: questionCharge 0.22s ease-out forwards; }
-
-@keyframes charge {
-  0%   { transform: scale(0.97); }
-  35%  { transform: scale(1.045) rotate(-1deg); }
-  55%  { transform: scale(1.03) rotate(1deg); }
-  72%  { transform: scale(1.055) rotate(-0.5deg); }
-  100% { transform: scale(1.06) rotate(0); }
-}
-
-@keyframes questionCharge {
-  0%   { transform: scale(1); }
-  60%  { transform: scale(1.25); }
-  100% { transform: scale(1.1); }
-}
-
-/* Beat 3 · BOOM (350–500ms) — squash then overshoot past 1. */
-.box.is-boom { animation: boxBoom 0.32s cubic-bezier(0.22, 1, 0.36, 1); }
-
-@keyframes boxBoom {
-  0%   { transform: scale(1.06); }
-  30%  { transform: scale(0.93); }
-  58%  { transform: scale(1.13); }
-  78%  { transform: scale(0.98); }
-  100% { transform: scale(1); }
-}
-
-/* ── BURST LAYER ── */
-.box__burst {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 3;
-}
-
-.box__burst::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 20px;
-  height: 20px;
-  margin: -10px 0 0 -10px;
-  border-radius: 999px;
-  border: 3px solid var(--orange);
-  opacity: 0;
-}
-
-.box__burst.is-boom::after { animation: shockwave 0.38s ease-out; }
-
-@keyframes shockwave {
-  0%   { transform: scale(0.2); opacity: 0.9; }
-  100% { transform: scale(9); opacity: 0; }
 }
 
 /* Particles fly from the centre along a per-particle angle and distance. */
@@ -990,17 +1035,6 @@ img { display: block; max-width: 100%; height: auto; }
   100% { opacity: 1; transform: translateY(0) scale(1); filter: none; }
 }
 
-/* Carousel swap — slide + scale, never a plain fade. */
-.act.slide-out-left  { animation: slide-out-left 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-.act.slide-out-right { animation: slide-out-right 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-.act.slide-in-left   { animation: slide-in-left 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
-.act.slide-in-right  { animation: slide-in-right 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
-
-@keyframes slide-out-left  { to { opacity: 0; transform: translateX(-80px) scale(0.97); } }
-@keyframes slide-out-right { to { opacity: 0; transform: translateX(80px) scale(0.97); } }
-@keyframes slide-in-left   { from { opacity: 0; transform: translateX(-80px) scale(0.97); } }
-@keyframes slide-in-right  { from { opacity: 0; transform: translateX(80px) scale(0.97); } }
-
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   .act { grid-template-columns: 1fr; gap: 20px; }
@@ -1008,30 +1042,6 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 @media (max-width: 768px) {
-  .picker__title { font-size: 30px; }
-  .picker__sub { font-size: 16px; }
-  .picker__deco { display: none; }
-
-  /* Horizontal carousel with the next box peeking, so swiping is discoverable. */
-  .boxes {
-    justify-content: flex-start;
-    gap: 16px;
-    padding: 26px 16px 32px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .boxes::-webkit-scrollbar { display: none; }
-  /* All three the same width on a phone. The desktop hero-box rule
-     (.box-slot:nth-child(2) .box) still wins on width — max-width is what
-     actually flattens it to 280, which is why there is no override here. */
-  .box { width: 74vw; max-width: 280px; scroll-snap-align: center; }
-
-  .reveal__inner { padding: 0 12px; }
-  .carousel { gap: 8px; }
-  .carousel__arrow { width: 42px; height: 42px; }
-  .carousel__arrow svg { width: 19px; height: 19px; }
   .act { padding: 16px; border-radius: var(--radius-md); }
   .act__title { font-size: 25px; }
   .act__hook { font-size: 17px; }
@@ -1081,11 +1091,6 @@ img { display: block; max-width: 100%; height: auto; }
 
 .test-back:hover { border-color: #8d8d96; color: #3c3c42; }
 /* ═══════ END TEMPORARY BACK LINK ═══════ */
-
-/* Chip icon follows the state: padlock while closed, check once opened. */
-.box__chip .chip-ok { display: none; }
-.box.is-open .box__chip .chip-lock { display: none; }
-.box.is-open .box__chip .chip-ok { display: block; }
 
 /* ══════ HERO AMBIENT MOTION ══════
    Slow, staggered, and never in unison — ambient, not a loading screen. */

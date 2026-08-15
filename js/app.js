@@ -20,238 +20,193 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
   });
 });
 
-/* ── ACTIVITY PICKER ─────────────────────────────────────────
-   Only runs on the Thank You page; the summary page has no #boxes. */
+/* ── QUIZ → REWARD FLOW ──────────────────────────────────────
+   Six states in one section: quiz → result → box → opening →
+   activity → check-in. Only runs on the Thank You page. */
 (function () {
-  const boxes = document.getElementById("boxes");
-  const reveal = document.getElementById("reveal");
-  const act = document.getElementById("act");
-  if (!boxes || !reveal || !act) return;
+  const quiz = document.getElementById("quiz");
+  const qAsk = document.getElementById("qAsk");
+  if (!quiz || !qAsk) return;
 
-  // Activity 1 is the real camp; 2 and 3 are placeholders awaiting real data.
-  const ACTIVITIES = [
-    {
-      badge: "แนะนำ",
-      title: "SciGameLab Camp",
-      hook: "ค่ายวิทย์ + โค้ดดิ้ง + เกม",
-      desc: "เปิดโลกวิทยาศาสตร์และเทคโนโลยีผ่านการลงมือทำจริง สร้างเกม ทดลองวิทย์ และพัฒนาไอเดียสุดล้ำไปกับเพื่อนๆ",
-      date: "14–16 ส.ค.",
-      place: "เรียนออนไลน์ผ่าน Discord",
-      link: "index.html",
-    },
-    {
-      badge: "เร็วๆ นี้",
-      title: "กิจกรรมที่ 2 (ตัวอย่าง)",
-      hook: "รอข้อมูลจริงจากทีมงาน",
-      desc: "ข้อความนี้เป็นตัวอย่างไว้ทดสอบระบบเลื่อนกิจกรรมเท่านั้น เมื่อมีข้อมูลกิจกรรมจริงแล้วสามารถนำมาแทนที่ได้ทันที",
-      date: "รอประกาศ",
-      place: "รอประกาศ",
-      link: "#",
-    },
-    {
-      badge: "เร็วๆ นี้",
-      title: "กิจกรรมที่ 3 (ตัวอย่าง)",
-      hook: "รอข้อมูลจริงจากทีมงาน",
-      desc: "ข้อความนี้เป็นตัวอย่างไว้ทดสอบระบบเลื่อนกิจกรรมเท่านั้น เมื่อมีข้อมูลกิจกรรมจริงแล้วสามารถนำมาแทนที่ได้ทันที",
-      date: "รอประกาศ",
-      place: "รอประกาศ",
-      link: "#",
-    },
-  ];
-
-  const field = {
-    badge: document.getElementById("act-badge"),
-    title: document.getElementById("act-title"),
-    hook: document.getElementById("act-hook"),
-    desc: document.getElementById("act-desc"),
-    date: document.getElementById("act-date"),
-    place: document.getElementById("act-place"),
-    link: document.getElementById("act-link"),
-  };
-
-  const dots = document.getElementById("dots");
-  const boxEls = [...boxes.querySelectorAll(".box")];
+  const pQuiz = document.getElementById("pQuiz");
+  const pResult = document.getElementById("pResult");
+  const pPrize = document.getElementById("pPrize");
+  const qCard = document.getElementById("qCard");
+  const qOpts = document.getElementById("qOpts");
+  const qCount = document.getElementById("qCount");
+  const qBar = document.getElementById("qBar");
+  const lootBox = document.getElementById("lootBox");
+  const live = document.getElementById("quizLive");
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  let current = -1;
-  let busy = false;
-
-  function paint(i) {
-    const a = ACTIVITIES[i];
-    field.badge.textContent = a.badge;
-    field.title.textContent = a.title;
-    field.hook.textContent = a.hook;
-    field.desc.textContent = a.desc;
-    field.date.textContent = a.date;
-    field.place.textContent = a.place;
-    field.link.setAttribute("href", a.link);
-
-    boxEls.forEach((b, n) => {
-      const open = n === i;
-      b.classList.toggle("is-open", open);
-      b.setAttribute("aria-expanded", String(open));
-      b.querySelector(".box__chip").lastChild.textContent = open ? " เปิดแล้ว! " : " คลิกเพื่อเปิด ";
-    });
-
-    [...dots.children].forEach((d, n) =>
-      d.setAttribute("aria-current", String(n === i))
-    );
-    current = i;
-  }
-
-  ACTIVITIES.forEach((a, i) => {
-    const d = document.createElement("button");
-    d.type = "button";
-    d.setAttribute("role", "tab");
-    d.setAttribute("aria-label", a.title);
-    d.setAttribute("aria-current", "false");
-    d.addEventListener("click", () => go(i));
-    dots.append(d);
-  });
-
-  function animate(el, cls, done) {
-    if (reduced.matches) return done();
-    el.classList.add(cls);
-    el.addEventListener(
-      "animationend",
-      () => {
-        el.classList.remove(cls);
-        done();
-      },
-      { once: true }
-    );
-  }
-
-  // Swap between activities: slide + scale, direction-aware.
-  function go(i) {
-    if (busy || i === current) return;
-    if (current === -1) return open(i);
-    busy = true;
-    const forward = i > current;
-    animate(act, forward ? "slide-out-left" : "slide-out-right", () => {
-      paint(i);
-      animate(act, forward ? "slide-in-right" : "slide-in-left", () => {
-        busy = false;
-      });
-    });
-  }
-
-  // Brand shapes for the burst — plus, ring, diamond, dot.
-  const SHAPES = [
-    '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></svg>',
-    '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="6"/></svg>',
-    '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="14" height="14" rx="2" transform="rotate(45 12 12)"/></svg>',
-    '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="9"/></svg>',
+  // ═══════ คำถามชั่วคราว — เปลี่ยนเป็นของจริงได้เลย ═══════
+  // score: แต้มของตัวเลือกนั้น เก็บครบ 3 ข้อแล้วได้ >= PASS_MARK คือผ่าน
+  const QUESTIONS = [
+    {
+      ask: "เวลาทำกิจกรรม น้องชอบแบบไหนที่สุด?",
+      opts: [
+        { icon: "pad",   text: "ทำเกม",                    score: 1 },
+        { icon: "flask", text: "ลองอะไรใหม่ ๆ",            score: 1 },
+        { icon: "bulb",  text: "อยากรู้ว่าตัวเองเหมาะกับอะไร", score: 0 },
+      ],
+    },
+    {
+      ask: "ถ้ามีภารกิจให้เลือก น้องจะหยิบอะไรก่อน?",
+      opts: [
+        { icon: "rocket", text: "อันที่ดูท้าทายที่สุด",  score: 1 },
+        { icon: "puzzle", text: "อันที่ต้องคิดเยอะ ๆ",   score: 1 },
+        { icon: "heart",  text: "อันที่ดูน่ารักที่สุด",   score: 0 },
+      ],
+    },
+    {
+      ask: "วันนี้อยากได้ความสนุกสายไหน?",
+      opts: [
+        { icon: "bolt",  text: "สายลุย ทำเลยไม่ต้องคิดนาน", score: 1 },
+        { icon: "brush", text: "สายสร้างของสวย ๆ",          score: 1 },
+        { icon: "star",  text: "ยังไม่แน่ใจ ขอลองดูก่อน",    score: 0 },
+      ],
+    },
   ];
-  const TINTS = ["#ff6b00", "#2c9fa2", "#ffc52a", "#ffffff"];
+  const PASS_MARK = 2;
 
-  // Ten, not fifty — more than this and it reads as a gacha pull.
-  function burst(slot) {
-    const layer = slot.querySelector(".box__burst");
-    if (!layer) return;
-    layer.classList.add("is-boom");
-    layer.addEventListener(
-      "animationend",
-      () => layer.classList.remove("is-boom"),
-      { once: true }
-    );
+  const ICON = {
+    pad:    '<svg viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="11" rx="5" stroke="currentColor" stroke-width="2"/><path d="M7 11v3M5.5 12.5h3M16 12h.01M18.5 14h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    flask:  '<svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v6l-5 9a3 3 0 0 0 2.6 4.5h8.8A3 3 0 0 0 19 18l-5-9V3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
+    bulb:   '<svg viewBox="0 0 24 24" fill="none"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.4.3.5.7.5 1.1h6c0-.4.1-.8.5-1.1A6 6 0 0 0 12 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
+    rocket: '<svg viewBox="0 0 24 24" fill="none"><path d="M13 3c4 1.5 6.5 5 7 9-4 3.5-8 5-8 5l-4-4s1.5-4 5-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 13l-3 1 1 3 3-1M15 9h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    puzzle: '<svg viewBox="0 0 24 24" fill="none"><path d="M10 4a2 2 0 1 1 4 0v1h4v4h-1a2 2 0 1 0 0 4h1v4h-4v-1a2 2 0 1 0-4 0v1H6v-4H5a2 2 0 1 0 0-4h1V5h4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
+    heart:  '<svg viewBox="0 0 24 24" fill="none"><path d="M12 20s-7.5-4.7-7.5-9.4A4.1 4.1 0 0 1 12 8a4.1 4.1 0 0 1 7.5 2.6C19.5 15.3 12 20 12 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
+    bolt:   '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 2L5 13h5.5L9.5 22 19 10h-6z"/></svg>',
+    brush:  '<svg viewBox="0 0 24 24" fill="none"><path d="M18 3.5l2.5 2.5-9 9-3.5 1 1-3.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M6 16c-1.5 1.5-1 4-3 5 3 .5 5.5 0 6.5-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    star:   '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.2 6.6.9-4.8 4.7 1.2 6.7L12 17.4 6.1 20.5l1.2-6.7L2.5 9.1l6.6-.9z"/></svg>',
+  };
 
-    for (let n = 0; n < 10; n++) {
-      const p = document.createElement("span");
-      p.className = "particle";
-      p.innerHTML = SHAPES[n % SHAPES.length];
-      const angle = (n / 10) * Math.PI * 2 + Math.random() * 0.5;
-      const dist = 30 + Math.random() * 40;
-      p.style.setProperty("--dx", `${Math.cos(angle) * dist}px`);
-      p.style.setProperty("--dy", `${Math.sin(angle) * dist}px`);
-      p.style.setProperty("--size", `${7 + Math.random() * 6}px`);
-      p.style.setProperty("--spin", `${Math.random() * 360 - 180}deg`);
-      p.style.setProperty("--tint", TINTS[n % TINTS.length]);
-      layer.append(p);
-      p.addEventListener("animationend", () => p.remove(), { once: true });
+  let index = 0;
+  let score = 0;
+  let locked = false;
+
+  function paintQuestion(dir) {
+    const q = QUESTIONS[index];
+    qAsk.textContent = q.ask;
+    qOpts.innerHTML = q.opts.map((o, i) => `
+      <button class="opt" type="button" data-i="${i}">
+        <span class="opt__icon">${ICON[o.icon] || ""}</span>
+        <span class="opt__text">${o.text}</span>
+        <svg class="opt__go" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>`).join("");
+
+    qCount.textContent = `${index + 1} / ${QUESTIONS.length}`;
+    qBar.style.width = `${((index + 1) / QUESTIONS.length) * 100}%`;
+    live.textContent = `ข้อ ${index + 1} จาก ${QUESTIONS.length}: ${q.ask}`;
+
+    if (dir && !reduced.matches) {
+      qCard.classList.remove("is-in-right", "is-in-left");
+      void qCard.offsetWidth;               // restart the animation
+      qCard.classList.add(dir > 0 ? "is-in-right" : "is-in-left");
     }
   }
 
-  // First open: ยุบ → อัดพลัง → BOOM → ดำเปลี่ยนเป็นส้ม, then the card.
-  // Beats run on timers rather than chained animationend so a dropped event
-  // cannot strand the box mid-sequence.
-  const timers = [];
-  function open(i) {
-    if (busy) return;
-    busy = true;
-    const box = boxEls[i];
-    const slot = box.closest(".box-slot");
+  // Answering: squash the button, glow it, then slide the next question in.
+  qOpts.addEventListener("click", (e) => {
+    const btn = e.target.closest(".opt");
+    if (!btn || locked) return;
+    locked = true;
 
-    if (reduced.matches) return finishOpen(i, box);
+    score += QUESTIONS[index].opts[+btn.dataset.i].score;
+    btn.classList.add("is-picked");
 
-    timers.forEach(clearTimeout);
-    timers.length = 0;
-    const at = (ms, fn) => timers.push(setTimeout(fn, ms));
+    const step = () => {
+      if (index < QUESTIONS.length - 1) {
+        index += 1;
+        paintQuestion(1);
+        locked = false;
+      } else {
+        finish();
+      }
+    };
 
-    box.classList.add("is-pressing");
+    if (reduced.matches) step();
+    else {
+      qCard.classList.add("is-out");
+      setTimeout(() => { qCard.classList.remove("is-out"); step(); }, 260);
+    }
+  });
 
-    at(140, () => {
-      box.classList.remove("is-pressing");
-      box.classList.add("is-charging");
-    });
-
-    at(350, () => {
-      box.classList.remove("is-charging");
-      box.classList.add("is-boom");
-      burst(slot);
-    });
-
-    // Colour lands only after the boom — holding black until here is the
-    // whole point of the sequence.
-    at(500, () => {
-      box.classList.remove("is-boom");
-      paint(i);
-    });
-
-    at(650, () => finishOpen(i, box));
+  function swap(from, to) {
+    from.hidden = true;
+    to.hidden = false;
+    if (!reduced.matches) {
+      to.classList.remove("is-pop");
+      void to.offsetWidth;
+      to.classList.add("is-pop");
+    }
   }
 
-  function finishOpen(i, box) {
-    reveal.hidden = false;
-    paint(i);
+  const passed = () => score >= PASS_MARK;
 
-    // Rise from the opened box rather than from the middle of the page.
-    const bb = box.getBoundingClientRect();
-    const rb = act.getBoundingClientRect();
-    const origin = ((bb.left + bb.width / 2 - rb.left) / rb.width) * 100;
-    act.style.transformOrigin = `${Math.max(0, Math.min(100, origin))}% top`;
+  function finish() {
+    // The hero has done its job; it steps aside so the result owns the screen.
+    const hero = document.querySelector(".page-thanks .hero");
+    if (hero) hero.classList.add("is-gone");
+    document.getElementById("quizHead").classList.add("is-gone");
 
-    animate(act, "is-entering", () => {
-      busy = false;
-    });
-    if (reduced.matches) busy = false;
+    const win = passed();
+    document.getElementById("resultTitle").textContent = win ? "ผ่านด่านแล้ว!" : "ยังไม่ผ่านรอบนี้";
+    document.getElementById("resultSub").textContent = win
+      ? "คุณปลดล็อกรางวัลพิเศษได้แล้ว"
+      : "ไม่เป็นไร ยังมีของให้เปิดเหมือนกัน";
+    document.getElementById("resultGot").textContent = win ? "คุณได้รับกล่องเพชร" : "คุณได้รับกล่องเหล็ก";
+    document.getElementById("lootLabel").textContent = win ? "เปิดกล่องเพชร" : "เปิดกล่องเหล็ก";
+    lootBox.classList.add(win ? "lootbox--diamond" : "lootbox--iron");
+
+    swap(pQuiz, pResult);
+    live.textContent = `${win ? "ผ่านด่านแล้ว" : "ยังไม่ผ่านรอบนี้"} — ${win ? "ได้รับกล่องเพชร" : "ได้รับกล่องเหล็ก"} คลิกเพื่อเปิดกล่อง`;
+    quiz.scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth", block: "center" });
   }
 
-  boxEls.forEach((b, i) => b.addEventListener("click", () => (reveal.hidden ? open(i) : go(i))));
+  // Six sparks, same restraint as the gallery slash — a loot box, not a
+  // confetti cannon.
+  function sparks(win) {
+    const burst = lootBox.querySelector(".lootbox__burst");
+    const tints = win ? ["#ffffff", "#7fd6ff", "#ffc52a", "#ff6b00"]
+                      : ["#ffffff", "#c9d1d9", "#ff6b00", "#8d949c"];
+    for (let n = 0; n < 8; n++) {
+      const s = document.createElement("i");
+      s.className = "spark";
+      const a = Math.PI * (0.15 + Math.random() * 0.7);
+      const d = 60 + Math.random() * 60;
+      s.style.setProperty("--dx", `${Math.cos(a) * d * (n % 2 ? 1 : -1)}px`);
+      s.style.setProperty("--dy", `${-Math.sin(a) * d}px`);
+      s.style.setProperty("--sz", `${6 + Math.random() * 7}px`);
+      s.style.setProperty("--tint", tints[n % tints.length]);
+      burst.append(s);
+      s.addEventListener("animationend", () => s.remove(), { once: true });
+    }
+  }
 
-  document.getElementById("prev").addEventListener("click", () =>
-    go((current - 1 + ACTIVITIES.length) % ACTIVITIES.length)
-  );
-  document.getElementById("next").addEventListener("click", () =>
-    go((current + 1) % ACTIVITIES.length)
-  );
+  let opened = false;
+  lootBox.addEventListener("click", () => {
+    if (opened) return;
+    opened = true;
+    const win = passed();
 
-  // Drag on desktop, swipe on touch.
-  let startX = null;
-  act.addEventListener("pointerdown", (e) => {
-    startX = e.clientX;
+    if (reduced.matches) { swap(pResult, pPrize); return; }
+
+    lootBox.classList.add(win ? "is-opening" : "is-opening-hard");
+    setTimeout(() => sparks(win), win ? 260 : 340);
+    setTimeout(() => {
+      swap(pResult, pPrize);
+      live.textContent = "ได้รับกิจกรรม SciGameLab Camp — เช็คอินเลยไหม?";
+    }, 900);
   });
-  act.addEventListener("pointerup", (e) => {
-    if (startX === null) return;
-    const dx = e.clientX - startX;
-    startX = null;
-    if (Math.abs(dx) < 60) return;
-    go(
-      dx < 0
-        ? (current + 1) % ACTIVITIES.length
-        : (current - 1 + ACTIVITIES.length) % ACTIVITIES.length
-    );
+
+  document.getElementById("laterBtn").addEventListener("click", () => {
+    document.querySelector(".gallery").scrollIntoView({
+      behavior: reduced.matches ? "auto" : "smooth", block: "start",
+    });
   });
+
+  paintQuestion(0);
 })();
 
 /* ── TEACHER GALLERY ──────────────────────────────────────────
