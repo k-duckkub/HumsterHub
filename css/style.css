@@ -235,19 +235,21 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 /* ── QR ── */
+/* The caption sits inside the frame with the QR, so the orange border reads
+   as one card rather than a box with a floating label under it. */
 .qr__frame {
   border: 6px solid var(--orange);
   border-radius: 20px;
-  padding: 12px;
+  padding: 12px 12px 10px;
   background: #ffffff;
-  margin-bottom: 16px;
+  text-align: center;
 }
 
 /* Square QR on plain white, so the spec's orange frame is the only frame.
    Sized so the account details beside it still get a readable column. */
 .qr__frame img { width: 224px; height: auto; }
 
-.qr__caption { font-size: 17px; color: var(--slate); line-height: 1.55; }
+.qr__caption { font-size: 16px; color: var(--slate); line-height: 1.45; margin-top: 8px; }
 
 /* Scan and transfer are two ways to pay the same account, so they sit as
    one group. Side by side rather than stacked: stacking made this column
