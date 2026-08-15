@@ -155,7 +155,10 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     document.getElementById("resultSub").textContent = win
       ? "คุณปลดล็อกรางวัลพิเศษได้แล้ว"
       : "ไม่เป็นไร ยังมีของให้เปิดเหมือนกัน";
-    document.getElementById("resultGot").textContent = win ? "คุณได้รับกล่องเพชร" : "คุณได้รับกล่องเหล็ก";
+    document.getElementById("resultGot").textContent = win ? "คุณได้รับกล่องเพชร!" : "คุณได้รับกล่องเหล็ก";
+    document.getElementById("boxHint").textContent = win
+      ? "✦ คลิกเพื่อเปิดกล่อง ✦"
+      : "✦ ลองเปิดดูว่ามีอะไรอยู่ข้างใน ✦";
     document.getElementById("lootLabel").textContent = win ? "เปิดกล่องเพชร" : "เปิดกล่องเหล็ก";
     lootBox.classList.add(win ? "lootbox--diamond" : "lootbox--iron");
 
@@ -164,23 +167,54 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     quiz.scrollIntoView({ behavior: reduced.matches ? "auto" : "smooth", block: "center" });
   }
 
-  // Eight shards, thrown 30–90px. Deliberately not confetti: the brief asks
-  // for a few crystal chips, and more than this reads as a slot machine.
-  function sparks(win) {
+  // Diamond throws crystal chips; iron coughs embers and a little smoke.
+  // Same restraint either way — the brief rules out confetti explicitly, and
+  // the counts here are the top of its stated ranges, not beyond them.
+  function burstFx(win) {
     const burst = lootBox.querySelector(".lootbox__burst");
-    const tints = win ? ["#ffffff", "#7fd6ff", "#bde9ff", "#ffc52a"]
-                      : ["#ffffff", "#ffd98a", "#ffc52a", "#c9d1d9"];
-    for (let n = 0; n < 8; n++) {
-      const s = document.createElement("i");
-      s.className = "spark";
-      const a = Math.PI * (0.15 + Math.random() * 0.7);
-      const d = 30 + Math.random() * 60;
-      s.style.setProperty("--dx", `${Math.cos(a) * d * (n % 2 ? 1 : -1)}px`);
-      s.style.setProperty("--dy", `${-Math.sin(a) * d}px`);
-      s.style.setProperty("--sz", `${6 + Math.random() * 7}px`);
-      s.style.setProperty("--tint", tints[n % tints.length]);
-      burst.append(s);
-      s.addEventListener("animationend", () => s.remove(), { once: true });
+    const add = (el) => {
+      burst.append(el);
+      el.addEventListener("animationend", () => el.remove(), { once: true });
+    };
+
+    if (win) {
+      const tints = ["#ffffff", "#bdf4ff", "#56c7ff", "#ffd978"];
+      for (let n = 0; n < 8; n++) {
+        const s = document.createElement("i");
+        s.className = "spark";
+        const a = Math.PI * (0.15 + Math.random() * 0.7);
+        const d = 40 + Math.random() * 70;
+        s.style.setProperty("--dx", `${Math.cos(a) * d * (n % 2 ? 1 : -1)}px`);
+        s.style.setProperty("--dy", `${-Math.sin(a) * d}px`);
+        s.style.setProperty("--sz", `${7 + Math.random() * 7}px`);
+        s.style.setProperty("--tint", tints[n % tints.length]);
+        add(s);
+      }
+      return;
+    }
+
+    const tints = ["#ffb347", "#ff8a24", "#ffd978", "#e56a10"];
+    for (let n = 0; n < 6; n++) {
+      const e = document.createElement("i");
+      e.className = "ember";
+      // Embers rise more than they spread — the vertical bias is what keeps
+      // them reading as heat rather than as debris.
+      const dx = (Math.random() * 54 - 27);
+      const dy = -(46 + Math.random() * 46);
+      e.style.setProperty("--dx", `${dx}px`);
+      e.style.setProperty("--dy", `${dy}px`);
+      e.style.setProperty("--sz", `${4 + Math.random() * 5}px`);
+      e.style.setProperty("--tint", tints[n % tints.length]);
+      e.style.animationDelay = `${n * 45}ms`;
+      add(e);
+    }
+    for (let n = 0; n < 2; n++) {
+      const k = document.createElement("i");
+      k.className = "smoke";
+      k.style.setProperty("--dx", `${n ? 26 : -24}px`);
+      k.style.setProperty("--dy", `${-38 - Math.random() * 20}px`);
+      k.style.animationDelay = `${n * 90}ms`;
+      add(k);
     }
   }
 
@@ -198,38 +232,63 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
     const squish = document.getElementById("lootSquish");
     const flash = lootBox.querySelector(".lootbox__flash");
 
+    // The chest is not swapped away for the reward — it shrinks and stays put
+    // above it, so the card reads as having come out of the box the user just
+    // opened rather than as the next screen.
+    const reveal = () => {
+      pResult.classList.add("is-compact");
+      pPrize.hidden = false;
+      if (!reduced.matches) {
+        pPrize.classList.remove("is-pop");
+        void pPrize.offsetWidth;
+        pPrize.classList.add("is-pop");
+      }
+      document.getElementById("prizeEyebrow").textContent = "ยินดีด้วย! คุณปลดล็อกกิจกรรมนี้แล้ว";
+      live.textContent = "ยินดีด้วย! ปลดล็อกกิจกรรม SciGameLab Camp แล้ว — เช็คอินเลยไหม?";
+    };
+
     if (reduced.matches) {
-      lootBox.classList.add("is-open");
-      swap(pResult, pPrize);
-      live.textContent = "ได้รับกิจกรรม SciGameLab Camp — เช็คอินเลยไหม?";
+      lootBox.classList.add("is-open", "is-settled");
+      reveal();
       return;
     }
 
     buzz(12);
-    squish.classList.add("is-pressing");                       // 0–130   ยุบ
+    squish.classList.add("is-pressing");                        // 0–130   ยุบ
 
-    setTimeout(() => {                                         // 130–390 อัดพลัง
+    setTimeout(() => {                                          // 130–420 อัดพลัง + แสงสะสม
       squish.classList.remove("is-pressing");
       squish.classList.add("is-charging");
+      lootBox.classList.add("is-charging");
     }, 130);
 
-    setTimeout(() => {                                         // 390     ฝาเปิด
+    setTimeout(() => {                                          // 420–570 สั่นสั้น ๆ
       squish.classList.remove("is-charging");
+      squish.classList.add("is-shaking");
+    }, 420);
+
+    setTimeout(() => {                                          // 570     ฝาเปิด + ตัวกล่องยุบ
+      squish.classList.remove("is-shaking");
+      squish.classList.add("is-bursting");
       lootBox.classList.add("is-open");
-    }, 390);
+    }, 570);
 
-    setTimeout(() => {                                         // 440     แสง + ประกาย
+    setTimeout(() => {                                          // 620     แสงพุ่ง + อนุภาค
       flash.classList.add("is-firing");
-      sparks(win);
+      burstFx(win);
       buzz(25);
-    }, 440);
+    }, 620);
 
-    setTimeout(() => squish.classList.add("is-settling"), 700); // 700     คืนตัว
+    setTimeout(() => {                                          // 900     รางวัลเด้งขึ้น
+      squish.classList.remove("is-bursting");
+      reveal();
+    }, 900);
 
-    setTimeout(() => {                                         // 860     reward pop
-      swap(pResult, pPrize);
-      live.textContent = "ได้รับกิจกรรม SciGameLab Camp — เช็คอินเลยไหม?";
-    }, 860);
+    setTimeout(() => {                                          // 1250    คืนตัว แสงหรี่ลง
+      squish.classList.add("is-settling");
+      lootBox.classList.remove("is-charging");
+      lootBox.classList.add("is-settled");
+    }, 1250);
   });
 
   paintQuestion(0);

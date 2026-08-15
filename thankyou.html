@@ -85,6 +85,12 @@
              over one. All four chests ship in the markup so the closed→open
              crossfade has nothing left to load at click time. -->
         <button class="lootbox" id="lootBox" type="button" aria-describedby="boxHint">
+          <!-- Ground plane rather than a pedestal: it doubles as the contact
+               shadow, so the chest reads as standing on something without a
+               second object competing with it. -->
+          <span class="lootbox__spot" aria-hidden="true"></span>
+          <span class="lootbox__halo" aria-hidden="true"></span>
+
           <span class="lootbox__float" aria-hidden="true">
             <span class="lootbox__squish" id="lootSquish">
               <img class="lootbox__art" data-art="diamond-closed" src="assets/box-diamond-closed.webp" width="480" height="452" alt="">
@@ -92,12 +98,15 @@
               <img class="lootbox__art" data-art="iron-closed"    src="assets/box-iron-closed.webp"    width="480" height="452" alt="">
               <img class="lootbox__art" data-art="iron-open"      src="assets/box-iron-open.webp"      width="480" height="452" alt="">
 
-              <!-- The sweep is masked to the chest silhouette so it never reads
-                   as a rectangle sliding past. The mask URL sits inline because
-                   the single-file build rewrites asset paths in the markup only,
-                   not inside style.css. -->
+              <!-- Sweep and charge glow are both masked to the chest silhouette
+                   so neither reads as a rectangle over the art. Every mask URL
+                   sits inline because the single-file build rewrites asset
+                   paths in the markup only, never inside style.css. -->
               <span class="lootbox__shine" data-shine="diamond" style="-webkit-mask-image:url(assets/box-diamond-closed.webp);mask-image:url(assets/box-diamond-closed.webp)"></span>
               <span class="lootbox__shine" data-shine="iron"    style="-webkit-mask-image:url(assets/box-iron-closed.webp);mask-image:url(assets/box-iron-closed.webp)"></span>
+
+              <span class="lootbox__charge" data-charge="diamond" style="-webkit-mask-image:url(assets/box-diamond-closed.webp);mask-image:url(assets/box-diamond-closed.webp)"></span>
+              <span class="lootbox__charge" data-charge="iron"    style="-webkit-mask-image:url(assets/box-iron-closed.webp);mask-image:url(assets/box-iron-closed.webp)"></span>
 
               <span class="lootbox__flash"></span>
             </span>
@@ -116,7 +125,7 @@
            Reuses the .act card the picker already had, so the reveal
            inherits the existing visual system instead of a second one. -->
       <div class="panel panel--prize" id="pPrize" hidden>
-        <p class="prize__eyebrow">กิจกรรมที่คุณได้รับ</p>
+        <p class="prize__eyebrow" id="prizeEyebrow">กิจกรรมที่คุณได้รับ</p>
 
         <article class="act act--prize">
           <div class="act__media">
