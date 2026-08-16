@@ -1,21 +1,21 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { AFTERMATH, SHOWER_LABEL, USE_SPRITE } from "@/lib/hamsterFrames";
+import { HamsterSprite } from "./HamsterSprite";
+
 /**
  * The fail meter, drawn rather than sprited.
  *
- * The brief describes six *additive* states — pipe, then head, then drops,
- * then flow — which is a layer stack, not a flipbook. Frames would have to
- * re-draw the hamster six times and could not slide the pipe in or pop the
- * head on; separate SVG layers get those entrances for free and stay crisp at
- * every size the scene is used at.
+ * It follows the painted reference sheet beat for beat — eight of them, not
+ * six: after the fifth miss the water stops, she drips, then she folds her
+ * arms and shivers. Those last two are an aftermath on a timer, not two more
+ * ways to fail, which is why `beat` is separate from `level`.
  *
- * The hamster is traced from the Hamster Hub mascot: ginger fur, pink bow,
- * cream cheeks, black tee with the pink play mark. Swap in the real artwork by
- * replacing <Hamster /> once the sprite lands in public/assets.
+ * Drawn rather than framed because the shower is additive — pipe, then head,
+ * then drops, then flow. Stills would have to redraw the whole hamster six
+ * times and still could not slide the pipe in or pop the head on.
  */
-
-import { SHOWER_LABEL, USE_SPRITE } from "@/lib/hamsterFrames";
-import { HamsterSprite } from "./HamsterSprite";
 
 type Props = {
   /** 0–5, one per miss. Anything higher is clamped to the fully soaked state. */
@@ -41,12 +41,42 @@ const WATER = "#7EC8F0";
 /** Nudges away from the water as it gets closer, then gives up at level 5. */
 const SHIFT_X = [0, 0, -3, -9, -6, 0];
 
+type Pose = "idle" | "guard" | "flail" | "hang" | "hug";
+
 export function HamsterShower({ level, compact = false, reduced = false }: Props) {
   const lv = Math.max(0, Math.min(5, Math.round(level)));
 
-  // The drawn scene is the stand-in. Once the painted sheet is in place the
-  // flag flips and this file stops rendering entirely.
+  // 0 = whatever the level says · 1 = water off, still dripping · 2 = shivering
+  const [beat, setBeat] = useState(0);
+
+  useEffect(() => {
+    if (lv < 5) {
+      setBeat(0);
+      return;
+    }
+    const timers = AFTERMATH.map((step) =>
+      window.setTimeout(
+        () => setBeat(step.frame - 5),
+        reduced ? step.at / 6 : step.at,
+      ),
+    );
+    return () => timers.forEach(window.clearTimeout);
+  }, [lv, reduced]);
+
+  // The painted sheet is the intended artwork. Once it is in public/assets the
+  // flag flips and none of the drawing below runs.
   if (USE_SPRITE) return <HamsterSprite level={level} compact={compact} reduced={reduced} />;
+
+  const raining = lv >= 4 && beat === 0;
+  const dripping = lv === 3 || (lv >= 5 && beat >= 1);
+  const shivering = lv >= 5 && beat >= 2;
+
+  const pose: Pose =
+    shivering ? "hug"
+      : lv >= 5 ? "hang"
+        : lv === 4 ? "flail"
+          : lv >= 1 ? "guard"
+            : "idle";
 
   return (
     <div
@@ -68,8 +98,8 @@ export function HamsterShower({ level, compact = false, reduced = false }: Props
             <stop offset="45%" stopColor="#DCE7F0" />
             <stop offset="100%" stopColor={METAL} />
           </linearGradient>
-          {/* Sits over the fur at level 4+ and is what makes "wet" read without
-              a second set of artwork. */}
+          {/* Sits over the fur from level 4 and is what makes "wet" read
+              without a second set of artwork. */}
           <linearGradient id="hh-wet" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#2E86C4" stopOpacity="0.22" />
             <stop offset="100%" stopColor="#2E86C4" stopOpacity="0.03" />
@@ -113,8 +143,7 @@ export function HamsterShower({ level, compact = false, reduced = false }: Props
           </g>
         )}
 
-        {/* ── Water. Three drops at level 3, a full flow from level 4. ── */}
-        {lv === 3 && (
+        {dripping && (
           <g key="drops">
             {[
               { x: 104, delay: 0, fall: 40 },
@@ -143,13 +172,13 @@ export function HamsterShower({ level, compact = false, reduced = false }: Props
           {/* Keyed so the one-shot hop replays when the level lands on 4 rather
               than being stuck in its finished state. */}
           <g key={`hop-${lv}`} style={lv === 4 ? { animation: "hh-hop 520ms var(--ease-out-soft) both" } : undefined}>
-            <Hamster level={lv} />
+            <Hamster level={lv} pose={pose} wet={lv >= 4} shivering={shivering} />
           </g>
         </g>
 
         {/* Water runs in front of the hamster, not behind it. Behind, the head
             hides the whole flow and the scene reads as a dry shower head. */}
-        {lv >= 4 && (
+        {raining && (
           <g key="stream" opacity="0.62">
             {[88, 98, 108, 120, 132, 142, 152].map((x, i) => (
               <rect
@@ -200,20 +229,30 @@ export function HamsterShower({ level, compact = false, reduced = false }: Props
             ))}
           </g>
         )}
+
+        {shivering && <ShiverMarks />}
       </svg>
     </div>
   );
 }
 
-function Hamster({ level }: { level: number }) {
-  const wet = level >= 4;
-  const soaked = level >= 5;
-  const earFlat = level >= 3 ? (soaked ? 40 : 24) : 0;
+function Hamster({
+  level,
+  pose,
+  wet,
+  shivering,
+}: {
+  level: number;
+  pose: Pose;
+  wet: boolean;
+  shivering: boolean;
+}) {
+  const earFlat = level >= 3 ? (level >= 5 ? 40 : 24) : 0;
 
   return (
     <g
       style={
-        soaked
+        shivering
           ? {
               transformBox: "fill-box",
               transformOrigin: "50% 90%",
@@ -245,12 +284,10 @@ function Hamster({ level }: { level: number }) {
 
       <Bow />
 
-      {/* Legs and body first, head over the top — the mascot's head is wider
-          than its shoulders, so the overlap has to run that way. */}
+      {/* Body first, head over the top — the mascot's head is wider than its
+          shoulders, so the overlap has to run that way. */}
       <ellipse cx="120" cy="176" rx="41" ry="31" fill={SHIRT} />
       <path d="M113 168l16 9-16 9z" fill={PINK} />
-      <ellipse cx="84" cy="180" rx="12" ry="10" fill={SKIN} />
-      <ellipse cx="156" cy="180" rx="12" ry="10" fill={SKIN} />
       {/* Feet after the shirt, or the tee's ellipse swallows them. */}
       <ellipse cx="101" cy="204" rx="15" ry="8.5" fill={SKIN} />
       <ellipse cx="139" cy="204" rx="15" ry="8.5" fill={SKIN} />
@@ -270,7 +307,6 @@ function Hamster({ level }: { level: number }) {
       </g>
 
       <Eyes level={level} />
-
       <path d="M114 131h12l-6 7z" fill={PINK} />
       <Mouth level={level} />
 
@@ -283,6 +319,92 @@ function Hamster({ level }: { level: number }) {
           <ellipse key={`${x}-${y}`} cx={x} cy={y} rx="3.4" ry="4.4" fill="#CFEBF9" opacity="0.9" />
         ))}
       </g>
+
+      {/* Soaked fur hangs in strands past the fur line. Without it a wet
+          hamster and a dry one differ only by a colour wash. */}
+      {wet && <WetFringe />}
+
+      {/* Arms last so a raised paw sits over the cheek rather than under it. */}
+      <Arms pose={pose} />
+    </g>
+  );
+}
+
+function Arms({ pose }: { pose: Pose }) {
+  const paw = { fill: SKIN };
+
+  if (pose === "guard") {
+    // Both paws up at the mouth — the sheet's "oh no" pose.
+    return (
+      <g {...paw}>
+        <circle cx="103" cy="154" r="11" />
+        <circle cx="137" cy="154" r="11" />
+        <ellipse cx="86" cy="182" rx="11" ry="9" />
+        <ellipse cx="154" cy="182" rx="11" ry="9" />
+      </g>
+    );
+  }
+
+  if (pose === "flail") {
+    return (
+      <g {...paw}>
+        <ellipse cx="76" cy="152" rx="11" ry="15" transform="rotate(-30 76 152)" />
+        <ellipse cx="164" cy="152" rx="11" ry="15" transform="rotate(30 164 152)" />
+      </g>
+    );
+  }
+
+  if (pose === "hug") {
+    // Arms folded across the chest, the shiver pose.
+    return (
+      <g {...paw}>
+        <rect x="88" y="170" width="64" height="14" rx="7" transform="rotate(-11 120 177)" />
+        <rect x="88" y="176" width="64" height="14" rx="7" transform="rotate(11 120 183)" />
+      </g>
+    );
+  }
+
+  if (pose === "idle") {
+    // One paw raised to the chin, the way the mascot is posed. Any higher and
+    // it sits on the cheek and reads as a lump on her face.
+    return (
+      <g {...paw}>
+        <circle cx="134" cy="160" r="9.5" />
+        <ellipse cx="84" cy="180" rx="12" ry="10" />
+      </g>
+    );
+  }
+
+  return (
+    <g {...paw}>
+      <ellipse cx="84" cy="182" rx="12" ry="10" />
+      <ellipse cx="156" cy="182" rx="12" ry="10" />
+    </g>
+  );
+}
+
+function WetFringe() {
+  return (
+    <g stroke={GINGER_DARK} strokeWidth="7" strokeLinecap="round" fill="none" opacity="0.92">
+      <path d="M82 100q-3 12-1 22" />
+      <path d="M95 92q-3 14-2 26" />
+      <path d="M158 100q3 12 1 22" />
+      <path d="M145 92q3 14 2 26" />
+    </g>
+  );
+}
+
+function ShiverMarks() {
+  return (
+    <g stroke={WATER} strokeWidth="2.6" strokeLinecap="round" fill="none">
+      {[
+        { d: "M62 150q5 6 0 12t0 12", delay: 0 },
+        { d: "M54 162q5 6 0 12", delay: 0.3 },
+        { d: "M178 150q-5 6 0 12t0 12", delay: 0.15 },
+        { d: "M186 162q-5 6 0 12", delay: 0.45 },
+      ].map((m) => (
+        <path key={m.d} d={m.d} style={{ animation: `hint-pulse 1.1s ${m.delay}s ease-in-out infinite` }} />
+      ))}
     </g>
   );
 }
@@ -301,9 +423,35 @@ function Bow() {
 }
 
 function Eyes({ level }: { level: number }) {
-  // Shut from level 4 — once the water lands, open eyes read as staring rather
-  // than flinching.
-  if (level >= 4) {
+  // Soaked: half-lidded and sad. The sheet holds this for the last three
+  // frames, and it is what separates "given up" from "still panicking".
+  if (level >= 5) {
+    return (
+      <g>
+        {[104, 136].map((cx) => (
+          <g key={cx}>
+            <ellipse cx={cx} cy="118" rx="10" ry="11" fill="#FFFFFF" stroke={INK} strokeWidth="2" />
+            <ellipse cx={cx} cy="121" rx="5.6" ry="6.2" fill={INK} />
+            <path
+              d={`M${cx - 11} 116a11 11 0 0 1 22 0z`}
+              fill={SKIN_LIGHT}
+              stroke={INK}
+              strokeWidth="2"
+              strokeLinejoin="round"
+            />
+          </g>
+        ))}
+        <g stroke={INK} strokeWidth="3.6" strokeLinecap="round" fill="none">
+          <path d="M92 101q9 4 15 1" />
+          <path d="M148 101q-9 4-15 1" />
+        </g>
+      </g>
+    );
+  }
+
+  // Water landing: eyes screwed shut, brows up. Open eyes here read as
+  // staring, not flinching.
+  if (level === 4) {
     return (
       <g stroke={INK} strokeWidth="4" strokeLinecap="round" fill="none">
         <path d="M96 120q9-10 18 0" />
@@ -314,8 +462,8 @@ function Eyes({ level }: { level: number }) {
     );
   }
 
-  // Pupils ride up toward the pipe from level 1 — the cheapest possible read on
-  // "it noticed".
+  // Pupils ride up toward the pipe from level 1 — the cheapest possible read
+  // on "it noticed".
   const pupilY = level >= 1 ? 111 : 116;
   return (
     <g>
@@ -358,11 +506,21 @@ function Eyes({ level }: { level: number }) {
 }
 
 function Mouth({ level }: { level: number }) {
-  // Cute grumpy wave at the end, not a grimace — the tone stays funny.
-  if (level >= 4) {
-    return <path d="M110 145q5 6 10 0t10 0" stroke={INK} strokeWidth="3.4" strokeLinecap="round" fill="none" />;
+  // Soaked: a cute grumpy wave, not a grimace — the tone stays funny.
+  if (level >= 5) {
+    return <path d="M110 146q5 6 10 0t10 0" stroke={INK} strokeWidth="3.4" strokeLinecap="round" fill="none" />;
   }
-  if (level >= 2) return <ellipse cx="120" cy="147" rx="6" ry="7.5" fill={INK} />;
+  // Water landing: wide open, mid-yelp.
+  if (level === 4) {
+    return (
+      <g>
+        <ellipse cx="120" cy="148" rx="9" ry="11" fill={INK} />
+        <ellipse cx="120" cy="153" rx="5" ry="4.5" fill={PINK} opacity="0.8" />
+      </g>
+    );
+  }
+  if (level >= 2) return <ellipse cx="120" cy="147" rx="6.5" ry="8" fill={INK} />;
+  if (level === 1) return <ellipse cx="120" cy="146" rx="4.5" ry="5.5" fill={INK} />;
   // Open smile with one tooth, the way the mascot is drawn.
   return (
     <g>

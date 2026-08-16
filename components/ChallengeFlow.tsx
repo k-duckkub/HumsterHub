@@ -71,8 +71,11 @@ export function ChallengeFlow() {
       }
 
       // A miss holds longer than a hit: the brief asks for the fail build-up to
-      // be seen before the next encounter starts.
-      const hold = reduced ? 120 : win ? 850 : 1350;
+      // be seen before the next encounter starts. The fifth miss holds longest
+      // of all, because the soaked state has an aftermath — water off, then a
+      // shiver — that runs to 1.8s and would otherwise be cut off by the
+      // reward screen.
+      const hold = reduced ? 120 : win ? 850 : nextFails >= 5 ? 3400 : 1350;
       timers.current.push(
         window.setTimeout(() => {
           if (index >= stages.length - 1) setMode("reward");
