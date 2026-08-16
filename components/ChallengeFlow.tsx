@@ -121,24 +121,7 @@ export function ChallengeFlow() {
       <Hero collapsed={index > 0 || mode !== "challenge"} />
 
       <section className="relative mx-auto flex max-w-[760px] flex-col items-center gap-3 px-5 pb-12 pt-4 max-md:px-4">
-        <header className="flex w-full items-center justify-between">
-          <div className="flex items-center gap-2" aria-label={`ด่านที่ ${index + 1} จาก ${TOTAL_STAGES}`}>
-            {stages.map((_, i) => (
-              <span
-                key={i}
-                aria-hidden
-                className={[
-                  "h-2.5 rounded-full transition-all duration-300",
-                  mode !== "challenge" || i < index
-                    ? "w-2.5 bg-orange"
-                    : i === index
-                      ? "w-7 bg-orange"
-                      : "w-2.5 bg-[#e2d5c7]",
-                ].join(" ")}
-              />
-            ))}
-          </div>
-
+        <header className="flex w-full items-center justify-end">
           <button
             type="button"
             onClick={toggleSound}
@@ -211,6 +194,32 @@ export function ChallengeFlow() {
             </div>
           )}
         </div>
+
+        {/* Under the stage rather than above it: the dots answer "how much is
+            left", which is a question the player asks after reading the card,
+            not before. */}
+        {mode === "challenge" && (
+          <div
+            className="mt-1 flex items-center justify-center gap-2"
+            role="status"
+            aria-label={`ด่านที่ ${index + 1} จาก ${TOTAL_STAGES}`}
+          >
+            {stages.map((_, i) => (
+              <span
+                key={i}
+                aria-hidden
+                className={[
+                  "h-2.5 rounded-full transition-all duration-300",
+                  i < index
+                    ? "w-2.5 bg-orange"
+                    : i === index
+                      ? "w-7 bg-orange"
+                      : "w-2.5 bg-[#e2d5c7]",
+                ].join(" ")}
+              />
+            ))}
+          </div>
+        )}
 
         {mode !== "challenge" && (
           <motion.div
