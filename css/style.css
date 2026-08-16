@@ -334,8 +334,10 @@ img { display: block; max-width: 100%; height: auto; }
 /* ══════════ THANK YOU PAGE ══════════
    Warm + playful + tech. Weighting is roughly
    60% warm ground / 20% navy / 10% orange / 5% teal / 5% other. */
-/* Lives on <main>, not <body>: the artifact build merges both pages into one
-   document, so a body class could not scope to just this page. */
+/* Lives on <main>, not <body>. The artifact build used to merge both pages
+   into one document, where a body class could not have scoped to just this
+   page; the pages are separate artifacts now, but scoping on <main> still
+   costs nothing and keeps the two pages' styles from ever bleeding. */
 .container.page-thanks {
   max-width: none;
   padding: 0;
