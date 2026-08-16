@@ -6,9 +6,13 @@ import { play } from "@/lib/sound";
 import type { GameProps } from "./types";
 
 const TARGET = 3;
-/** Slow enough to be beatable on purpose. A paddle that tracks the ball
- *  exactly turns first-to-three into first-to-never. */
-const AI_TRACK = 0.045;
+/**
+ * Slow enough to be beatable on purpose — a paddle that tracks the ball exactly
+ * turns first-to-three into first-to-never. Raised from 0.045 after a paddle
+ * left parked in the middle beat it: an opponent that loses to doing nothing is
+ * not a difficulty setting, it is a no-op.
+ */
+const AI_TRACK = 0.055;
 
 type World = {
   ready: boolean;

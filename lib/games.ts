@@ -37,22 +37,33 @@ export function shuffle<T>(input: readonly T[]): T[] {
 }
 
 export type Stage =
-  | { kind: "question"; questionIndex: number }
+  /** `slot` indexes the questions drawn for this session, not the whole pool. */
+  | { kind: "question"; slot: number }
   | { kind: "game"; game: GameId };
 
-/** Question, game, question, game, question — the two games drawn without
- *  replacement so one session never repeats a game. */
-export function buildStages(games: readonly GameId[]): Stage[] {
-  return [
-    { kind: "question", questionIndex: 0 },
-    { kind: "game", game: games[0] },
-    { kind: "question", questionIndex: 1 },
-    { kind: "game", game: games[1] },
-    { kind: "question", questionIndex: 2 },
-  ];
-}
+export const QUESTIONS_PER_RUN = 5;
+export const GAMES_PER_RUN = 2;
+export const TOTAL_STAGES = QUESTIONS_PER_RUN + GAMES_PER_RUN;
 
-export const TOTAL_STAGES = 5;
+/** Two questions, a game, two questions, a game, one question. Even spacing,
+ *  and the run ends on a question so the reward follows a beat of calm rather
+ *  than the adrenaline of a game. */
+const GAME_SLOTS = [2, 5];
+
+export function buildStages(games: readonly GameId[]): Stage[] {
+  const stages: Stage[] = [];
+  let question = 0;
+  let game = 0;
+
+  for (let i = 0; i < TOTAL_STAGES; i++) {
+    if (GAME_SLOTS.includes(i) && game < games.length) {
+      stages.push({ kind: "game", game: games[game++] });
+    } else {
+      stages.push({ kind: "question", slot: question++ });
+    }
+  }
+  return stages;
+}
 
 export type Tier = "diamond" | "silver" | "iron";
 

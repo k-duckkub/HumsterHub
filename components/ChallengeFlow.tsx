@@ -2,8 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { QUESTIONS } from "@/lib/questions";
-import { ALL_GAMES, buildStages, shuffle, tierForFails, TIER_COPY, TOTAL_STAGES, type GameId } from "@/lib/games";
+import { drawQuestions, QUESTIONS, type Question } from "@/lib/questions";
+import {
+  ALL_GAMES, buildStages, shuffle, tierForFails, TIER_COPY,
+  QUESTIONS_PER_RUN, TOTAL_STAGES, type GameId,
+} from "@/lib/games";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { useSound, play } from "@/lib/sound";
 import { QuestionCard } from "./QuestionCard";
@@ -27,16 +30,18 @@ export function ChallengeFlow() {
   const reduced = useReducedMotion();
   const { enabled: soundOn, toggle: toggleSound } = useSound();
 
-  // Drawn after mount, not during render. This page is statically prerendered,
-  // so a draw in the render pass would bake one pair into the HTML and then
-  // disagree with the client's own draw at hydration. The placeholder is never
-  // seen because stage 0 is always a question.
+  // Both draws happen after mount, never during render. This page is statically
+  // prerendered, so drawing in the render pass bakes one set into the HTML that
+  // the client then disagrees with at hydration.
   const [games, setGames] = useState<GameId[]>(() => ALL_GAMES.slice(0, 2));
+  const [deck, setDeck] = useState<Question[]>(() => QUESTIONS.slice(0, QUESTIONS_PER_RUN));
   const drawn = useRef(false);
+
   useEffect(() => {
     if (drawn.current) return;
     drawn.current = true;
     setGames(shuffle(ALL_GAMES).slice(0, 2));
+    setDeck(drawQuestions(QUESTIONS_PER_RUN));
   }, []);
 
   const stages = useMemo(() => buildStages(games), [games]);
@@ -94,7 +99,7 @@ export function ChallengeFlow() {
     setPicked(optionIndex);
     play("click");
 
-    const win = QUESTIONS[stage.questionIndex].opts[optionIndex].score > 0;
+    const win = deck[stage.slot].opts[optionIndex].score > 0;
     timers.current.push(
       window.setTimeout(() => {
         setPicked(null);
@@ -108,7 +113,7 @@ export function ChallengeFlow() {
     mode !== "challenge"
       ? `${TIER_COPY[tier].head} ได้รับ${TIER_COPY[tier].boxName} — คลิกเพื่อเปิดกล่อง`
       : stage.kind === "question"
-        ? `ด่าน ${index + 1} จาก ${TOTAL_STAGES}: ${QUESTIONS[stage.questionIndex].ask}`
+        ? `ด่าน ${index + 1} จาก ${TOTAL_STAGES}: ${deck[stage.slot].ask}`
         : `ด่าน ${index + 1} จาก ${TOTAL_STAGES}: มินิเกม`;
 
   return (
@@ -168,9 +173,9 @@ export function ChallengeFlow() {
                 className="w-full max-w-[620px]"
               >
                 <QuestionCard
-                  question={QUESTIONS[stage.questionIndex]}
-                  index={stage.questionIndex}
-                  total={QUESTIONS.length}
+                  question={deck[stage.slot]}
+                  index={stage.slot}
+                  total={QUESTIONS_PER_RUN}
                   picked={picked}
                   onPick={pickOption}
                   reduced={reduced}
