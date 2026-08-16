@@ -13,7 +13,7 @@ import { QuestionCard } from "./QuestionCard";
 import { LootBox } from "./LootBox";
 import { PrizeCard } from "./PrizeCard";
 import { Hero } from "./Hero";
-import { HamsterShower } from "./challenge/HamsterShower";
+import { HamsterFailProgress } from "./challenge/HamsterFailProgress";
 import { GameShell } from "./challenge/GameShell";
 
 type Mode = "challenge" | "reward" | "prize";
@@ -70,17 +70,16 @@ export function ChallengeFlow() {
       const nextFails = win ? fails : fails + 1;
       if (!win) {
         setFails(nextFails);
-        // The shower only actually turns on at level 4; before that it is a
-        // pipe and a nozzle, and a splash sound would be a lie.
-        if (nextFails >= 4) play("water");
+        // The water only actually starts on the third miss; before that the
+        // shower is overhead and dry, and a splash sound would be a lie.
+        if (nextFails >= 3) play("water");
       }
 
-      // A miss holds longer than a hit: the brief asks for the fail build-up to
-      // be seen before the next encounter starts. The fifth miss holds longest
-      // of all, because the soaked state has an aftermath — water off, then a
-      // shiver — that runs to 1.8s and would otherwise be cut off by the
-      // reward screen.
-      const hold = reduced ? 120 : win ? 850 : nextFails >= 5 ? 3400 : 1350;
+      // A miss holds longer than a hit: the fail build-up has to be seen before
+      // the next encounter starts. The miss that soaks her holds longest of
+      // all, because the shake-it-off beat does not begin until 500ms in and
+      // runs another 420ms — a normal hold would cut it in half.
+      const hold = reduced ? 120 : win ? 850 : nextFails === 4 ? 2400 : 1350;
       timers.current.push(
         window.setTimeout(() => {
           if (index >= stages.length - 1) setMode("reward");
@@ -141,7 +140,7 @@ export function ChallengeFlow() {
         </header>
 
         {mode === "challenge" && (
-          <HamsterShower level={fails} compact={inGame && phase === "playing"} reduced={reduced} />
+          <HamsterFailProgress failCount={fails} compact={inGame && phase === "playing"} reduced={reduced} />
         )}
 
         <div className="relative flex w-full flex-col items-center">
