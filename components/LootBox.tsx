@@ -4,15 +4,45 @@ import { useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
-export type BoxKind = "diamond" | "iron";
+export type BoxKind = "diamond" | "silver" | "iron";
 
+/* ═══════ รอรูปกล่องเงิน — วางไฟล์ box-silver-closed.webp / box-silver-open.webp
+   ใน public/assets/ แล้วเปลี่ยนสองบรรทัดของ silver ให้ชี้ไฟล์ใหม่ ไม่ต้องแก้อย่างอื่น ═══════
+   Silver currently borrows the iron plates so the middle tier renders at all.
+   Its particles are already its own, so the three tiers still feel distinct in
+   motion while the artwork is outstanding. */
 const ART = {
   diamond: { closed: "/assets/box-diamond-closed.webp", open: "/assets/box-diamond-open.webp" },
+  silver: { closed: "/assets/box-iron-closed.webp", open: "/assets/box-iron-open.webp" },
   iron: { closed: "/assets/box-iron-closed.webp", open: "/assets/box-iron-open.webp" },
 } as const;
 
 const SPARK_TINTS = ["#ffffff", "#bdf4ff", "#56c7ff", "#ffd978"];
+const SILVER_TINTS = ["#ffffff", "#e6edf3", "#c3d2de", "#f2f6f9"];
 const EMBER_TINTS = ["#ffb347", "#ff8a24", "#ffd978", "#e56a10"];
+
+/** Per-tier lighting. Keeping it in one table stops the ground spot, the halo
+ *  and the burst flash from drifting apart when a tier is added. */
+const GLOW: Record<BoxKind, { spot: string; halo: string; flash: string; label: string }> = {
+  diamond: {
+    spot: "radial-gradient(ellipse at center, rgba(46,123,255,0.26) 0%, rgba(86,199,255,0.14) 52%, transparent 78%)",
+    halo: "radial-gradient(circle, rgba(125,214,255,0.26) 0%, transparent 70%)",
+    flash: "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(86,203,255,0.5) 30%, rgba(255,191,64,0.16) 55%, transparent 75%)",
+    label: "เปิดกล่องเพชร",
+  },
+  silver: {
+    spot: "radial-gradient(ellipse at center, rgba(120,145,170,0.26) 0%, rgba(190,208,222,0.16) 52%, transparent 78%)",
+    halo: "radial-gradient(circle, rgba(214,228,238,0.30) 0%, transparent 70%)",
+    flash: "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(214,228,238,0.55) 30%, rgba(150,175,196,0.18) 55%, transparent 75%)",
+    label: "เปิดกล่องเงิน",
+  },
+  iron: {
+    spot: "radial-gradient(ellipse at center, rgba(229,106,16,0.28) 0%, rgba(255,179,71,0.15) 52%, transparent 78%)",
+    halo: "radial-gradient(circle, rgba(255,160,60,0.24) 0%, transparent 70%)",
+    flash: "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,201,92,0.55) 30%, rgba(255,150,40,0.18) 55%, transparent 75%)",
+    label: "เปิดกล่องเหล็ก",
+  },
+};
 
 type Props = {
   kind: BoxKind;
@@ -48,18 +78,21 @@ export function LootBox({ kind, compact, onOpened, reduced }: Props) {
       el.addEventListener("animationend", () => el.remove(), { once: true });
     };
 
-    if (kind === "diamond") {
-      // Eight crystal chips. The brief rules out confetti explicitly, and this
-      // is the top of its stated range rather than beyond it.
-      for (let n = 0; n < 8; n++) {
+    if (kind === "diamond" || kind === "silver") {
+      // Crystal chips for diamond, cooler and fewer for silver. The brief rules
+      // out confetti explicitly, and eight is the top of its stated range
+      // rather than beyond it.
+      const tints = kind === "diamond" ? SPARK_TINTS : SILVER_TINTS;
+      const count = kind === "diamond" ? 8 : 6;
+      for (let n = 0; n < count; n++) {
         const s = document.createElement("i");
         s.className = "spark";
         const a = Math.PI * (0.15 + Math.random() * 0.7);
         const d = 40 + Math.random() * 70;
         s.style.setProperty("--dx", `${Math.cos(a) * d * (n % 2 ? 1 : -1)}px`);
         s.style.setProperty("--dy", `${-Math.sin(a) * d}px`);
-        s.style.setProperty("--sz", `${7 + Math.random() * 7}px`);
-        s.style.setProperty("--tint", SPARK_TINTS[n % SPARK_TINTS.length]);
+        s.style.setProperty("--sz", `${6 + Math.random() * 7}px`);
+        s.style.setProperty("--tint", tints[n % tints.length]);
         add(s);
       }
       return;
@@ -143,12 +176,10 @@ export function LootBox({ kind, compact, onOpened, reduced }: Props) {
   });
 
   const art = ART[kind];
-  const spot =
-    isOpen && kind === "diamond"
-      ? "radial-gradient(ellipse at center, rgba(46,123,255,0.26) 0%, rgba(86,199,255,0.14) 52%, transparent 78%)"
-      : isOpen
-        ? "radial-gradient(ellipse at center, rgba(229,106,16,0.28) 0%, rgba(255,179,71,0.15) 52%, transparent 78%)"
-        : "radial-gradient(ellipse at center, rgba(10,26,47,0.14) 0%, rgba(10,26,47,0.06) 55%, transparent 78%)";
+  const glow = GLOW[kind];
+  const spot = isOpen
+    ? glow.spot
+    : "radial-gradient(ellipse at center, rgba(10,26,47,0.14) 0%, rgba(10,26,47,0.06) 55%, transparent 78%)";
 
   return (
     <button
@@ -183,11 +214,7 @@ export function LootBox({ kind, compact, onOpened, reduced }: Props) {
           compact ? "w-[200px] h-[200px]" : "w-[340px] h-[340px]",
         ].join(" ")}
         style={{
-          background: isOpen
-            ? kind === "diamond"
-              ? "radial-gradient(circle, rgba(125,214,255,0.26) 0%, transparent 70%)"
-              : "radial-gradient(circle, rgba(255,160,60,0.24) 0%, transparent 70%)"
-            : "radial-gradient(circle, rgba(255,183,122,0.18) 0%, transparent 70%)",
+          background: isOpen ? glow.halo : "radial-gradient(circle, rgba(255,183,122,0.18) 0%, transparent 70%)",
         }}
       />
 
@@ -233,13 +260,7 @@ export function LootBox({ kind, compact, onOpened, reduced }: Props) {
           />
 
           <span ref={flash} className="pointer-events-none absolute left-1/2 top-[46%] block -translate-x-1/2 -translate-y-1/2 rounded-full opacity-0"
-            style={{
-              width: 330, height: 330,
-              background:
-                kind === "diamond"
-                  ? "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(86,203,255,0.5) 30%, rgba(255,191,64,0.16) 55%, transparent 75%)"
-                  : "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,201,92,0.55) 30%, rgba(255,150,40,0.18) 55%, transparent 75%)",
-            }}
+            style={{ width: 330, height: 330, background: glow.flash }}
           />
         </span>
       </span>
@@ -265,7 +286,7 @@ export function LootBox({ kind, compact, onOpened, reduced }: Props) {
       </span>
 
       <span ref={burst} aria-hidden className="pointer-events-none absolute inset-0" />
-      <span className="sr-only">{kind === "diamond" ? "เปิดกล่องเพชร" : "เปิดกล่องเหล็ก"}</span>
+      <span className="sr-only">{glow.label}</span>
     </button>
   );
 }

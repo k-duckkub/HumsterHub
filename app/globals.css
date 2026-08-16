@@ -193,6 +193,86 @@ img {
   100% { transform: translate(var(--dx), var(--dy)) scale(1.9); opacity: 0; }
 }
 
+/* ── Hamster shower · the fail meter ──
+   Every miss adds one layer to the same scene rather than swapping a frame,
+   so the pipe arriving, the head popping on and the water starting each get
+   their own entrance and none of them restart the others. */
+@keyframes hh-head-pop {
+  0%   { transform: translateY(-14px) scale(0.7) rotate(-8deg); opacity: 0; }
+  60%  { transform: translateY(0) scale(1.08) rotate(2deg); opacity: 1; }
+  100% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes hh-drop {
+  0%   { transform: translateY(0) scaleY(0.7); opacity: 0; }
+  22%  { opacity: 1; }
+  100% { transform: translateY(var(--fall, 52px)) scaleY(1.3); opacity: 0; }
+}
+
+@keyframes hh-stream {
+  0%   { transform: translateY(-12px) scaleY(0.5); opacity: 0; }
+  25%  { opacity: 0.9; }
+  100% { transform: translateY(var(--fall, 62px)) scaleY(1.2); opacity: 0; }
+}
+
+@keyframes hh-sweat {
+  0%, 52%  { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  64%      { transform: translate(0, 0) scale(1); opacity: 1; }
+  100%     { transform: translate(2px, 15px) scale(0.8); opacity: 0; }
+}
+
+/* Mostly still, with the shake bunched into the last fifth — a continuous
+   wobble reads as a broken loop, a periodic shudder reads as cold. */
+@keyframes hh-shiver {
+  0%, 80%, 100% { transform: rotate(0deg); }
+  84% { transform: rotate(-3deg); }
+  88% { transform: rotate(3deg); }
+  92% { transform: rotate(-2deg); }
+  96% { transform: rotate(2deg); }
+}
+
+@keyframes hh-hop {
+  0%, 100% { transform: translateY(0); }
+  35%      { transform: translateY(-9px); }
+  70%      { transform: translateY(1px); }
+}
+
+@keyframes hh-splash {
+  0%   { transform: scale(0.4); opacity: 0; }
+  40%  { opacity: 0.7; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes hh-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  96%           { transform: scaleY(0.1); }
+}
+
+/* ── Mini game bits ── */
+@keyframes hh-mark-pop {
+  0%   { transform: scale(0.4); opacity: 0; }
+  65%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes hh-line-glow {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 0.75; }
+}
+
+@keyframes hh-score-pop {
+  0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+  30%  { transform: translateY(-10px) scale(1.1); opacity: 1; }
+  100% { transform: translateY(-34px) scale(1); opacity: 0; }
+}
+
+@keyframes hh-count-in {
+  0%   { transform: scale(1.7); opacity: 0; }
+  35%  { transform: scale(1); opacity: 1; }
+  75%  { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.85); opacity: 0; }
+}
+
 @keyframes loot-flash {
   0%   { opacity: 0; transform: scale(0.35); }
   40%  { opacity: 1; }
