@@ -14,11 +14,15 @@
  * replacing <Hamster /> once the sprite lands in public/assets.
  */
 
+import { SHOWER_LABEL, USE_SPRITE } from "@/lib/hamsterFrames";
+import { HamsterSprite } from "./HamsterSprite";
+
 type Props = {
   /** 0–5, one per miss. Anything higher is clamped to the fully soaked state. */
   level: number;
   /** Shrinks the scene to a strip so a running game keeps its vertical space. */
   compact?: boolean;
+  reduced?: boolean;
 };
 
 const GINGER = "#F0641E";
@@ -34,25 +38,20 @@ const METAL = "#A9BCCF";
 const METAL_DARK = "#8098B2";
 const WATER = "#7EC8F0";
 
-const LABEL = [
-  "แฮมสเตอร์ยืนยิ้มมั่นใจ ยังไม่มีอะไรเกิดขึ้น",
-  "มีท่อน้ำเลื่อนลงมาจากด้านบน แฮมสเตอร์เริ่มเหลียวมอง",
-  "ฝักบัวโผล่มาแล้ว แฮมสเตอร์เริ่มกังวล",
-  "น้ำเริ่มหยดลงมา แฮมสเตอร์ขยับหนี",
-  "น้ำไหลลงมาแล้ว แฮมสเตอร์ตกใจ",
-  "แฮมสเตอร์เปียกทั้งตัวและสั่นเล็กน้อย",
-];
-
 /** Nudges away from the water as it gets closer, then gives up at level 5. */
 const SHIFT_X = [0, 0, -3, -9, -6, 0];
 
-export function HamsterShower({ level, compact = false }: Props) {
+export function HamsterShower({ level, compact = false, reduced = false }: Props) {
   const lv = Math.max(0, Math.min(5, Math.round(level)));
+
+  // The drawn scene is the stand-in. Once the painted sheet is in place the
+  // flag flips and this file stops rendering entirely.
+  if (USE_SPRITE) return <HamsterSprite level={level} compact={compact} reduced={reduced} />;
 
   return (
     <div
       role="img"
-      aria-label={LABEL[lv]}
+      aria-label={SHOWER_LABEL[lv]}
       className={[
         "mx-auto w-full transition-[height] duration-500 ease-[var(--ease-out-soft)]",
         compact ? "h-[116px] max-md:h-[84px]" : "h-[212px] max-md:h-[168px]",

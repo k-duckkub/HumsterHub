@@ -150,7 +150,7 @@ export function ChallengeFlow() {
         </header>
 
         {mode === "challenge" && (
-          <HamsterShower level={fails} compact={inGame && phase === "playing"} />
+          <HamsterShower level={fails} compact={inGame && phase === "playing"} reduced={reduced} />
         )}
 
         <div className="relative flex w-full flex-col items-center">
