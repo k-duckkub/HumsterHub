@@ -269,6 +269,7 @@ export function ChallengeFlow() {
         {mode === "prize" && (
           <PrizeCard
             reduced={reduced}
+            tier={tier}
             onLater={() => window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" })}
           />
         )}
