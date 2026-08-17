@@ -2,15 +2,15 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "./Icons";
-import { RewardShelf } from "./RewardShelf";
-import type { Tier } from "@/lib/games";
+import { RewardReveal } from "./RewardReveal";
+import type { RollResult } from "@/lib/rewards";
 
 /** ═══════ ใส่ URL หน้า profile ตรงนี้ ═══════ */
 const CHECKIN_URL = "#";
 
-type Props = { onLater: () => void; reduced: boolean; tier: Tier };
+type Props = { onLater: () => void; reduced: boolean; reward: RollResult };
 
-export function PrizeCard({ onLater, reduced, tier }: Props) {
+export function PrizeCard({ onLater, reduced, reward }: Props) {
   return (
     <motion.div
       // The reward rising out of the chest: overshoots past its resting place,
@@ -28,9 +28,9 @@ export function PrizeCard({ onLater, reduced, tier }: Props) {
         ยินดีด้วย! คุณผ่านชาเลนจ์แล้ว
       </p>
 
-      {/* Rewards above the check-in: the check-in is the action, and an action
-          reads last. Silent until lib/rewards.ts has entries. */}
-      <RewardShelf tier={tier} reduced={reduced} />
+      {/* The drop above the check-in: the check-in is the action, and an
+          action reads last. */}
+      <RewardReveal reward={reward} reduced={reduced} />
 
       <div className="rounded-[30px] border border-[rgba(10,26,47,0.06)] bg-white px-[22px] py-8 shadow-[0_24px_60px_rgba(10,26,47,0.10)] max-md:rounded-[var(--radius-md)] max-md:px-4 max-md:py-6">
         <h3 className="text-[28px] font-extrabold tracking-[-0.01em] max-md:text-[23px]">เช็คอินเลยไหม?</h3>

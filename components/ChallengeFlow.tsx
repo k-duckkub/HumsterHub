@@ -9,6 +9,7 @@ import {
 } from "@/lib/games";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { useSound, play } from "@/lib/sound";
+import { rollReward, type RollResult } from "@/lib/rewards";
 import { QuestionCard } from "./QuestionCard";
 import { LootBox } from "./LootBox";
 import { PrizeCard } from "./PrizeCard";
@@ -52,6 +53,9 @@ export function ChallengeFlow() {
   const [lastWin, setLastWin] = useState(true);
   const [picked, setPicked] = useState<number | null>(null);
   const [mode, setMode] = useState<Mode>("challenge");
+  // Rolled once, when the box is opened. Rolling during render would re-roll
+  // the prize on every re-render of the screen showing it.
+  const [reward, setReward] = useState<RollResult | null>(null);
 
   const timers = useRef<number[]>([]);
   useEffect(() => {
@@ -247,7 +251,10 @@ export function ChallengeFlow() {
               kind={tier}
               compact={mode === "prize"}
               reduced={reduced}
-              onOpened={() => setMode("prize")}
+              onOpened={() => {
+                setReward(rollReward());
+                setMode("prize");
+              }}
             />
 
             <div
@@ -266,10 +273,10 @@ export function ChallengeFlow() {
           </motion.div>
         )}
 
-        {mode === "prize" && (
+        {mode === "prize" && reward && (
           <PrizeCard
             reduced={reduced}
-            tier={tier}
+            reward={reward}
             onLater={() => window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" })}
           />
         )}
