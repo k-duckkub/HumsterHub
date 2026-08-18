@@ -41,14 +41,13 @@ export type Stage =
   | { kind: "question"; slot: number }
   | { kind: "game"; game: GameId };
 
-export const QUESTIONS_PER_RUN = 5;
-export const GAMES_PER_RUN = 2;
+export const QUESTIONS_PER_RUN = 4;
+export const GAMES_PER_RUN = 1;
 export const TOTAL_STAGES = QUESTIONS_PER_RUN + GAMES_PER_RUN;
 
-/** Two questions, a game, two questions, a game, one question. Even spacing,
- *  and the run ends on a question so the reward follows a beat of calm rather
- *  than the adrenaline of a game. */
-const GAME_SLOTS = [2, 5];
+/** Two questions, one game, then two questions. The run still ends on a calm
+ *  question beat rather than immediately after the mini-game. */
+const GAME_SLOTS = [2];
 
 export function buildStages(games: readonly GameId[]): Stage[] {
   const stages: Stage[] = [];
@@ -65,28 +64,38 @@ export function buildStages(games: readonly GameId[]): Stage[] {
   return stages;
 }
 
-export type Tier = "diamond" | "silver" | "iron";
+export type Tier = "diamond" | "silver" | "wood";
 
 export function tierForFails(fails: number): Tier {
   if (fails === 0) return "diamond";
   if (fails <= 2) return "silver";
-  return "iron";
+  return "wood";
 }
 
-export const TIER_COPY: Record<Tier, { head: string; sub: string; boxName: string }> = {
+/** Extra percentage points of collectible chance earned by performance. */
+export const TIER_REWARD_BOOST: Record<Tier, number> = {
+  wood: 0,
+  silver: 0.05,
+  diamond: 0.07,
+};
+
+export const TIER_COPY: Record<Tier, { head: string; sub: string; boxName: string; boost: string }> = {
   diamond: {
     head: "Perfect!",
     sub: "ผ่านครบทั้ง 5 ด่านโดยไม่พลาดเลย",
     boxName: "กล่องเพชร",
+    boost: "เพิ่มโอกาสได้ของดี +7%",
   },
   silver: {
     head: "เกือบสมบูรณ์แบบ!",
     sub: "พลาดไปนิดเดียว แฮมยังแห้งอยู่พอสมควร",
     boxName: "กล่องเงิน",
+    boost: "เพิ่มโอกาสได้ของดี +5%",
   },
-  iron: {
+  wood: {
     head: "ยังมีรางวัลให้เปิดนะ!",
     sub: "แฮมเปียกไปหน่อย แต่ของข้างในยังอยู่ครบ",
-    boxName: "กล่องเหล็ก",
+    boxName: "กล่องไม้",
+    boost: "โอกาสได้ของดี +0%",
   },
 };

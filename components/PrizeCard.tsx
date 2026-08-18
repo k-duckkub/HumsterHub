@@ -33,9 +33,9 @@ export function PrizeCard({ onLater, reduced, reward }: Props) {
       <RewardReveal reward={reward} reduced={reduced} />
 
       <div className="rounded-[30px] border border-[rgba(10,26,47,0.06)] bg-white px-[22px] py-8 shadow-[0_24px_60px_rgba(10,26,47,0.10)] max-md:rounded-[var(--radius-md)] max-md:px-4 max-md:py-6">
-        <h3 className="text-[28px] font-extrabold tracking-[-0.01em] max-md:text-[23px]">เช็คอินเลยไหม?</h3>
+        <h3 className="text-[28px] font-extrabold tracking-[-0.01em] max-md:text-[23px]">แวะเช็คอินก่อนออกผจญภัยกัน ✦</h3>
         <p className="mx-auto mb-[18px] mt-3 inline-block whitespace-nowrap rounded-[var(--radius-sm)] bg-warm-ivory px-3.5 py-2.5 font-semibold leading-[1.5] text-ink [font-size:clamp(11.5px,3.1vw,15.5px)] max-[375px]:whitespace-normal max-[375px]:text-[13px]">
-          เตือนถ้าเช็คอินทีหลังจะต้องไปเช็คอินใน Discord เองนะครับ
+          น้องสามารถเช็คอินไว้ก่อนได้ แล้ววันกิจกรรมค่อยเจอกันใน Discord!
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <a

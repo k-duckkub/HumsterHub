@@ -28,31 +28,31 @@ export const CATEGORY_RATES: Record<RewardCategory, number> = {
 
 /** Odds inside a category, given that category was rolled. */
 const EGG_SPLIT = { COMMON: 0.60, RARE: 0.30, EPIC: 0.10 } as const;
-const BOX_SPLIT = { COMMON: 0.70, RARE: 0.30 } as const;
+const BOX_SPLIT = { BRONZE: 0.70, SILVER: 0.30 } as const;
 
 export const PETS: Reward[] = [
-  { id: "pet_common_pink_dino", name: "Pink Dino Pet", category: "PET", rarity: "COMMON", dropRate: CATEGORY_RATES.PET / 6, imageUrl: "" },
-  { id: "pet_common_cream_fluff", name: "Cream Fluff Pet", category: "PET", rarity: "COMMON", dropRate: CATEGORY_RATES.PET / 6, imageUrl: "" },
-  { id: "pet_common_white_dragon", name: "White Dragon Pet", category: "PET", rarity: "COMMON", dropRate: CATEGORY_RATES.PET / 6, imageUrl: "" },
-  { id: "pet_common_mint_monster", name: "Mint Monster Pet", category: "PET", rarity: "COMMON", dropRate: CATEGORY_RATES.PET / 6, imageUrl: "" },
-  { id: "pet_common_blue_blob", name: "Blue Blob Pet", category: "PET", rarity: "COMMON", dropRate: CATEGORY_RATES.PET / 6, imageUrl: "" },
-  { id: "pet_common_long_cat", name: "Long Cat Pet", category: "PET", rarity: "COMMON", dropRate: CATEGORY_RATES.PET / 6, imageUrl: "" },
+  { id: "pet_common_pink_dino", name: "Pink Dino Pet", category: "PET", rarity: "COMMON", dropRate: CATEGORY_RATES.PET / 6, imageUrl: "/assets/rewards/pet-pink-dino.png" },
+  { id: "pet_common_cream_fluff", name: "Cream Fluff Pet", category: "PET", rarity: "COMMON", dropRate: CATEGORY_RATES.PET / 6, imageUrl: "/assets/rewards/pet-cream-fluff.png" },
+  { id: "pet_common_white_dragon", name: "White Dragon Pet", category: "PET", rarity: "COMMON", dropRate: CATEGORY_RATES.PET / 6, imageUrl: "/assets/rewards/pet-white-dragon.png" },
+  { id: "pet_common_mint_monster", name: "Mint Monster Pet", category: "PET", rarity: "COMMON", dropRate: CATEGORY_RATES.PET / 6, imageUrl: "/assets/rewards/pet-mint-monster.png" },
+  { id: "pet_common_blue_blob", name: "Blue Blob Pet", category: "PET", rarity: "COMMON", dropRate: CATEGORY_RATES.PET / 6, imageUrl: "/assets/rewards/pet-blue-blob.png" },
+  { id: "pet_common_long_cat", name: "Long Cat Pet", category: "PET", rarity: "COMMON", dropRate: CATEGORY_RATES.PET / 6, imageUrl: "/assets/rewards/pet-long-cat.png" },
 ];
 
 export const HAMSTER_COIN: Reward = {
   id: "hamstercoin_basic", name: "Hamster Coin", category: "HAMSTERCOIN",
-  rarity: "CURRENCY", dropRate: CATEGORY_RATES.HAMSTERCOIN, imageUrl: "",
+  rarity: "CURRENCY", dropRate: CATEGORY_RATES.HAMSTERCOIN, imageUrl: "/assets/rewards/hamster-coin.png",
 };
 
 export const EGGS: Reward[] = [
-  { id: "egg_common", name: "Common Egg", category: "EGG", rarity: "COMMON", dropRate: CATEGORY_RATES.EGG * EGG_SPLIT.COMMON, imageUrl: "" },
-  { id: "egg_rare", name: "Rare Egg", category: "EGG", rarity: "RARE", dropRate: CATEGORY_RATES.EGG * EGG_SPLIT.RARE, imageUrl: "" },
-  { id: "egg_epic", name: "Epic Egg", category: "EGG", rarity: "EPIC", dropRate: CATEGORY_RATES.EGG * EGG_SPLIT.EPIC, imageUrl: "" },
+  { id: "egg_common", name: "Common Egg", category: "EGG", rarity: "COMMON", dropRate: CATEGORY_RATES.EGG * EGG_SPLIT.COMMON, imageUrl: "/assets/rewards/egg-common.png" },
+  { id: "egg_rare", name: "Rare Egg", category: "EGG", rarity: "RARE", dropRate: CATEGORY_RATES.EGG * EGG_SPLIT.RARE, imageUrl: "/assets/rewards/egg-rare.png" },
+  { id: "egg_epic", name: "Epic Egg", category: "EGG", rarity: "EPIC", dropRate: CATEGORY_RATES.EGG * EGG_SPLIT.EPIC, imageUrl: "/assets/rewards/egg-epic.png" },
 ];
 
 export const BOXES: Reward[] = [
-  { id: "box_common_bronze", name: "Bronze Box", category: "BOX", rarity: "COMMON", dropRate: CATEGORY_RATES.BOX * BOX_SPLIT.COMMON, imageUrl: "" },
-  { id: "box_rare_silver", name: "Silver Box", category: "BOX", rarity: "RARE", dropRate: CATEGORY_RATES.BOX * BOX_SPLIT.RARE, imageUrl: "" },
+  { id: "box_common_bronze", name: "Bronze Box", category: "BOX", rarity: "RARE", dropRate: CATEGORY_RATES.BOX * BOX_SPLIT.BRONZE, imageUrl: "/assets/rewards/box-bronze.png" },
+  { id: "box_rare_silver", name: "Silver Box", category: "BOX", rarity: "EPIC", dropRate: CATEGORY_RATES.BOX * BOX_SPLIT.SILVER, imageUrl: "/assets/rewards/box-silver.png" },
 ];
 
 /* ═══════ รางวัลปลอบใจ ═══════ ยังไม่ได้กำหนดว่าได้อะไร */
@@ -102,7 +102,11 @@ export function rollEgg(rng: Rng = Math.random): Reward {
 }
 
 export function rollBox(rng: Rng = Math.random): Reward {
-  return walk(BOXES, (b) => BOX_SPLIT[b.rarity as keyof typeof BOX_SPLIT], rng());
+  return walk(
+    BOXES,
+    (box) => box.id === "box_common_bronze" ? BOX_SPLIT.BRONZE : BOX_SPLIT.SILVER,
+    rng(),
+  );
 }
 
 export function rollCoinAmount(rng: Rng = Math.random): number {
@@ -119,9 +123,22 @@ export function rollCoinAmount(rng: Rng = Math.random): number {
  * `rng` is injectable so the distribution can be checked against the table
  * rather than eyeballed.
  */
-export function rollReward(rng: Rng = Math.random): RollResult {
+export function rollReward(rng: Rng = Math.random, collectibleBoost = 0): RollResult {
+  // Performance boxes add percentage points to the chance of receiving any
+  // collectible. The boost comes only out of NONE, while the four collectible
+  // categories keep their existing relative proportions.
+  const safeBoost = Math.max(0, Math.min(CATEGORY_RATES.NONE, collectibleBoost));
+  const baseCollectible = 1 - CATEGORY_RATES.NONE;
+  const collectibleScale = (baseCollectible + safeBoost) / baseCollectible;
+  const rates: Record<RewardCategory, number> = {
+    PET: CATEGORY_RATES.PET * collectibleScale,
+    HAMSTERCOIN: CATEGORY_RATES.HAMSTERCOIN * collectibleScale,
+    EGG: CATEGORY_RATES.EGG * collectibleScale,
+    BOX: CATEGORY_RATES.BOX * collectibleScale,
+    NONE: CATEGORY_RATES.NONE - safeBoost,
+  };
   const order: RewardCategory[] = ["PET", "HAMSTERCOIN", "EGG", "BOX", "NONE"];
-  const category = walk(order, (c) => CATEGORY_RATES[c], rng());
+  const category = walk(order, (c) => rates[c], rng());
 
   const reward =
     category === "PET" ? rollPet(rng)

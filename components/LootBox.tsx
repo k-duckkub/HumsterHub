@@ -4,17 +4,12 @@ import { useRef, useState } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 
-export type BoxKind = "diamond" | "silver" | "iron";
+export type BoxKind = "diamond" | "silver" | "wood";
 
-/* ═══════ รอรูปกล่องเงิน — วางไฟล์ box-silver-closed.webp / box-silver-open.webp
-   ใน public/assets/ แล้วเปลี่ยนสองบรรทัดของ silver ให้ชี้ไฟล์ใหม่ ไม่ต้องแก้อย่างอื่น ═══════
-   Silver currently borrows the iron plates so the middle tier renders at all.
-   Its particles are already its own, so the three tiers still feel distinct in
-   motion while the artwork is outstanding. */
 const ART = {
-  diamond: { closed: "/assets/box-diamond-closed.webp", open: "/assets/box-diamond-open.webp" },
-  silver: { closed: "/assets/box-iron-closed.webp", open: "/assets/box-iron-open.webp" },
-  iron: { closed: "/assets/box-iron-closed.webp", open: "/assets/box-iron-open.webp" },
+  diamond: { closed: "/assets/box-diamond-closed-v2.png", open: "/assets/box-diamond-open-v2.png" },
+  silver: { closed: "/assets/box-silver-closed.png", open: "/assets/box-silver-open.png" },
+  wood: { closed: "/assets/box-wood-closed.png", open: "/assets/box-wood-open.png" },
 } as const;
 
 const SPARK_TINTS = ["#ffffff", "#bdf4ff", "#56c7ff", "#ffd978"];
@@ -36,11 +31,11 @@ const GLOW: Record<BoxKind, { spot: string; halo: string; flash: string; label: 
     flash: "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(214,228,238,0.55) 30%, rgba(150,175,196,0.18) 55%, transparent 75%)",
     label: "เปิดกล่องเงิน",
   },
-  iron: {
+  wood: {
     spot: "radial-gradient(ellipse at center, rgba(229,106,16,0.28) 0%, rgba(255,179,71,0.15) 52%, transparent 78%)",
     halo: "radial-gradient(circle, rgba(255,160,60,0.24) 0%, transparent 70%)",
     flash: "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(255,201,92,0.55) 30%, rgba(255,150,40,0.18) 55%, transparent 75%)",
-    label: "เปิดกล่องเหล็ก",
+    label: "เปิดกล่องไม้",
   },
 };
 

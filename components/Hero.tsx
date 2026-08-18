@@ -1,13 +1,10 @@
 import Image from "next/image";
 
 const ORBS = [
-  { c: "top-[8%] left-[6%] w-[26px] h-[26px] text-[#3b82f6]", d: 0 },
-  { c: "top-[18%] left-[12%] w-[18px] h-[18px] text-teal", d: 1 },
-  { c: "top-[52%] left-[4%] w-[22px] h-[22px] text-[#f6c445]", d: 0 },
-  { c: "top-[10%] right-[7%] w-[24px] h-[24px] text-orange", d: 1 },
-  { c: "top-[30%] right-[12%] w-[16px] h-[16px] text-teal", d: 0 },
-  { c: "top-[60%] right-[5%] w-[20px] h-[20px] text-[#3b82f6]", d: 1 },
-  { c: "top-[42%] left-[9%] w-[14px] h-[14px] text-orange", d: 1 },
+  { c: "top-[34%] left-[1.5%] w-[15px] h-[15px] text-teal opacity-60", d: 0 },
+  { c: "top-[70%] left-[3%] w-[13px] h-[13px] text-[#3b82f6] opacity-55", d: 1 },
+  { c: "top-[32%] right-[1.5%] w-[14px] h-[14px] text-orange opacity-60", d: 1 },
+  { c: "top-[69%] right-[3%] w-[12px] h-[12px] text-teal opacity-55", d: 0 },
 ];
 
 const SHAPES = [
@@ -36,14 +33,13 @@ export function Hero({ collapsed }: { collapsed: boolean }) {
 
       <div className="relative">
         <div className="relative overflow-hidden">
-          {/* Two crops of one scene: wide for desktop, tighter for phones so the
-              wordmark and mascot stay large. Both run full-bleed. */}
+          {/* The supplied scene already includes its finished wave edge, so
+              the same source stays intact at every breakpoint. */}
           <picture>
-            <source media="(min-width: 769px)" srcSet="/assets/thankyou-hero-wide.webp" width={2000} height={685} />
             <Image
-              src="/assets/thankyou-hero-mobile.webp"
-              width={1060}
-              height={685}
+              src="/assets/thankyou-hero-v2.png"
+              width={1680}
+              height={938}
               priority
               className="w-full anim-scene"
               alt="Thank you — มาสคอตแฮมสเตอร์ของ HamsterHub ยืนอยู่กลางโต๊ะทำงาน"

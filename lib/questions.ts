@@ -19,7 +19,7 @@ export type Question = {
  *
  * None of them has a factually right answer, so "safe" is the one that keeps
  * the hamster out of trouble — the cautious, the kind, or the one the joke is
- * built around. Something has to score, or the iron box becomes unreachable:
+ * built around. Something has to score, or the wood box becomes unreachable:
  * with only the mini games able to miss, a run tops out at two fails and the
  * bottom tier is dead code.
  *

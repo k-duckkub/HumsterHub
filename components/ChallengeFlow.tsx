@@ -5,23 +5,22 @@ import { AnimatePresence, motion } from "framer-motion";
 import { drawQuestions, QUESTIONS, type Question } from "@/lib/questions";
 import {
   ALL_GAMES, buildStages, shuffle, tierForFails, TIER_COPY,
-  QUESTIONS_PER_RUN, TOTAL_STAGES, type GameId,
+  TIER_REWARD_BOOST, GAMES_PER_RUN, QUESTIONS_PER_RUN, TOTAL_STAGES, type GameId,
 } from "@/lib/games";
 import { useReducedMotion } from "@/lib/useReducedMotion";
-import { useSound, play } from "@/lib/sound";
+import { play } from "@/lib/sound";
 import { rollReward, type RollResult } from "@/lib/rewards";
 import { QuestionCard } from "./QuestionCard";
 import { LootBox } from "./LootBox";
 import { PrizeCard } from "./PrizeCard";
 import { Hero } from "./Hero";
-import { HamsterFailProgress } from "./challenge/HamsterFailProgress";
 import { GameShell } from "./challenge/GameShell";
 
 type Mode = "challenge" | "reward" | "prize";
 type Phase = "playing" | "outcome";
 
 /**
- * One session, five encounters, one hamster getting progressively wetter.
+ * One session: four random questions and one random mini-game.
  *
  * The two mini games are drawn once at mount and held in state, never
  * recomputed — re-rolling them on a re-render would swap the game out from
@@ -29,19 +28,18 @@ type Phase = "playing" | "outcome";
  */
 export function ChallengeFlow() {
   const reduced = useReducedMotion();
-  const { enabled: soundOn, toggle: toggleSound } = useSound();
 
   // Both draws happen after mount, never during render. This page is statically
   // prerendered, so drawing in the render pass bakes one set into the HTML that
   // the client then disagrees with at hydration.
-  const [games, setGames] = useState<GameId[]>(() => ALL_GAMES.slice(0, 2));
+  const [games, setGames] = useState<GameId[]>(() => ALL_GAMES.slice(0, GAMES_PER_RUN));
   const [deck, setDeck] = useState<Question[]>(() => QUESTIONS.slice(0, QUESTIONS_PER_RUN));
   const drawn = useRef(false);
 
   useEffect(() => {
     if (drawn.current) return;
     drawn.current = true;
-    setGames(shuffle(ALL_GAMES).slice(0, 2));
+    setGames(shuffle(ALL_GAMES).slice(0, GAMES_PER_RUN));
     setDeck(drawQuestions(QUESTIONS_PER_RUN));
   }, []);
 
@@ -65,6 +63,7 @@ export function ChallengeFlow() {
 
   const stage = stages[index];
   const tier = tierForFails(fails);
+  const heroCollapsed = index > 0 || mode !== "challenge";
 
   const settle = useCallback(
     (win: boolean) => {
@@ -74,19 +73,12 @@ export function ChallengeFlow() {
       const nextFails = win ? fails : fails + 1;
       if (!win) {
         setFails(nextFails);
-        // The water only actually starts on the third miss; before that the
-        // shower is overhead and dry, and a splash sound would be a lie.
-        if (nextFails >= 3) play("water");
       }
 
-      // A miss holds longer than a hit: the fail build-up has to be seen before
-      // the next encounter starts. The miss that soaks her holds longest of
-      // all, because the shake-it-off beat does not begin until 500ms in and
-      // runs another 420ms — a normal hold would cut it in half.
-      const hold = reduced ? 120 : win ? 850 : nextFails === 4 ? 2400 : 1350;
+      const hold = reduced ? 120 : win ? 850 : 1100;
       timers.current.push(
         window.setTimeout(() => {
-          if (index >= stages.length - 1) setMode("reward");
+          if (nextFails >= 5 || index >= stages.length - 1) setMode("reward");
           else {
             setIndex((i) => i + 1);
             setPhase("playing");
@@ -111,7 +103,6 @@ export function ChallengeFlow() {
     );
   };
 
-  const inGame = mode === "challenge" && stage.kind === "game";
   const live =
     mode !== "challenge"
       ? `${TIER_COPY[tier].head} ได้รับ${TIER_COPY[tier].boxName} — คลิกเพื่อเปิดกล่อง`
@@ -120,33 +111,16 @@ export function ChallengeFlow() {
         : `ด่าน ${index + 1} จาก ${TOTAL_STAGES}: มินิเกม`;
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_50%_34%,#ffffff_0%,var(--color-warm-ivory)_75%)]">
-      <Hero collapsed={index > 0 || mode !== "challenge"} />
+    <main className="min-h-screen bg-warm-ivory">
+      <Hero collapsed={heroCollapsed} />
 
-      <section className="relative mx-auto flex max-w-[760px] flex-col items-center gap-3 px-5 pb-12 pt-4 max-md:px-4">
-        <header className="flex w-full items-center justify-end">
-          <button
-            type="button"
-            onClick={toggleSound}
-            aria-pressed={soundOn}
-            aria-label={soundOn ? "ปิดเสียง" : "เปิดเสียง"}
-            className="grid h-11 w-11 place-items-center rounded-full bg-white text-ink shadow-[0_4px_14px_rgba(10,26,47,0.10)] transition-transform duration-200 hover:scale-105 active:scale-95"
-          >
-            <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
-              <path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor" />
-              {soundOn ? (
-                <path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              ) : (
-                <path d="M16.5 9.5l5 5m0-5l-5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              )}
-            </svg>
-          </button>
-        </header>
-
-        {mode === "challenge" && (
-          <HamsterFailProgress failCount={fails} compact={inGame && phase === "playing"} reduced={reduced} />
-        )}
-
+      <section className="relative bg-[linear-gradient(180deg,#f3dfd0_0%,#fbf6f1_16%,var(--color-warm-ivory)_100%)]">
+        <div
+          className={[
+            "relative mx-auto flex max-w-[760px] flex-col items-center gap-3 px-5 pb-12 pt-4 max-md:px-4",
+            heroCollapsed ? "min-h-screen justify-center" : "min-h-[45vh]",
+          ].join(" ")}
+        >
         <div className="relative flex w-full flex-col items-center">
           <AnimatePresence mode="wait">
             {mode === "challenge" && stage.kind === "question" && (
@@ -252,7 +226,7 @@ export function ChallengeFlow() {
               compact={mode === "prize"}
               reduced={reduced}
               onOpened={() => {
-                setReward(rollReward());
+                setReward(rollReward(Math.random, TIER_REWARD_BOOST[tier]));
                 setMode("prize");
               }}
             />
@@ -265,6 +239,9 @@ export function ChallengeFlow() {
             >
               <p className="mt-1 text-[18px] font-semibold">
                 คุณได้รับ{TIER_COPY[tier].boxName}
+              </p>
+              <p className="mt-1 text-[15px] font-extrabold text-teal">
+                {TIER_COPY[tier].boost}
               </p>
               <p id="boxHint" className="anim-hint mt-2.5 text-[20px] font-extrabold tracking-[0.01em] text-orange max-md:text-[18px]">
                 ✦ คลิกเพื่อเปิดกล่อง ✦
@@ -281,7 +258,8 @@ export function ChallengeFlow() {
           />
         )}
 
-        <p className="sr-only" role="status" aria-live="polite">{live}</p>
+          <p className="sr-only" role="status" aria-live="polite">{live}</p>
+        </div>
       </section>
     </main>
   );
