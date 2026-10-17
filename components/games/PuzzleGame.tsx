@@ -55,12 +55,17 @@ function scramble(): number[] {
 }
 
 export function PuzzleGame({ onFinish, reduced }: GameProps) {
-  const [slots, setSlots] = useState<number[]>(scramble);
+  // Keep the server and first client render identical, then shuffle after
+  // hydration. This prevents React from discarding interaction handlers when
+  // Math.random() produces a different board on each side.
+  const [slots, setSlots] = useState<number[]>(() => Array.from({ length: CELLS }, (_, i) => i));
   const [left, setLeft] = useState(LIMIT);
   const [solved, setSolved] = useState(false);
 
   const finished = useRef(false);
   const endTimer = useRef<number | undefined>(undefined);
+
+  useEffect(() => setSlots(scramble()), []);
 
   const finish = useCallback(
     (win: boolean) => {
@@ -103,28 +108,31 @@ export function PuzzleGame({ onFinish, reduced }: GameProps) {
   const urgent = left <= 10;
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-3 px-4">
-      <div className="flex w-full max-w-[360px] items-center justify-between text-[15px] font-extrabold">
-        <span className="text-ink/70">เรียงภาพให้ครบ</span>
+    <div className="relative flex h-full flex-col items-center justify-center gap-5 overflow-hidden bg-[#fff8f3] px-5">
+      <div className="relative z-[1] flex w-full max-w-[380px] items-center justify-between">
+        <div>
+          <p className="text-[19px] font-semibold tracking-[-0.02em] text-[#1d1d1f]">เรียงภาพให้สมบูรณ์</p>
+          <p className="mt-0.5 text-[13px] font-medium text-[#86868b]">เลื่อนชิ้นส่วนที่อยู่ติดกับช่องว่าง</p>
+        </div>
         <span
           className={[
-            "rounded-full px-3 py-1 tabular-nums transition-colors",
-            urgent ? "bg-[#ffe3e0] text-[#d8391f]" : "bg-warm-ivory text-ink",
+            "shrink-0 rounded-full px-3 py-1.5 text-[13px] font-semibold tabular-nums transition-colors",
+            urgent ? "bg-[#fff0e3] text-orange-dark" : "bg-white text-[#1d1d1f] shadow-[0_2px_10px_rgba(0,0,0,0.06)]",
           ].join(" ")}
         >
-          ⏱ {String(Math.floor(left / 60)).padStart(2, "0")}:{String(left % 60).padStart(2, "0")}
+          เหลือ {String(Math.floor(left / 60)).padStart(2, "0")}:{String(left % 60).padStart(2, "0")}
         </span>
       </div>
 
       <div
-        className="relative w-full max-w-[360px] overflow-hidden rounded-[18px] bg-ink p-1.5"
+        className="relative z-[1] w-full max-w-[380px] overflow-hidden rounded-[22px] border-[7px] border-white bg-white shadow-[0_18px_45px_rgba(0,0,0,0.12)]"
         style={{ aspectRatio: IMAGE_ASPECT }}
       >
         {/* Faint whole picture behind the tiles once the clock has run a while.
             Younger players stall on "what am I even building". */}
         <div
           aria-hidden
-          className="absolute inset-1.5 rounded-[13px] bg-cover bg-center transition-opacity duration-700"
+          className="absolute inset-0 rounded-[15px] bg-cover bg-center transition-opacity duration-700"
           style={{ backgroundImage: `url(${IMAGE})`, opacity: showGuide && !solved ? 0.11 : 0 }}
         />
 
@@ -143,7 +151,7 @@ export function PuzzleGame({ onFinish, reduced }: GameProps) {
                   className={[
                     "absolute left-0 top-0 overflow-hidden bg-cover",
                     "transition-[transform,border-radius,padding] duration-200 ease-[var(--ease-out-soft)]",
-                    solved ? "rounded-none" : "rounded-[9px]",
+                    solved ? "rounded-none" : "rounded-[7px]",
                   ].join(" ")}
                   style={{
                     width: `${100 / N}%`,
@@ -154,8 +162,8 @@ export function PuzzleGame({ onFinish, reduced }: GameProps) {
                     backgroundPosition: `${(colOf(tile) * 100) / (N - 1)}% ${(rowOf(tile) * 100) / (N - 1)}%`,
                     // A hairline gap while playing so the pieces read as pieces;
                     // it closes on the win and the picture becomes whole.
-                    outline: solved ? "none" : "2px solid #0A1A2F",
-                    outlineOffset: "-1px",
+                    outline: solved ? "none" : "3px solid #ffffff",
+                    outlineOffset: "-2px",
                   }}
                 />
               );
@@ -165,13 +173,13 @@ export function PuzzleGame({ onFinish, reduced }: GameProps) {
         {solved && (
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-[18px] ring-4 ring-orange"
+            className="pointer-events-none absolute inset-0 rounded-[15px] border-4 border-orange"
             style={{ animation: "hh-mark-pop 420ms var(--ease-spring) both" }}
           />
         )}
       </div>
 
-      <p className="text-center text-[14px] font-bold text-ink/60">
+      <p className="relative z-[1] text-center text-[14px] font-medium text-[#6e6e73]">
         {solved ? "เรียงครบแล้ว!" : "แตะแผ่นที่ติดกับช่องว่าง"}
       </p>
     </div>

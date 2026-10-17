@@ -112,14 +112,14 @@ export function XOGame({ onFinish, reduced }: GameProps) {
   };
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-4 px-4">
-      <p className="text-center text-[15px] font-bold text-ink/70">
+    <div className="relative flex h-full flex-col items-center justify-center gap-6 overflow-hidden bg-[#fff8f3] px-5">
+      <p className="relative z-[1] text-center text-[14px] font-medium text-[#6e6e73]">
         {over ? " " : thinking ? "AI กำลังคิด…" : "ตาคุณ — แตะช่องว่างเพื่อวาง ✕"}
       </p>
 
       <div
         className={[
-          "grid aspect-square w-full max-w-[380px] grid-cols-3 gap-2.5 rounded-[22px] bg-ink p-2.5",
+          "relative z-[1] grid aspect-square w-full max-w-[380px] grid-cols-3 gap-px overflow-hidden rounded-[26px] border border-orange/10 bg-[#ecd6c4] p-0 shadow-[0_20px_48px_rgba(255,107,0,0.10)]",
           wobble ? "animate-[hh-shiver_600ms_ease-in-out_1]" : "",
         ].join(" ")}
         style={{ transformBox: "fill-box" }}
@@ -134,17 +134,17 @@ export function XOGame({ onFinish, reduced }: GameProps) {
               disabled={mark !== null || thinking || over}
               aria-label={`ช่องที่ ${i + 1}${mark ? ` มี ${mark}` : " ว่าง"}`}
               className={[
-                "relative grid place-items-center rounded-[14px] transition-colors duration-200",
-                inLine ? "bg-[#fff5e2]" : "bg-warm-ivory",
+                "relative grid place-items-center transition-colors duration-200",
+                inLine ? "bg-[#fff0e3]" : "bg-white",
                 mark === null && !thinking && !over
-                  ? "cursor-pointer hover:bg-white active:scale-[0.97]"
+                  ? "cursor-pointer hover:bg-[#fff8f3] active:scale-[0.985]"
                   : "cursor-default",
               ].join(" ")}
             >
               {inLine && (
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 rounded-[14px] ring-4 ring-orange"
+                  className="pointer-events-none absolute inset-[6px] rounded-[16px] border-[3px] border-orange"
                   style={{ animation: "hh-line-glow 900ms ease-in-out infinite" }}
                 />
               )}
@@ -163,7 +163,7 @@ export function XOGame({ onFinish, reduced }: GameProps) {
                       strokeLinecap="round"
                     />
                   ) : (
-                    <circle cx="20" cy="20" r="12" stroke="#2C9FA2" strokeWidth="7.5" fill="none" />
+                    <circle cx="20" cy="20" r="12" stroke="#C54F00" strokeWidth="7.5" fill="none" />
                   )}
                 </svg>
               )}

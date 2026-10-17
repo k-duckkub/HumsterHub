@@ -14,6 +14,7 @@ import { QuestionCard } from "./QuestionCard";
 import { LootBox } from "./LootBox";
 import { PrizeCard } from "./PrizeCard";
 import { Hero } from "./Hero";
+import { ThankYouIntro } from "./ThankYouIntro";
 import { GameShell } from "./challenge/GameShell";
 
 type Mode = "challenge" | "reward" | "prize";
@@ -28,6 +29,8 @@ type Phase = "playing" | "outcome";
  */
 export function ChallengeFlow() {
   const reduced = useReducedMotion();
+  const [introComplete, setIntroComplete] = useState(false);
+  const completeIntro = useCallback(() => setIntroComplete(true), []);
 
   // Both draws happen after mount, never during render. This page is statically
   // prerendered, so drawing in the render pass bakes one set into the HTML that
@@ -111,13 +114,19 @@ export function ChallengeFlow() {
         : `ด่าน ${index + 1} จาก ${TOTAL_STAGES}: มินิเกม`;
 
   return (
-    <main className="min-h-screen bg-warm-ivory">
+    <>
+      {!introComplete && <ThankYouIntro onComplete={completeIntro} />}
+    <main className="min-h-screen bg-warm-ivory" inert={!introComplete} aria-hidden={!introComplete}>
       <Hero collapsed={heroCollapsed} />
 
-      <section className="relative bg-[linear-gradient(180deg,#f3dfd0_0%,#fbf6f1_16%,var(--color-warm-ivory)_100%)]">
+      <section className="relative bg-[#fff8f3]">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 -top-10 h-28 bg-[radial-gradient(ellipse_at_top,rgba(255,107,0,0.28)_0%,rgba(255,138,52,0.13)_44%,transparent_76%)] blur-[22px]"
+        />
         <div
           className={[
-            "relative mx-auto flex max-w-[760px] flex-col items-center gap-3 px-5 pb-12 pt-4 max-md:px-4",
+            "relative z-[1] mx-auto flex max-w-[760px] flex-col items-center gap-3 px-5 pb-12 pt-4 max-md:px-4",
             heroCollapsed ? "min-h-screen justify-center" : "min-h-[45vh]",
           ].join(" ")}
         >
@@ -161,8 +170,8 @@ export function ChallengeFlow() {
             <div className="pointer-events-none absolute inset-0 z-20 grid place-items-center">
               <span
                 className={[
-                  "rounded-[18px] px-7 py-4 text-[26px] font-extrabold text-white shadow-[0_16px_40px_rgba(10,26,47,0.28)] max-md:text-[21px]",
-                  lastWin ? "bg-teal" : "bg-[#e0552f]",
+                  "border-2 border-white/45 px-7 py-4 text-[26px] font-black text-white shadow-[8px_9px_0_rgba(10,26,47,0.24)] max-md:text-[21px]",
+                  lastWin ? "bg-orange" : "bg-orange-dark",
                 ].join(" ")}
                 style={{ animation: "hh-mark-pop 360ms var(--ease-spring) both" }}
               >
@@ -177,7 +186,7 @@ export function ChallengeFlow() {
             not before. */}
         {mode === "challenge" && (
           <div
-            className="mt-1 flex items-center justify-center gap-2"
+            className="mt-3 flex items-center justify-center gap-2"
             role="status"
             aria-label={`ด่านที่ ${index + 1} จาก ${TOTAL_STAGES}`}
           >
@@ -186,12 +195,12 @@ export function ChallengeFlow() {
                 key={i}
                 aria-hidden
                 className={[
-                  "h-2.5 rounded-full transition-all duration-300",
+                  "h-1.5 rounded-full transition-all duration-300",
                   i < index
-                    ? "w-2.5 bg-orange"
+                    ? "w-5 bg-[#ffc08a]"
                     : i === index
-                      ? "w-7 bg-orange"
-                      : "w-2.5 bg-[#e2d5c7]",
+                      ? "w-9 bg-orange"
+                      : "w-5 bg-[#ead9cc]",
                 ].join(" ")}
               />
             ))}
@@ -262,5 +271,6 @@ export function ChallengeFlow() {
         </div>
       </section>
     </main>
+    </>
   );
 }

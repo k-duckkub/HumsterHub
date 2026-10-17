@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { OPTION_ICONS, ChevronRight } from "./Icons";
 import type { Question } from "@/lib/questions";
 
 type Props = {
@@ -29,27 +28,29 @@ export function QuestionCard({ question, index, total, picked, onPick, reduced }
       animate={{ opacity: 1, x: 0, scale: 1 }}
       exit={reduced ? undefined : { opacity: 0, x: -56, scale: 0.97 }}
       transition={{ duration: reduced ? 0 : 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="rounded-[var(--radius-lg)] bg-white px-[30px] pt-[30px] pb-[26px] text-left shadow-[0_18px_44px_rgba(10,26,47,0.10)] max-md:rounded-[var(--radius-md)] max-md:px-[18px] max-md:pt-[22px] max-md:pb-5"
+      className="rounded-[30px] border border-black/[0.04] bg-white px-8 pb-8 pt-7 text-left shadow-[0_18px_55px_rgba(0,0,0,0.08)] max-md:rounded-[24px] max-md:px-5 max-md:pb-5 max-md:pt-5"
     >
-      <div className="mb-[22px] flex items-center gap-3.5">
-        <span className="shrink-0 text-[17px] font-extrabold text-ink">
-          {index + 1} / {total}
-        </span>
-        <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-[#eee]">
-          <motion.span
-            className="block h-full rounded-full bg-gradient-to-r from-[#ffa04d] to-orange"
-            initial={false}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: reduced ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
-          />
-        </span>
+      <div className="mb-7 flex items-center justify-between gap-4 max-md:mb-5">
+        <p className="text-[14px] font-semibold tracking-[-0.01em] text-[#6e6e73]">
+          คำถามที่ {index + 1} จาก {total}
+        </p>
+        <p className="text-[13px] font-medium text-[#86868b]">เลือกคำตอบที่เป็นคุณที่สุด</p>
       </div>
 
-      <h3 className="mb-[22px] text-[27px] font-extrabold leading-[1.35] tracking-[-0.01em] text-balance max-md:text-[22px]">
+      <div className="mb-8 h-1.5 overflow-hidden rounded-full bg-[#e8e8ed] max-md:mb-6">
+        <motion.span
+          className="block h-full rounded-full bg-orange"
+          initial={false}
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: reduced ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </div>
+
+      <h3 className="mb-8 max-w-[540px] text-[30px] font-bold leading-[1.32] tracking-[-0.035em] text-[#1d1d1f] text-balance max-md:mb-6 max-md:text-[23px]">
         {question.ask}
       </h3>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2.5">
         {question.opts.map((o, i) => {
           const isPicked = picked === i;
           return (
@@ -59,24 +60,24 @@ export function QuestionCard({ question, index, total, picked, onPick, reduced }
               disabled={picked !== null}
               onClick={() => onPick(i)}
               className={[
-                "group flex w-full items-center gap-3.5 rounded-[var(--radius-md)] border-2 px-[18px] py-[15px] text-left text-[18px] font-semibold text-ink",
+                "group flex w-full items-center gap-4 rounded-[17px] border px-3.5 py-3 text-left text-[17px] font-semibold text-[#1d1d1f]",
                 "transition-[transform,border-color,box-shadow,background] duration-200 ease-[var(--ease-out-soft)]",
-                "max-md:gap-3 max-md:px-3.5 max-md:py-3 max-md:text-base",
+                "max-md:gap-3 max-md:px-3 max-md:py-2.5 max-md:text-base",
                 isPicked
-                  ? "scale-[0.975] border-orange bg-[#fff3e8] shadow-[0_0_0_4px_rgba(255,107,0,0.16)]"
-                  : "border-[#f0e4d8] bg-[#fdf8f3] enabled:hover:-translate-y-0.5 enabled:hover:border-orange enabled:hover:bg-white enabled:hover:shadow-[0_10px_22px_rgba(255,107,0,0.14)] enabled:active:translate-y-0 enabled:active:scale-[0.985]",
+                  ? "scale-[0.99] border-orange bg-[#fff3e8] shadow-[0_0_0_3px_rgba(255,107,0,0.14)]"
+                  : "border-transparent bg-[#fff8f3] enabled:hover:-translate-y-0.5 enabled:hover:bg-[#fff0e3] enabled:hover:shadow-[0_8px_22px_rgba(255,107,0,0.09)] enabled:active:translate-y-0 enabled:active:scale-[0.99]",
               ].join(" ")}
             >
               <span
                 className={[
-                  "grid h-[42px] w-[42px] shrink-0 place-items-center rounded-xl transition-colors duration-200 max-md:h-[38px] max-md:w-[38px]",
-                  isPicked ? "bg-orange text-white" : "bg-soft-orange text-orange",
+                  "grid h-[38px] w-[38px] shrink-0 place-items-center rounded-full text-[13px] font-bold transition-colors duration-200 max-md:h-[35px] max-md:w-[35px]",
+                  isPicked ? "bg-orange text-white" : "bg-white text-[#a54c12] shadow-[inset_0_0_0_1px_rgba(255,107,0,0.16)]",
                 ].join(" ")}
               >
-                <span className="[&>svg]:h-[23px] [&>svg]:w-[23px]">{OPTION_ICONS[o.icon]}</span>
+                {String.fromCharCode(65 + i)}
               </span>
               <span className="min-w-0 flex-1">{o.text}</span>
-              <ChevronRight />
+              <span aria-hidden className="mr-1 text-[27px] font-light leading-none text-[#86868b] transition-transform group-enabled:group-hover:translate-x-0.5">›</span>
             </button>
           );
         })}

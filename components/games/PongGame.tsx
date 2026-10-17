@@ -173,37 +173,65 @@ export function PongGame({ onFinish, reduced }: GameProps) {
       c.translate((Math.random() - 0.5) * 5 * s.shake, (Math.random() - 0.5) * 5 * s.shake);
     }
 
-    c.fillStyle = "#12314F";
+    const court = c.createLinearGradient(0, 0, 0, h);
+    court.addColorStop(0, "#FFFCF8");
+    court.addColorStop(0.5, "#FFF6ED");
+    court.addColorStop(1, "#FCE7D5");
+    c.fillStyle = court;
     c.fillRect(-6, -6, w + 12, h + 12);
 
-    c.strokeStyle = "rgba(255,255,255,0.22)";
-    c.lineWidth = 2 * k;
-    c.setLineDash([10 * k, 10 * k]);
+    c.strokeStyle = "rgba(29,29,31,0.045)";
+    c.lineWidth = 1 * k;
+    for (let x = 0; x <= w; x += 34 * k) {
+      c.beginPath(); c.moveTo(x, 0); c.lineTo(x, h); c.stroke();
+    }
+    for (let y = 0; y <= h; y += 34 * k) {
+      c.beginPath(); c.moveTo(0, y); c.lineTo(w, y); c.stroke();
+    }
+
+    c.strokeStyle = "rgba(29,29,31,0.14)";
+    c.lineWidth = 1.5 * k;
     c.beginPath();
     c.moveTo(0, h / 2);
     c.lineTo(w, h / 2);
     c.stroke();
-    c.setLineDash([]);
 
-    c.fillStyle = "rgba(255,255,255,0.10)";
-    c.font = `800 ${64 * k}px system-ui, sans-serif`;
-    c.textAlign = "center";
-    c.fillText(String(s.aiScore), w / 2, h / 2 - 22 * k);
-    c.fillText(String(s.playerScore), w / 2, h / 2 + 74 * k);
+    c.strokeStyle = "rgba(29,29,31,0.09)";
+    c.lineWidth = 1 * k;
+    c.strokeRect(10 * k, 10 * k, w - 20 * k, h - 20 * k);
 
     const paddle = (x: number, y: number, tint: string) => {
-      c.fillStyle = tint;
+      c.shadowColor = "rgba(0,0,0,0.16)";
+      c.shadowBlur = 12 * k;
+      c.shadowOffsetY = 4 * k;
+      const bar = c.createLinearGradient(0, y - paddleH, 0, y + paddleH);
+      bar.addColorStop(0, "rgba(255,255,255,0.72)");
+      bar.addColorStop(0.28, tint);
+      bar.addColorStop(1, tint);
+      c.fillStyle = bar;
       c.beginPath();
       c.roundRect(x - paddleW / 2, y - paddleH / 2, paddleW, paddleH, paddleH / 2);
       c.fill();
+      c.shadowBlur = 0;
+      c.shadowOffsetY = 0;
     };
-    paddle(s.ax, aiY, "#FF6B00");
-    paddle(s.px, playerY, "#2C9FA2");
+    paddle(s.ax, aiY, "#A8511B");
+    paddle(s.px, playerY, "#FF6B00");
 
-    c.fillStyle = "#FFFFFF";
+    c.shadowColor = "rgba(255,107,0,0.30)";
+    c.shadowBlur = 12 * k;
+    const orb = c.createRadialGradient(s.bx - 3 * k, s.by - 3 * k, 0, s.bx, s.by, ballR * 1.2);
+    orb.addColorStop(0, "#FFFFFF");
+    orb.addColorStop(0.55, "#FFF2E6");
+    orb.addColorStop(1, "#FF9F4A");
+    c.fillStyle = orb;
     c.beginPath();
     c.arc(s.bx, s.by, ballR, 0, Math.PI * 2);
     c.fill();
+    c.strokeStyle = "rgba(224,95,0,0.62)";
+    c.lineWidth = 1.5 * k;
+    c.stroke();
+    c.shadowBlur = 0;
 
     c.restore();
   });
@@ -226,11 +254,11 @@ export function PongGame({ onFinish, reduced }: GameProps) {
 
       {/* One pill, inset on the right so it never runs under the restart button
           on a narrow phone. */}
-      <div className="pointer-events-none absolute left-3 right-16 top-3 flex justify-center">
-        <span className="flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-[14px] font-extrabold text-ink">
-          <span className="text-orange">AI {scores.ai}</span>
-          <span className="text-ink/45">ถึง {TARGET}</span>
-          <span className="text-teal">คุณ {scores.you}</span>
+      <div className="pointer-events-none absolute left-4 right-16 top-4 flex justify-center">
+        <span className="flex items-center gap-3 rounded-full border border-black/[0.04] bg-white/88 px-4 py-2 text-[12px] font-semibold text-[#1d1d1f] shadow-[0_5px_18px_rgba(0,0,0,0.08)] backdrop-blur-xl">
+          <span className="text-[#a8511b]">AI {scores.ai}</span>
+          <span className="text-[#aeaeb2]">ถึง {TARGET}</span>
+          <span className="text-orange">คุณ {scores.you}</span>
         </span>
       </div>
 
@@ -238,7 +266,7 @@ export function PongGame({ onFinish, reduced }: GameProps) {
         <div className="pointer-events-none absolute inset-0 grid place-items-center">
           <span
             key={count}
-            className="text-[74px] font-extrabold text-white drop-shadow-[0_6px_18px_rgba(0,0,0,0.45)]"
+            className="text-[74px] font-semibold text-orange/80"
             style={{ animation: "hh-count-in 500ms ease-out both" }}
           >
             {count}
@@ -246,9 +274,11 @@ export function PongGame({ onFinish, reduced }: GameProps) {
         </div>
       )}
 
-      <p className="pointer-events-none absolute inset-x-0 bottom-1.5 text-center text-[12px] font-bold text-white/55">
-        ลากซ้าย-ขวาเพื่อรับลูก
-      </p>
+      <div className="pointer-events-none absolute inset-x-4 bottom-4 flex items-center gap-3 text-[#86868b]">
+        <span className="h-px flex-1 bg-black/10" />
+        <p className="text-[11px] font-medium">เลื่อนซ้าย–ขวาเพื่อรับลูก</p>
+        <span className="h-px flex-1 bg-black/10" />
+      </div>
     </div>
   );
 }

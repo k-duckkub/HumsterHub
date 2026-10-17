@@ -41,9 +41,10 @@ export function GameShell({ game, onFinish, reduced }: Props) {
   return (
     <div className="w-full">
       <div
-        className="relative mx-auto aspect-9/12 w-full max-w-[520px] max-h-[66vh] overflow-hidden rounded-[26px] bg-warm-ivory shadow-[0_20px_50px_rgba(10,26,47,0.14)]"
+        className="relative mx-auto aspect-9/12 w-full max-w-[520px] max-h-[66vh] overflow-hidden rounded-[30px] border border-black/[0.05] bg-white shadow-[0_22px_65px_rgba(0,0,0,0.10)]"
         style={{ touchAction: "none" }}
       >
+        <div aria-hidden className="pointer-events-none absolute inset-px z-[2] rounded-[29px] border border-white/70" />
         {!intro && <Game key={attempt} onFinish={onFinish} reduced={reduced} />}
 
         {intro && (
@@ -65,7 +66,7 @@ export function GameShell({ game, onFinish, reduced }: Props) {
               play("click");
             }}
             aria-label="เริ่มเกมนี้ใหม่"
-            className="absolute right-2.5 top-2.5 grid h-11 w-11 place-items-center rounded-full bg-white/85 text-ink shadow-sm transition-transform duration-200 hover:scale-105 active:scale-95"
+            className="absolute right-4 top-4 z-[5] grid h-10 w-10 place-items-center rounded-full border border-black/[0.05] bg-white/88 text-[#1d1d1f] shadow-[0_6px_20px_rgba(0,0,0,0.10)] backdrop-blur-xl transition-transform duration-200 hover:scale-105 hover:bg-white active:scale-95"
           >
             <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
               <path
@@ -115,29 +116,34 @@ function GameIntro({
   }, [step, reduced]);
 
   return (
-    <div className="absolute inset-0 z-10 grid place-items-center bg-ink/92 px-6 text-center text-white">
+    <div className="absolute inset-0 z-10 flex flex-col justify-between overflow-hidden bg-[#fff8f3] px-8 py-8 text-left text-[#1d1d1f] max-md:px-6 max-md:py-7">
+      <div className="flex items-center justify-between border-b border-black/[0.07] pb-4 text-[13px] font-semibold text-[#86868b]">
+        <span>มินิเกม</span>
+        <span>ด่านที่ 3 จาก 5</span>
+      </div>
       {step === 0 || reduced ? (
-        <div style={{ animation: "hh-mark-pop 380ms var(--ease-spring) both" }}>
-          <p className="mb-3 text-[14px] font-extrabold uppercase tracking-[0.28em] text-orange">
-            Mini Game!
+        <div className="my-auto flex flex-col items-center text-center" style={{ animation: "hh-mark-pop 380ms var(--ease-spring) both" }}>
+          <p className="mb-4 text-[15px] font-semibold text-orange">
+            Skill challenge
           </p>
-          <h4 className="text-[34px] font-extrabold leading-tight tracking-[-0.01em] max-md:text-[27px]">
+          <h4 className="max-w-[390px] text-[39px] font-bold leading-[1.08] tracking-[-0.04em] max-md:text-[31px]">
             {title}
           </h4>
-          <p className="mt-2.5 text-[18px] font-bold text-white/90 max-md:text-[16px]">{tagline}</p>
-          <p className="mt-5 inline-block rounded-full bg-white/12 px-4 py-2 text-[15px] font-semibold text-white/80">
-            {how}
-          </p>
+          <p className="mt-4 max-w-[360px] text-[18px] font-medium leading-relaxed text-[#6e6e73] max-md:text-[16px]">{tagline}</p>
         </div>
       ) : (
-        <span
+        <div
           key={step}
-          className="text-[86px] font-extrabold leading-none"
+          className="my-auto grid place-items-center"
           style={{ animation: "hh-count-in 320ms ease-out both" }}
         >
-          {step < 4 ? 4 - step : "GO!"}
-        </span>
+          <span className="text-[96px] font-semibold leading-none tracking-[-0.06em] text-orange">{step < 4 ? 4 - step : "GO"}</span>
+        </div>
       )}
+      <div className="flex items-center gap-3 border-t border-black/[0.07] pt-4">
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#ffe5d0] text-[14px] font-semibold text-orange-dark">i</span>
+        <p className="text-[14px] font-medium text-[#6e6e73]">{how}</p>
+      </div>
     </div>
   );
 }
