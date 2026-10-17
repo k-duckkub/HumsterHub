@@ -30,7 +30,10 @@ type Phase = "playing" | "outcome";
 export function ChallengeFlow() {
   const reduced = useReducedMotion();
   const [introComplete, setIntroComplete] = useState(false);
-  const completeIntro = useCallback(() => setIntroComplete(true), []);
+  const completeIntro = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    setIntroComplete(true);
+  }, []);
 
   // Both draws happen after mount, never during render. This page is statically
   // prerendered, so drawing in the render pass bakes one set into the HTML that
@@ -130,6 +133,11 @@ export function ChallengeFlow() {
             heroCollapsed ? "min-h-screen justify-center" : "min-h-[45vh]",
           ].join(" ")}
         >
+        {!heroCollapsed && (
+          <p className="max-w-[620px] text-center text-[14px] font-semibold leading-relaxed text-[#a54c12] max-md:text-[13px]">
+            ตอบ 4 คำถาม + เล่น 1 มินิเกม แล้วเปิดกล่องรับรางวัล
+          </p>
+        )}
         <div className="relative flex w-full flex-col items-center">
           <AnimatePresence mode="wait">
             {mode === "challenge" && stage.kind === "question" && (
