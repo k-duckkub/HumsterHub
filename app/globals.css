@@ -182,6 +182,28 @@ img {
   will-change: transform;
 }
 
+.thankyou-envelope-artwork {
+  display: block;
+  width: 100%;
+}
+
+.thankyou-envelope-seal-logo {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  aspect-ratio: 1;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #b31316, #7d0608);
+  box-shadow: inset 0 0 2px rgb(255 200 170 / 24%);
+  pointer-events: none;
+}
+
+.thankyou-envelope-seal-logo svg {
+  width: 92%;
+  height: 92%;
+}
+
 .thankyou-envelope-frame {
   position: absolute;
   top: 50%;

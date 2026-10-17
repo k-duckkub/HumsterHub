@@ -11,8 +11,8 @@ export function ThankYouIntro({ onComplete, onSkip }: { onComplete: () => void; 
   const letter = useRef<HTMLButtonElement>(null);
   const plane = useRef<HTMLSpanElement>(null);
   const flutter = useRef<HTMLSpanElement>(null);
-  const frameImages = useRef<(HTMLImageElement | null)[]>([]);
-  const finalEnvelope = useRef<HTMLImageElement>(null);
+  const frameImages = useRef<(HTMLSpanElement | null)[]>([]);
+  const finalEnvelope = useRef<HTMLSpanElement>(null);
   const streak = useRef<HTMLSpanElement>(null);
   const shadow = useRef<HTMLDivElement>(null);
   const halo = useRef<HTMLDivElement>(null);
@@ -53,7 +53,7 @@ export function ThankYouIntro({ onComplete, onSkip }: { onComplete: () => void; 
         ].join(" ");
 
         const flight = gsap.timeline({ onComplete: () => setLanded(true) });
-        const frames = frameImages.current.filter((frame): frame is HTMLImageElement => frame !== null);
+        const frames = frameImages.current.filter((frame): frame is HTMLSpanElement => frame !== null);
         animation.current = flight;
         flight
           .set(letter.current, { autoAlpha: 1, x: -0.62 * w, y: 0.16 * h, scale: 0.42, force3D: true })
@@ -170,29 +170,44 @@ export function ThankYouIntro({ onComplete, onSkip }: { onComplete: () => void; 
           <span ref={streak} className="thankyou-letter-streak" aria-hidden="true"><i /><i /><i /></span>
           <span ref={plane} className="thankyou-letter-spin">
             <span ref={flutter} className="thankyou-envelope-surface">
-              {Array.from({ length: 48 }, (_, index) => (
+              {Array.from({ length: 48 }, (_, index) => {
+                const angle = index * 7.5;
+                const radians = angle * Math.PI / 180;
+                // The seal starts at (293, 320) on a 600px square and rotates
+                // around its centre with the original envelope artwork.
+                const x = (300 - 7 * Math.cos(radians) - 20 * Math.sin(radians)) / 6;
+                const y = (300 - 7 * Math.sin(radians) + 20 * Math.cos(radians)) / 6;
+                return (
+                  <span
+                    key={index}
+                    ref={(node) => { frameImages.current[index] = node; }}
+                    className="thankyou-envelope-artwork thankyou-envelope-frame"
+                  >
+                    <Image
+                      src={`/assets/envelope-rotation-frames/frame-${String(index + 1).padStart(2, "0")}.png`}
+                      alt=""
+                      width={600}
+                      height={600}
+                      priority
+                      draggable={false}
+                      className="thankyou-letter-art"
+                    />
+                    <SealLogo x={x} y={y} width={13.5} rotation={angle} />
+                  </span>
+                );
+              })}
+              <span ref={finalEnvelope} className="thankyou-envelope-artwork thankyou-envelope-final">
                 <Image
-                  key={index}
-                  ref={(node) => { frameImages.current[index] = node; }}
-                  src={`/assets/envelope-rotation-frames/frame-${String(index + 1).padStart(2, "0")}.png`}
+                  src="/assets/thankyou-envelope-straight-v2.png"
                   alt=""
-                  width={600}
-                  height={600}
+                  width={1536}
+                  height={1024}
                   priority
                   draggable={false}
-                  className="thankyou-letter-art thankyou-envelope-frame"
+                  className="thankyou-letter-art"
                 />
-              ))}
-              <Image
-                ref={finalEnvelope}
-                src="/assets/thankyou-envelope-straight-v2.png"
-                alt=""
-                width={1536}
-                height={1024}
-                priority
-                draggable={false}
-                className="thankyou-letter-art thankyou-envelope-final"
-              />
+                <SealLogo x={50} y={52.44} width={12.2} />
+              </span>
             </span>
           </span>
         </button>
@@ -211,5 +226,19 @@ export function ThankYouIntro({ onComplete, onSkip }: { onComplete: () => void; 
         </div>
       </div>
     </div>
+  );
+}
+
+function SealLogo({ x, y, width, rotation = 0 }: { x: number; y: number; width: number; rotation?: number }) {
+  return (
+    <span
+      aria-hidden="true"
+      className="thankyou-envelope-seal-logo"
+      style={{ left: `${x}%`, top: `${y}%`, width: `${width}%`, transform: `translate(-50%, -50%) rotate(${rotation}deg)` }}
+    >
+      <svg viewBox="125 100 1065 930" className="h-full w-full" focusable="false">
+        <image href="/assets/hamsterhub-seal-logo.png" width="1315" height="1197" />
+      </svg>
+    </span>
   );
 }
