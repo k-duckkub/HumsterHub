@@ -26,23 +26,22 @@ export function Hero({ collapsed }: { collapsed: boolean }) {
         "relative origin-top transition-[opacity,transform,height] duration-500 ease-out",
         collapsed
           ? "h-0 scale-[0.96] -translate-y-3.5 opacity-0 overflow-hidden pointer-events-none"
-          : "h-[clamp(128px,27svh,270px)] opacity-100",
+          : "opacity-100",
       ].join(" ")}
     >
       <h1 className="sr-only">ขอบคุณสำหรับการชำระเงิน</h1>
 
-      <div className="relative h-full bg-[#f5dfcf]">
-        <div className="relative h-full overflow-hidden">
+      <div className="relative">
+        <div className="relative overflow-hidden">
           {/* The supplied scene already includes its finished wave edge, so
               the same source stays intact at every breakpoint. */}
-          <picture className="block h-full">
+          <picture>
             <Image
               src="/assets/thankyou-hero-v2.png"
               width={1680}
               height={938}
               priority
-              className="mx-auto h-full w-full object-contain"
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              className="w-full anim-scene"
               alt="Thank you — มาสคอตแฮมสเตอร์ของ HamsterHub ยืนอยู่กลางโต๊ะทำงาน"
             />
           </picture>

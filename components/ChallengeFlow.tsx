@@ -30,10 +30,25 @@ type Phase = "playing" | "outcome";
 export function ChallengeFlow() {
   const reduced = useReducedMotion();
   const [introComplete, setIntroComplete] = useState(false);
-  const completeIntro = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
-    setIntroComplete(true);
-  }, []);
+  const completeIntro = useCallback(() => setIntroComplete(true), []);
+  const firstQuestion = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!introComplete) return;
+    const frame = window.requestAnimationFrame(() => {
+      const entry = firstQuestion.current;
+      if (!entry) return;
+      const bounds = entry.getBoundingClientRect();
+      // Keep the artwork full size, but land where the answers are visible.
+      // Any spare room shows a small part of the banner above the activity.
+      const bannerPeek = Math.max(0, Math.min(96, window.innerHeight - bounds.height - 24));
+      window.scrollTo({
+        top: Math.max(0, window.scrollY + bounds.top - bannerPeek),
+        behavior: "instant",
+      });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [introComplete]);
 
   // Both draws happen after mount, never during render. This page is statically
   // prerendered, so drawing in the render pass bakes one set into the HTML that
@@ -128,6 +143,7 @@ export function ChallengeFlow() {
           className="pointer-events-none absolute inset-x-0 -top-10 h-28 bg-[radial-gradient(ellipse_at_top,rgba(255,107,0,0.28)_0%,rgba(255,138,52,0.13)_44%,transparent_76%)] blur-[22px]"
         />
         <div
+          ref={firstQuestion}
           className={[
             "relative z-[1] mx-auto flex max-w-[760px] flex-col items-center gap-3 px-5 pb-12 pt-4 max-md:px-4",
             heroCollapsed ? "min-h-screen justify-center" : "min-h-[45vh]",
