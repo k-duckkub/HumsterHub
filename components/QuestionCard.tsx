@@ -19,8 +19,6 @@ type Props = {
  * uses a GSAP timeline instead.
  */
 export function QuestionCard({ question, index, total, picked, onPick, reduced }: Props) {
-  const progress = ((index + 1) / total) * 100;
-
   return (
     <motion.div
       key={index}
@@ -30,21 +28,7 @@ export function QuestionCard({ question, index, total, picked, onPick, reduced }
       transition={{ duration: reduced ? 0 : 0.4, ease: [0.22, 1, 0.36, 1] }}
       className="rounded-[30px] border border-black/[0.04] bg-white px-8 pb-8 pt-7 text-left shadow-[0_18px_55px_rgba(0,0,0,0.08)] max-md:rounded-[24px] max-md:px-5 max-md:pb-5 max-md:pt-5"
     >
-      <div className="mb-7 flex items-center justify-between gap-4 max-md:mb-5">
-        <p className="text-[14px] font-semibold tracking-[-0.01em] text-[#6e6e73]">
-          คำถามที่ {index + 1} จาก {total}
-        </p>
-        <p className="text-[13px] font-medium text-[#86868b]">เลือกคำตอบที่เป็นคุณที่สุด</p>
-      </div>
-
-      <div className="mb-8 h-1.5 overflow-hidden rounded-full bg-[#e8e8ed] max-md:mb-6">
-        <motion.span
-          className="block h-full rounded-full bg-orange"
-          initial={false}
-          animate={{ width: `${progress}%` }}
-          transition={{ duration: reduced ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
-        />
-      </div>
+      <p className="sr-only">คำถามที่ {index + 1} จาก {total}</p>
 
       <h3 className="mb-8 max-w-[540px] text-[30px] font-bold leading-[1.32] tracking-[-0.035em] text-[#1d1d1f] text-balance max-md:mb-6 max-md:text-[23px]">
         {question.ask}

@@ -149,11 +149,6 @@ export function ChallengeFlow() {
             heroCollapsed ? "min-h-screen justify-center" : "min-h-[45vh]",
           ].join(" ")}
         >
-        {!heroCollapsed && (
-          <p className="max-w-[620px] text-center text-[14px] font-semibold leading-relaxed text-[#a54c12] max-md:text-[13px]">
-            ตอบ 4 คำถาม + เล่น 1 มินิเกม แล้วเปิดกล่องรับรางวัล
-          </p>
-        )}
         <div className="relative flex w-full flex-col items-center">
           <AnimatePresence mode="wait">
             {mode === "challenge" && stage.kind === "question" && (
