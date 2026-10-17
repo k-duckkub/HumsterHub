@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 
 /** A sealed letter flies in, lands with weight, then opens the Thank You flow. */
-export function ThankYouIntro({ onComplete }: { onComplete: () => void }) {
+export function ThankYouIntro({ onComplete, onSkip }: { onComplete: () => void; onSkip: () => void }) {
   const root = useRef<HTMLDivElement>(null);
   const letter = useRef<HTMLButtonElement>(null);
   const plane = useRef<HTMLSpanElement>(null);
@@ -136,15 +136,15 @@ export function ThankYouIntro({ onComplete }: { onComplete: () => void }) {
     };
   }, []);
 
-  const open = () => {
+  const enter = (onEnter: () => void) => {
     if (!landed || opening) return;
     setOpening(true);
     animation.current?.kill();
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      onComplete();
+      onEnter();
       return;
     }
-    gsap.timeline({ onComplete })
+    gsap.timeline({ onComplete: onEnter })
       .to(plane.current, { scale: 1.07, y: -9, duration: 0.24, ease: "power2.out" }, 0)
       .to(root.current, { opacity: 0, duration: 0.38, ease: "power2.inOut" }, 0.1);
   };
@@ -163,9 +163,9 @@ export function ThankYouIntro({ onComplete }: { onComplete: () => void }) {
           ref={letter}
           type="button"
           disabled={!landed || opening}
-          onClick={open}
+          onClick={() => enter(onComplete)}
           className="thankyou-letter-button"
-          aria-label="เปิดซองจดหมายเพื่อเข้าสู่หน้า Thank You"
+          aria-label="กดเปิดซอง เพื่อรับรางวัลที่รอคุณอยู่"
         >
           <span ref={streak} className="thankyou-letter-streak" aria-hidden="true"><i /><i /><i /></span>
           <span ref={plane} className="thankyou-letter-spin">
@@ -197,9 +197,17 @@ export function ThankYouIntro({ onComplete }: { onComplete: () => void }) {
           </span>
         </button>
 
-        <div className={`thankyou-letter-prompt${landed ? " is-visible" : ""}`}>
-          <p className="text-center text-[18px] font-bold text-[#583c3b] max-sm:text-base">จดหมายถึงคุณ</p>
-          <p className="mt-1 text-center text-[15px] text-[#856b67] max-sm:text-sm">กดซองจดหมายเพื่อเข้าสู่หน้า Thank You</p>
+        <div className={`thankyou-letter-prompt text-center${landed ? " is-visible" : ""}`} aria-hidden={!landed}>
+          <p className="text-[18px] font-bold text-[#583c3b] max-sm:text-base">กดเปิดซอง</p>
+          <p className="mt-1 text-[15px] text-[#856b67] max-sm:text-sm">เพื่อรับรางวัลที่รอคุณอยู่</p>
+          <button
+            type="button"
+            disabled={!landed || opening}
+            onClick={() => enter(onSkip)}
+            className="mt-5 min-h-11 rounded-full border border-orange/30 bg-white/60 px-5 py-2.5 text-[14px] font-semibold text-[#a54c12] transition-colors hover:bg-white disabled:cursor-default"
+          >
+            ข้ามไปหน้าเช็คอินเลย
+          </button>
         </div>
       </div>
     </div>

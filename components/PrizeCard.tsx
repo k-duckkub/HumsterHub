@@ -32,7 +32,14 @@ export function PrizeCard({ onLater, reduced, reward }: Props) {
           action reads last. */}
       <RewardReveal reward={reward} reduced={reduced} />
 
-      <div className="rounded-[30px] border border-[rgba(10,26,47,0.06)] bg-white px-[22px] py-8 shadow-[0_24px_60px_rgba(10,26,47,0.10)] max-md:rounded-[var(--radius-md)] max-md:px-4 max-md:py-6">
+      <CheckInCard onLater={onLater} />
+    </motion.div>
+  );
+}
+
+export function CheckInCard({ onLater, returnLabel = "ไว้ก่อน" }: { onLater: () => void; returnLabel?: string }) {
+  return (
+      <div className="w-full rounded-[30px] border border-[rgba(10,26,47,0.06)] bg-white px-[22px] py-8 text-center shadow-[0_24px_60px_rgba(10,26,47,0.10)] max-md:rounded-[var(--radius-md)] max-md:px-4 max-md:py-6">
         <h3 className="text-[28px] font-extrabold tracking-[-0.01em] max-md:text-[23px]">แวะเช็คอินก่อนออกผจญภัยกัน ✦</h3>
         <p className="mx-auto mb-[18px] mt-3 block w-fit max-w-full whitespace-normal break-words rounded-[var(--radius-sm)] bg-warm-ivory px-3.5 py-2.5 text-pretty font-semibold leading-[1.55] text-ink [font-size:clamp(13px,3.1vw,15.5px)]">
           น้องสามารถเช็คอินไว้ก่อนได้ แล้ววันกิจกรรมค่อยเจอกันใน Discord!
@@ -51,10 +58,9 @@ export function PrizeCard({ onLater, reduced, reward }: Props) {
             onClick={onLater}
             className="inline-flex h-[54px] cursor-pointer items-center justify-center gap-2.5 rounded-[15px] border-2 border-orange bg-transparent px-[26px] text-[17px] font-bold text-orange transition-[transform,background] duration-200 hover:-translate-y-0.5 hover:bg-[rgba(255,107,0,0.08)] max-md:h-[50px] max-md:flex-[1_1_100%] max-md:text-base"
           >
-            ไว้ก่อน
+            {returnLabel}
           </button>
         </div>
       </div>
-    </motion.div>
   );
 }

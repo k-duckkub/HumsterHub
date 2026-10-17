@@ -12,12 +12,12 @@ import { play } from "@/lib/sound";
 import { rollReward, type RollResult } from "@/lib/rewards";
 import { QuestionCard } from "./QuestionCard";
 import { LootBox } from "./LootBox";
-import { PrizeCard } from "./PrizeCard";
+import { CheckInCard, PrizeCard } from "./PrizeCard";
 import { Hero } from "./Hero";
 import { ThankYouIntro } from "./ThankYouIntro";
 import { GameShell } from "./challenge/GameShell";
 
-type Mode = "challenge" | "reward" | "prize";
+type Mode = "challenge" | "reward" | "prize" | "checkin";
 type Phase = "playing" | "outcome";
 
 /**
@@ -72,6 +72,10 @@ export function ChallengeFlow() {
   const [lastWin, setLastWin] = useState(true);
   const [picked, setPicked] = useState<number | null>(null);
   const [mode, setMode] = useState<Mode>("challenge");
+  const skipToCheckIn = useCallback(() => {
+    setMode("checkin");
+    setIntroComplete(true);
+  }, []);
   // Rolled once, when the box is opened. Rolling during render would re-roll
   // the prize on every re-render of the screen showing it.
   const [reward, setReward] = useState<RollResult | null>(null);
@@ -125,7 +129,9 @@ export function ChallengeFlow() {
   };
 
   const live =
-    mode !== "challenge"
+    mode === "checkin"
+      ? "เช็คอินเข้ากิจกรรม"
+      : mode !== "challenge"
       ? `${TIER_COPY[tier].head} ได้รับ${TIER_COPY[tier].boxName} — คลิกเพื่อเปิดกล่อง`
       : stage.kind === "question"
         ? `ด่าน ${index + 1} จาก ${TOTAL_STAGES}: ${deck[stage.slot].ask}`
@@ -133,7 +139,7 @@ export function ChallengeFlow() {
 
   return (
     <>
-      {!introComplete && <ThankYouIntro onComplete={completeIntro} />}
+      {!introComplete && <ThankYouIntro onComplete={completeIntro} onSkip={skipToCheckIn} />}
     <main className="min-h-screen bg-warm-ivory" inert={!introComplete} aria-hidden={!introComplete}>
       <Hero collapsed={heroCollapsed} />
 
@@ -226,7 +232,7 @@ export function ChallengeFlow() {
           </div>
         )}
 
-        {mode !== "challenge" && (
+        {(mode === "reward" || mode === "prize") && (
           <motion.div
             initial={reduced ? false : { opacity: 0, y: 26, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -284,6 +290,19 @@ export function ChallengeFlow() {
             reward={reward}
             onLater={() => window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" })}
           />
+        )}
+
+        {mode === "checkin" && (
+          <div className="w-full max-w-[620px]">
+            <CheckInCard
+              returnLabel="กลับไปเปิดซอง"
+              onLater={() => {
+                setMode("challenge");
+                setIntroComplete(false);
+                window.scrollTo({ top: 0, behavior: "instant" });
+              }}
+            />
+          </div>
         )}
 
           <p className="sr-only" role="status" aria-live="polite">{live}</p>
