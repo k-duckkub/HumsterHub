@@ -13,7 +13,6 @@ import { rollReward, type RollResult } from "@/lib/rewards";
 import { QuestionCard } from "./QuestionCard";
 import { LootBox } from "./LootBox";
 import { CheckInCard, PrizeCard } from "./PrizeCard";
-import { Hero } from "./Hero";
 import { ThankYouIntro } from "./ThankYouIntro";
 import { GameShell } from "./challenge/GameShell";
 
@@ -31,21 +30,11 @@ export function ChallengeFlow() {
   const reduced = useReducedMotion();
   const [introComplete, setIntroComplete] = useState(false);
   const completeIntro = useCallback(() => setIntroComplete(true), []);
-  const firstQuestion = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!introComplete) return;
     const frame = window.requestAnimationFrame(() => {
-      const entry = firstQuestion.current;
-      if (!entry) return;
-      const bounds = entry.getBoundingClientRect();
-      // Keep the artwork full size, but land where the answers are visible.
-      // Any spare room shows a small part of the banner above the activity.
-      const bannerPeek = Math.max(0, Math.min(96, window.innerHeight - bounds.height - 24));
-      window.scrollTo({
-        top: Math.max(0, window.scrollY + bounds.top - bannerPeek),
-        behavior: "instant",
-      });
+      window.scrollTo({ top: 0, behavior: "instant" });
     });
     return () => window.cancelAnimationFrame(frame);
   }, [introComplete]);
@@ -88,7 +77,6 @@ export function ChallengeFlow() {
 
   const stage = stages[index];
   const tier = tierForFails(fails);
-  const heroCollapsed = index > 0 || mode !== "challenge";
 
   const settle = useCallback(
     (win: boolean) => {
@@ -141,7 +129,7 @@ export function ChallengeFlow() {
     <>
       {!introComplete && <ThankYouIntro onComplete={completeIntro} onSkip={skipToCheckIn} />}
     <main className="min-h-screen bg-warm-ivory" inert={!introComplete} aria-hidden={!introComplete}>
-      <Hero collapsed={heroCollapsed} />
+      <h1 className="sr-only">ขอบคุณสำหรับการชำระเงิน</h1>
 
       <section className="relative bg-[#fff8f3]">
         <div
@@ -149,11 +137,7 @@ export function ChallengeFlow() {
           className="pointer-events-none absolute inset-x-0 -top-10 h-28 bg-[radial-gradient(ellipse_at_top,rgba(255,107,0,0.28)_0%,rgba(255,138,52,0.13)_44%,transparent_76%)] blur-[22px]"
         />
         <div
-          ref={firstQuestion}
-          className={[
-            "relative z-[1] mx-auto flex max-w-[760px] flex-col items-center gap-3 px-5 pb-12 pt-4 max-md:px-4",
-            heroCollapsed ? "min-h-screen justify-center" : "min-h-[45vh]",
-          ].join(" ")}
+          className="relative z-[1] mx-auto flex min-h-screen max-w-[760px] flex-col items-center justify-center gap-3 px-5 pb-12 pt-4 max-md:px-4"
         >
         <div className="relative flex w-full flex-col items-center">
           <AnimatePresence mode="wait">
