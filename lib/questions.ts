@@ -5,7 +5,7 @@ export type IconName =
 export type Option = {
   icon: IconName;
   text: string;
-  /** Above zero keeps the hamster dry. See the note on SAFE below. */
+  /** Correct answers score 1; incorrect answers score 0. */
   score: number;
 };
 
@@ -14,189 +14,94 @@ export type Question = {
   opts: Option[];
 };
 
-/**
- * Twenty questions, three answers each, drawn fresh every session.
- *
- * None of them has a factually right answer, so "safe" is the one that keeps
- * the hamster out of trouble — the cautious, the kind, or the one the joke is
- * built around. Something has to score, or the wood box becomes unreachable:
- * with only the mini games able to miss, a run tops out at two fails and the
- * bottom tier is dead code.
- *
- * The safe answer is not always first. A player who learns "always pick A"
- * would be playing the layout instead of the question.
- */
+/** Ten everyday-knowledge questions, three choices and one correct answer each.
+ * Four are drawn per run; correct choices occupy different positions.
+ * These assess only the facts asked, not a learner's overall ability. */
 export const QUESTIONS: Question[] = [
   {
-    ask: "ถ้าเจอปุ่มแดงเขียนว่า “ห้ามกด” คุณจะ…",
+    ask: "ทุกคนต้องดื่มน้ำวันละ 8 แก้วเท่ากันไหม?",
     opts: [
-      { icon: "hand", text: "ไม่กด", score: 1 },
-      { icon: "bolt", text: "กดทันที", score: 0 },
-      { icon: "heart", text: "ให้เพื่อนกดก่อน", score: 0 },
+      { icon: "bowl", text: "เท่ากันทุกคน", score: 0 },
+      { icon: "heart", text: "ไม่เท่ากัน ขึ้นกับร่างกายและกิจกรรม", score: 1 },
+      { icon: "hand", text: "ขึ้นอยู่กับความสูงอย่างเดียว", score: 0 },
     ],
   },
   {
-    ask: "ถ้าแฮมสเตอร์ใน Hamster Hub ขโมยขนมคุณไป?",
+    ask: "ของราคา 100 บาท ลด 50% แล้วลดอีก 50% จะเหลือเท่าไร?",
     opts: [
-      { icon: "bolt", text: "แย่งคืน", score: 0 },
-      { icon: "heart", text: "แบ่งให้ครึ่งนึง", score: 1 },
-      { icon: "star", text: "ยกให้ทั้งหมด", score: 0 },
+      { icon: "coin", text: "0 บาท", score: 0 },
+      { icon: "coin", text: "50 บาท", score: 0 },
+      { icon: "coin", text: "25 บาท", score: 1 },
     ],
   },
   {
-    ask: "ถ้าเลือกพลังได้ 1 อย่าง?",
+    ask: "ข่าวที่มีคนแชร์เยอะ แปลว่าเป็นเรื่องจริงไหม?",
     opts: [
-      { icon: "clock", text: "หยุดเวลา", score: 1 },
-      { icon: "ghost", text: "หายตัว", score: 0 },
-      { icon: "rocket", text: "บินได้", score: 0 },
+      { icon: "shield", text: "ยังสรุปไม่ได้ ต้องตรวจแหล่งที่มา", score: 1 },
+      { icon: "heart", text: "จริง เพราะคนส่วนใหญ่เชื่อ", score: 0 },
+      { icon: "brush", text: "จริง ถ้ามีภาพประกอบ", score: 0 },
     ],
   },
   {
-    ask: "ถ้าเปิดกล่องปริศนาแล้วมีเสียงกุกกัก?",
+    ask: "ขีด Wi-Fi เต็ม แปลว่าอินเทอร์เน็ตเร็วเสมอไหม?",
     opts: [
-      { icon: "bolt", text: "เปิดทันที", score: 0 },
-      { icon: "puzzle", text: "เขย่าก่อน", score: 0 },
-      { icon: "shield", text: "ถอยก่อนหนึ่งก้าว", score: 1 },
+      { icon: "bolt", text: "เร็วที่สุดแน่นอน", score: 0 },
+      { icon: "bulb", text: "ไม่เสมอ เพราะความแรงสัญญาณกับความเร็วเน็ตเป็นคนละเรื่อง", score: 1 },
+      { icon: "pad", text: "เร็วเท่ากันทุกเครื่องที่เชื่อมต่อ", score: 0 },
     ],
   },
   {
-    ask: "ถ้าได้ Hamster Coin 1,000 Coin ฟรี?",
+    ask: "AI ตอบอย่างมั่นใจ แปลว่าคำตอบถูกแน่นอนไหม?",
     opts: [
-      { icon: "bolt", text: "ใช้ทันที", score: 0 },
-      { icon: "coin", text: "เก็บไว้", score: 1 },
-      { icon: "heart", text: "เอาไปแจกเพื่อน", score: 0 },
+      { icon: "bulb", text: "ถูก ถ้าคำตอบยาวและละเอียด", score: 0 },
+      { icon: "heart", text: "ถูก ถ้าตอบเหมือนคนจริง", score: 0 },
+      { icon: "shield", text: "ไม่แน่ ควรตรวจสอบข้อมูลสำคัญอีกครั้ง", score: 1 },
     ],
   },
   {
-    ask: "ถ้าตื่นมาแล้วกลายเป็นแฮมสเตอร์?",
+    ask: "เหล็ก 1 กิโลกรัม กับสำลี 1 กิโลกรัม อะไรมีมวลมากกว่า?",
     opts: [
-      { icon: "bowl", text: "หาของกิน", score: 0 },
-      { icon: "door", text: "สำรวจบ้าน", score: 1 },
-      { icon: "moon", text: "นอนต่อ", score: 0 },
+      { icon: "shield", text: "เหล็ก", score: 0 },
+      { icon: "puzzle", text: "เท่ากัน", score: 1 },
+      { icon: "moon", text: "สำลี", score: 0 },
     ],
   },
   {
-    ask: "ถ้าต้องติดเกาะกับของ 1 ชิ้น?",
+    ask: "โยนเหรียญที่ยุติธรรมออกหัวมาแล้ว 5 ครั้ง ครั้งต่อไปโอกาสออกก้อยเท่าไร?",
     opts: [
-      { icon: "bulb", text: "โทรศัพท์", score: 0 },
-      { icon: "shield", text: "มีด", score: 1 },
-      { icon: "moon", text: "หมอน", score: 0 },
+      { icon: "coin", text: "50% เหมือนเดิม", score: 1 },
+      { icon: "star", text: "มากกว่า 50% เพราะหัวออกมาหลายครั้งแล้ว", score: 0 },
+      { icon: "clock", text: "น้อยกว่า 50% เพราะกำลังออกหัวติดกัน", score: 0 },
     ],
   },
   {
-    ask: "ถ้า Hamster Hub มีบอสลับ คุณคิดว่าคืออะไร?",
+    ask: "ใช้รหัสผ่านเดียวกันทุกเว็บ มีความเสี่ยงอะไร?",
     opts: [
-      { icon: "clock", text: "Deadline", score: 0 },
-      { icon: "bolt", text: "Wi-Fi", score: 0 },
-      { icon: "ghost", text: "งานที่บอกว่า “แป๊บเดียวเสร็จ”", score: 1 },
+      { icon: "shield", text: "ไม่มี ถ้ารหัสผ่านยาวมาก", score: 0 },
+      { icon: "door", text: "ถ้าเว็บหนึ่งรั่ว บัญชีอื่นอาจถูกเข้าถึงด้วย", score: 1 },
+      { icon: "clock", text: "เสี่ยงเฉพาะเว็บที่ไม่ได้ใช้บ่อย", score: 0 },
     ],
   },
   {
-    ask: "ถ้าเพื่อนบอกว่า “อย่าหันหลังไปนะ”",
+    ask: "น้ำ 500 มล. ราคา 20 บาท กับน้ำ 1 ลิตร ราคา 35 บาท แบบไหนถูกกว่าต่อปริมาตร?",
     opts: [
-      { icon: "shield", text: "ไม่หัน", score: 1 },
-      { icon: "ghost", text: "หันทันที", score: 0 },
-      { icon: "rocket", text: "วิ่งก่อน", score: 0 },
+      { icon: "bowl", text: "ขวด 500 มล.", score: 0 },
+      { icon: "coin", text: "ราคาเท่ากัน", score: 0 },
+      { icon: "bowl", text: "ขวด 1 ลิตร", score: 1 },
     ],
   },
   {
-    ask: "ถ้าต้องกินเมนูเดียว 7 วัน?",
+    ask: "น้ำแข็ง 100 กรัมละลายหมด โดยไม่มีน้ำหกหรือระเหย จะได้น้ำกี่กรัม?",
     opts: [
-      { icon: "bowl", text: "ข้าวผัด", score: 1 },
-      { icon: "star", text: "พิซซ่า", score: 0 },
-      { icon: "flask", text: "มาม่า", score: 0 },
-    ],
-  },
-  {
-    ask: "ถ้า Hub แจก Quest ตอนเที่ยงคืน?",
-    opts: [
-      { icon: "bolt", text: "รับเลย", score: 1 },
-      { icon: "clock", text: "พรุ่งนี้ค่อยทำ", score: 0 },
-      { icon: "ghost", text: "แกล้งออฟไลน์", score: 0 },
-    ],
-  },
-  {
-    ask: "ถ้ามีประตู 3 บาน คุณจะเลือก…",
-    opts: [
-      { icon: "bulb", text: "บานที่มีแสง", score: 1 },
-      { icon: "heart", text: "บานที่มีเสียงหัวเราะ", score: 0 },
-      { icon: "door", text: "บานที่เงียบสนิท", score: 0 },
-    ],
-  },
-  {
-    ask: "ถ้าได้ Clone ตัวเอง 1 คน?",
-    opts: [
-      { icon: "bulb", text: "ให้ไปเรียนแทน", score: 0 },
-      { icon: "brush", text: "ให้ทำงานแทน", score: 1 },
-      { icon: "pad", text: "ให้เล่นเกมเป็นเพื่อน", score: 0 },
-    ],
-  },
-  {
-    ask: "ถ้าแฮมสเตอร์พูดได้ 1 ประโยค คุณคิดว่ามันจะพูดว่า…",
-    opts: [
-      { icon: "star", text: "“ทำเควสยัง”", score: 1 },
-      { icon: "bowl", text: "“มีอะไรกินไหม”", score: 0 },
-      { icon: "moon", text: "“วันนี้พักได้”", score: 0 },
-    ],
-  },
-  {
-    ask: "ถ้าต้องเลือกสัตว์มาเป็นบอดี้การ์ด?",
-    opts: [
-      { icon: "shield", text: "หมี", score: 0 },
-      { icon: "bolt", text: "เสือ", score: 0 },
-      { icon: "ghost", text: "ห่าน", score: 1 },
-    ],
-  },
-  {
-    ask: "ถ้าได้ย้อนเวลา 10 นาที?",
-    opts: [
-      { icon: "clock", text: "แก้สิ่งที่พลาด", score: 1 },
-      { icon: "ghost", text: "แกล้งเพื่อน", score: 0 },
-      { icon: "coin", text: "เก็บไว้ใช้ทีหลัง", score: 0 },
-    ],
-  },
-  {
-    ask: "ถ้า Hamster Hub มีห้องลับ คุณอยากให้ข้างในมี…",
-    opts: [
-      { icon: "coin", text: "กล่องสมบัติ", score: 1 },
-      { icon: "heart", text: "แฮมสเตอร์ 100 ตัว", score: 0 },
-      { icon: "moon", text: "ห้องนอนอย่างดี", score: 0 },
-    ],
-  },
-  {
-    ask: "ถ้าไฟดับตอนเที่ยงคืน?",
-    opts: [
-      { icon: "bulb", text: "เปิดแฟลช", score: 1 },
-      { icon: "moon", text: "นอนต่อ", score: 0 },
-      { icon: "heart", text: "โทรหาเพื่อน", score: 0 },
-    ],
-  },
-  {
-    ask: "ถ้าชนะลอตเตอรี่ 10 ล้าน สิ่งแรกที่จะทำคือ?",
-    opts: [
-      { icon: "star", text: "ซื้อของที่อยากได้", score: 0 },
-      { icon: "coin", text: "เก็บเงิน", score: 1 },
-      { icon: "heart", text: "เลี้ยงเพื่อน", score: 0 },
-    ],
-  },
-  {
-    ask: "ถ้าสุดท้ายต้องเลือก 1 อย่าง?",
-    opts: [
-      { icon: "star", text: "กล่องเพชร", score: 1 },
-      { icon: "coin", text: "Hamster Coin 500", score: 0 },
-      { icon: "moon", text: "วันหยุดเพิ่ม 1 วัน", score: 0 },
+      { icon: "flask", text: "100 กรัม", score: 1 },
+      { icon: "flask", text: "น้อยกว่า 100 กรัม", score: 0 },
+      { icon: "flask", text: "มากกว่า 100 กรัม", score: 0 },
     ],
   },
 ];
 
-/**
- * Fisher-Yates over a copy, so the exported list stays in its authored order
- * and two sessions in the same tab cannot influence each other.
- *
- * Must be called after mount, never during render: this page is statically
- * prerendered, and a draw in the render pass bakes one set into the HTML that
- * the client then disagrees with at hydration.
- */
+/** Fisher-Yates over a copy, preserving the question bank between sessions.
+ * Call after mount so random draws cannot disagree with prerendered HTML. */
 export function drawQuestions(count: number): Question[] {
   const pool = QUESTIONS.slice();
   for (let i = pool.length - 1; i > 0; i--) {
