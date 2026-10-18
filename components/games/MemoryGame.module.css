@@ -33,8 +33,9 @@
 .card[data-revealed] .cardInner { transform: rotateY(180deg); }
 .game[data-phase="memorize"] .cardInner { transition-delay: calc(var(--order) * 30ms); }
 .cardBack, .cardFace { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 16px; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
-.cardBack { border: 1px solid #eaeaec; background: #f5f5f7; transition: border-color .2s, background .2s; }
-.backIcon { width: 30px; height: 30px; stroke: #cb671f; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.cardBack { border: 1px solid #edb88d; background: #fff0e0; box-shadow: 0 2px 5px #b9570b0a; transition: border-color .2s, background .2s, box-shadow .2s; }
+.backIcon { width: 35px; height: 35px; stroke: #ba4e08; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.card:enabled:active .cardBack { background: #ffdfbd; border-color: #d78342; }
 .cardFace { transform: rotateY(180deg); border: 1px solid #e9e9ec; background: #fff; transition: border-color .25s, background .25s; }
 .symbolTile { display: grid; place-items: center; flex-shrink: 0; width: 68px; height: 68px; }
 .symbol { display: block; width: 68px; height: 68px; object-fit: contain; }
@@ -64,7 +65,7 @@
 @keyframes result-in { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: scale(1); } }
 @media (hover: hover) and (pointer: fine) {
   .card:enabled:hover { transform: translateY(-2px); }
-  .card:enabled:hover .cardBack { background: #fff7ef; border-color: #ebcbb0; }
+  .card:enabled:hover .cardBack { background: #ffe6cc; border-color: #d78c51; box-shadow: 0 4px 12px #b9570b14; }
   .start:hover { background: #b84b00; }
 }
 @media (max-width: 520px) {
