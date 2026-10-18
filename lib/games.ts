@@ -1,8 +1,14 @@
-export type GameId = "xo" | "hoop" | "puzzle" | "pong";
+export type GameId = "memory" | "xo" | "hoop" | "puzzle" | "pong";
 
-export const ALL_GAMES: readonly GameId[] = ["xo", "hoop", "puzzle", "pong"];
+// Try the new touch-first game without deleting the previous games.
+export const ALL_GAMES: readonly GameId[] = ["memory"];
 
 export const GAME_META: Record<GameId, { title: string; tagline: string; how: string }> = {
+  memory: {
+    title: "จับคู่ความทรงจำ",
+    tagline: "เปิดการ์ดให้ครบ 4 คู่ ภายใน 45 วินาที",
+    how: "แตะเปิดทีละสองใบ แล้วหาภาพที่เหมือนกัน",
+  },
   xo: {
     title: "XO CHALLENGE",
     tagline: "เรียง X ให้ครบสามก่อน AI!",

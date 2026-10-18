@@ -22,7 +22,7 @@ type Phase = "playing" | "outcome";
 /**
  * One session: four random questions and one random mini-game.
  *
- * The two mini games are drawn once at mount and held in state, never
+ * The mini-game is drawn once at mount and held in state, never
  * recomputed — re-rolling them on a re-render would swap the game out from
  * under a player mid-round.
  */

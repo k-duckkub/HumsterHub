@@ -4,6 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 
 export type SoundName =
   | "click"   // tile / option tap
+  | "cardFlip"
+  | "pair"
+  | "miss"
   | "place"   // X or O lands
   | "swoosh"  // ball through a hoop
   | "bounce"  // pong paddle
@@ -111,6 +114,17 @@ export function play(name: SoundName) {
 
 function emit(ac: AudioContext, name: SoundName) {
   switch (name) {
+    case "cardFlip":
+      tone(ac, { from: 560, to: 820, dur: 0.045, type: "sine", gain: 0.055 });
+      tone(ac, { from: 1050, to: 700, dur: 0.065, type: "triangle", gain: 0.025, at: 0.025 });
+      break;
+    case "pair":
+      tone(ac, { from: 740, dur: 0.12, type: "sine", gain: 0.075 });
+      tone(ac, { from: 1110, dur: 0.21, type: "sine", gain: 0.065, at: 0.075 });
+      break;
+    case "miss":
+      tone(ac, { from: 310, to: 260, dur: 0.1, type: "sine", gain: 0.035 });
+      break;
     case "click":
       tone(ac, { from: 620, to: 900, dur: 0.06, type: "triangle", gain: 0.1 });
       break;

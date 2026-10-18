@@ -7,9 +7,11 @@ import { XOGame } from "../games/XOGame";
 import { HoopDropGame } from "../games/HoopDropGame";
 import { PuzzleGame } from "../games/PuzzleGame";
 import { PongGame } from "../games/PongGame";
+import { MemoryGame } from "../games/MemoryGame";
 import type { GameProps } from "../games/types";
 
 const GAMES: Record<GameId, (p: GameProps) => React.ReactElement> = {
+  memory: MemoryGame,
   xo: XOGame,
   hoop: HoopDropGame,
   puzzle: PuzzleGame,
@@ -28,7 +30,7 @@ type Props = {
  * them — they take onFinish and call it once.
  */
 export function GameShell({ game, onFinish, reduced }: Props) {
-  const [intro, setIntro] = useState(true);
+  const [intro, setIntro] = useState(game !== "memory");
   // Bumping this remounts the game, which is also how every timer, listener and
   // rAF inside it gets torn down. Restarting in place would need each game to
   // reset its own world.
@@ -41,8 +43,8 @@ export function GameShell({ game, onFinish, reduced }: Props) {
   return (
     <div className="w-full">
       <div
-        className="relative mx-auto aspect-9/12 w-full max-w-[520px] max-h-[66vh] overflow-hidden rounded-[30px] border border-black/[0.05] bg-white shadow-[0_22px_65px_rgba(0,0,0,0.10)]"
-        style={{ touchAction: "none" }}
+        className={`relative mx-auto w-full overflow-hidden rounded-[28px] border border-black/[0.05] bg-white ${game === "memory" ? "max-w-[620px] shadow-[0_12px_40px_rgba(0,0,0,0.045)]" : "aspect-9/12 max-w-[520px] max-h-[66vh] shadow-[0_22px_65px_rgba(0,0,0,0.10)]"}`}
+        style={{ touchAction: game === "memory" ? "pan-y" : "none" }}
       >
         <div aria-hidden className="pointer-events-none absolute inset-px z-[2] rounded-[29px] border border-white/70" />
         {!intro && <Game key={attempt} onFinish={onFinish} reduced={reduced} />}
@@ -66,7 +68,7 @@ export function GameShell({ game, onFinish, reduced }: Props) {
               play("click");
             }}
             aria-label="เริ่มเกมนี้ใหม่"
-            className="absolute right-4 top-4 z-[5] grid h-10 w-10 place-items-center rounded-full border border-black/[0.05] bg-white/88 text-[#1d1d1f] shadow-[0_6px_20px_rgba(0,0,0,0.10)] backdrop-blur-xl transition-transform duration-200 hover:scale-105 hover:bg-white active:scale-95"
+            className={`absolute right-4 top-4 z-[5] grid h-10 w-10 place-items-center rounded-full text-[#6e6e73] transition-transform duration-200 hover:bg-[#ededf0] active:scale-95 ${game === "memory" ? "bg-[#f5f5f7]" : "border border-black/[0.05] bg-white/88 shadow-[0_6px_20px_rgba(0,0,0,0.10)] backdrop-blur-xl"}`}
           >
             <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" aria-hidden>
               <path
